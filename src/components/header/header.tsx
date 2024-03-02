@@ -1,17 +1,25 @@
 'use client';
 
 import { useMediaQuery } from '@/hook/use-media-query';
-import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTrigger,
+} from '../ui/drawer';
 import { MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { CiSearch, CiShoppingCart, CiUser } from 'react-icons/ci';
+import { IconType } from 'react-icons';
 import { ModeToggle } from '../dark-mode-toggle';
 import Image from 'next/image';
 import Logo from '../../../public/images/logo/logo.png';
-import { cn } from '@/lib/utils';
 import NavLink from './nav-link';
+import { FaArrowRightLong } from 'react-icons/fa6';
+import { IoHomeOutline, IoShapesOutline} from 'react-icons/io5';
 
-const navLinks = ['/', 'shop', 'contact'];
+const navLinks: string[] = ['/', 'shop', 'contact'];
+const NavLinkIcons: IconType[] = [IoHomeOutline, IoShapesOutline];
 
 function Header() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -76,18 +84,37 @@ function Header() {
           </DrawerTrigger>
         </div>
         <DrawerContent>
-          <div className="flex mt-8 mx-4 gap-4 flex-col">
-            <div className="flex justify-center flex-col gap-4 items-start border-b">
-              <Link href="/home">Home</Link>
-              <Link href="/shop">Shop</Link>
-              <Link href="/contact">Contact</Link>
+          <div className="flex mt-16 mx-4 gap-4 flex-col">
+            <div className="flex justify-center flex-col gap-4 items-start">
+              <div className=" flex">
+                <ul className=" flex flex-col gap-8">
+                  {navLinks.map((navLink, index) => (
+                    <li key={index}>
+                       {NavLinkIcons[index] && <NavLinkIcons[index] />}
+                      <NavLink href={navLink}>
+                        {navLink.startsWith('/')
+                          ? 'Home'
+                          : navLink.charAt(0).toUpperCase() + navLink.slice(1)}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className=" flex flex-row">
-              <CiUser className=" text-xl" />
+            <div className=" border w-full"></div>
+
+            <div className=" mt-4 flex flex-row justify-between">
+              <Link href="#" className=" flex gap-2 items-center">
+                Log in{' '}
+                <span>
+                  <FaArrowRightLong />
+                </span>
+              </Link>
               <ModeToggle />
             </div>
           </div>
+          <DrawerClose />
         </DrawerContent>
       </Drawer>
     </div>
