@@ -16,10 +16,8 @@ import Image from 'next/image';
 import Logo from '../../../public/images/logo/logo.png';
 import NavLink from './nav-link';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import { IoHomeOutline, IoShapesOutline} from 'react-icons/io5';
 
 const navLinks: string[] = ['/', 'shop', 'contact'];
-const NavLinkIcons: IconType[] = [IoHomeOutline, IoShapesOutline];
 
 function Header() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -90,7 +88,6 @@ function Header() {
                 <ul className=" flex flex-col gap-8">
                   {navLinks.map((navLink, index) => (
                     <li key={index}>
-                       {NavLinkIcons[index] && <NavLinkIcons[index] />}
                       <NavLink href={navLink}>
                         {navLink.startsWith('/')
                           ? 'Home'
