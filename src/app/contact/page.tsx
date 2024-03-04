@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
@@ -36,6 +37,7 @@ const formSchema = z.object({
 });
 
 function page() {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,7 +45,11 @@ function page() {
     },
   });
 
-  function onSubmit() {}
+  function onSubmit() {
+    toast({
+      description: "Your message has been sent successfully!",
+    });
+  }
 
   return (
     <main className=" mx-auto flex flex-col items-center justify-center gap-8">
