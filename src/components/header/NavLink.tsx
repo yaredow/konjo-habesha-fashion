@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { ReactElement } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import React, { ReactElement } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type NavLinkProps = {
   href: string;
@@ -14,11 +14,7 @@ function NavLink({ href, children }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className={
-        path.startsWith(href)
-          ? ' text-base font-normal leading-6  hover:underline hover:underline-offset-4'
-          : ' text-base font-normal leading-6 hover:underline hover:underline-offset-4'
-      }
+      className={`text-base font-normal leading-6  hover:underline hover:underline-offset-4 ${path === href && "text-blue-500"}`}
     >
       {children}
     </Link>

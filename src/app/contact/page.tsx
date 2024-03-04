@@ -3,10 +3,8 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -14,8 +12,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+);
 
 const formSchema = z.object({
   fullName: z.string().refine((value) => {
@@ -28,8 +29,9 @@ const formSchema = z.object({
     );
   }),
   email: z.string().email(),
+  phone: z.string().regex(phoneRegex, "Invalid phone number"),
   message: z.string().max(1000, {
-    message: "Bio must not be longer than 30 characters.",
+    message: "Message must not be longer than 1000 characters.",
   }),
 });
 
@@ -55,31 +57,52 @@ function page() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex w-full max-w-md flex-col gap-6"
+          className=" flex w-full max-w-xl flex-col gap-6"
         >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="Email" type="email" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+          <div className=" flex flex-row gap-4">
+            <div className=" w-1/2">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder="Full name" type="text" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+
+            <div className=" w-1/2">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder="Email" type="email" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+          </div>
 
           <FormField
             control={form.control}
-            name="fullName"
+            name="phone"
             render={({ field }) => {
               return (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="Full name" type="text" />
+                    <Input {...field} placeholder="Phone" type="phone" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +117,7 @@ function page() {
               <FormItem>
                 <FormControl>
                   <Textarea
-                    placeholder="write your message here"
+                    placeholder="Write your message here"
                     className="resize-none"
                     {...field}
                   />

@@ -16,11 +16,10 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 
-const navLinks: string[] = ["/", "shop", "contact"];
+const navLinks: string[] = ["/", "/shop", "/contact"];
 
 function Header() {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  return isDesktop ? (
+  return (
     <header className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b px-6  py-4 md:px-12">
       <nav className="flex items-center justify-between">
         <div className="flex">
@@ -35,13 +34,14 @@ function Header() {
         </div>
 
         <div className=" flex">
-          <ul className=" flex gap-8">
+          <ul className="flex gap-8">
             {navLinks.map((navLink, index) => (
               <li key={index}>
                 <NavLink href={navLink}>
-                  {navLink.startsWith("/")
+                  {navLink === "/"
                     ? "Home"
-                    : navLink.charAt(0).toUpperCase() + navLink.slice(1)}
+                    : navLink.split("/")[1].charAt(0).toUpperCase() +
+                      navLink.split("/")[1].slice(1)}
                 </NavLink>
               </li>
             ))}
@@ -65,55 +65,56 @@ function Header() {
 
           <ModeToggle />
         </div>
+
+        <div className="flex items-center justify-between px-6 py-4 md:hidden ">
+          <div>
+            <Link href="/">
+              <Image src={Logo} alt="Your Company" width={44} height={44} />
+            </Link>
+          </div>
+          <Drawer direction="left">
+            <div className=" flex justify-end">
+              <DrawerTrigger>
+                <MenuIcon />
+              </DrawerTrigger>
+            </div>
+            <DrawerContent>
+              <div className="mx-4 mt-16 flex flex-col gap-4">
+                <div className="flex flex-col items-start justify-center gap-4">
+                  <div className=" flex">
+                    <ul className=" flex flex-col gap-8">
+                      {navLinks.map((navLink, index) => (
+                        <li key={index}>
+                          <NavLink href={navLink}>
+                            {navLink.startsWith("/")
+                              ? "Home"
+                              : navLink.charAt(0).toUpperCase() +
+                                navLink.slice(1)}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className=" w-full border"></div>
+
+                <div className=" mt-4 flex flex-row justify-between">
+                  <Link href="#" className=" flex items-center gap-2">
+                    Log in{" "}
+                    <span>
+                      <FaArrowRightLong />
+                    </span>
+                  </Link>
+                  <ModeToggle />
+                </div>
+              </div>
+              <DrawerClose />
+            </DrawerContent>
+          </Drawer>
+        </div>
       </nav>
     </header>
-  ) : (
-    <div className=" flex items-center justify-between px-6 py-4 ">
-      <div>
-        <Link href="/">
-          <Image src={Logo} alt="Your Company" width={44} height={44} />
-        </Link>
-      </div>
-      <Drawer direction="left">
-        <div className=" flex justify-end">
-          <DrawerTrigger>
-            <MenuIcon />
-          </DrawerTrigger>
-        </div>
-        <DrawerContent>
-          <div className="mx-4 mt-16 flex flex-col gap-4">
-            <div className="flex flex-col items-start justify-center gap-4">
-              <div className=" flex">
-                <ul className=" flex flex-col gap-8">
-                  {navLinks.map((navLink, index) => (
-                    <li key={index}>
-                      <NavLink href={navLink}>
-                        {navLink.startsWith("/")
-                          ? "Home"
-                          : navLink.charAt(0).toUpperCase() + navLink.slice(1)}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className=" w-full border"></div>
-
-            <div className=" mt-4 flex flex-row justify-between">
-              <Link href="#" className=" flex items-center gap-2">
-                Log in{" "}
-                <span>
-                  <FaArrowRightLong />
-                </span>
-              </Link>
-              <ModeToggle />
-            </div>
-          </div>
-          <DrawerClose />
-        </DrawerContent>
-      </Drawer>
-    </div>
   );
 }
 
