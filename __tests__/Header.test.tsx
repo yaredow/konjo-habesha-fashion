@@ -1,10 +1,18 @@
 import { render, screen } from "@testing-library/react";
-import Header from "@/components/header/header";
+import Home from "@/app/page";
+
+beforeEach(() => {
+  window.matchMedia = jest.fn().mockImplementation((query) => ({
+    matches: false,
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  }));
+});
 
 it("should have Logo text", () => {
-  render(<Header />);
+  render(<Home />);
 
-  const myText = screen.getByText("Shop");
+  const myText = screen.getByText("Home");
 
   expect(myText).toBeInTheDocument();
 });

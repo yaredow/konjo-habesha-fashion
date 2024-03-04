@@ -1,14 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Header from '@/components/header/header';
-import { ThemeProvider } from '@/components/theme-provider';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider/ThemeProvider";
+import Header from "@/components/header/header";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Konjo habesha fashion',
-  description: 'The best habesha attire shop in Addis',
+  title: "Konjo habesha fashion",
+  description: "The best habesha attire shop in Addis",
 };
 
 export default function RootLayout({
