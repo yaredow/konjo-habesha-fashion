@@ -1,5 +1,5 @@
 function page() {
-  return <div>Shope</div>;
+  return <div className=" font-logo">Shope</div>;
 }
 
 export default page;

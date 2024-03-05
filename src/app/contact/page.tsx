@@ -52,7 +52,7 @@ function page() {
   }
 
   return (
-    <main className=" mx-auto flex flex-col items-center justify-center gap-8">
+    <main className=" font-nav mx-auto flex flex-col items-center justify-center gap-8">
       <div className=" text-md mx-auto mb-6 flex max-w-md flex-col justify-center text-center">
         <h2 className="font-custom mb-6 text-3xl font-semibold ">Contact Us</h2>
         <p>

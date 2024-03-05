@@ -18,7 +18,7 @@ function Home() {
   return (
     <main className="">
       <div className="">
-        <h2 className=" mb-6 text-center text-lg font-semibold md:mx-[26px] md:text-start md:text-2xl">
+        <h2 className="font-roboto mb-6 text-center text-base font-semibold md:mx-[26px] md:text-start md:text-2xl">
           Trending Items
         </h2>
         <div className=" mx-auto flex justify-center gap-4">

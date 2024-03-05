@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 type NavLinkProps = {
   href: string;
-  children: string;
+  children: React.ReactNode;
 };
 
 function NavLink({ href, children }: NavLinkProps) {
@@ -14,7 +14,7 @@ function NavLink({ href, children }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className={`text-base font-semibold leading-6 hover:underline hover:underline-offset-4 ${path === href && "text-blue-500"}`}
+      className={` font-nav text-base font-medium leading-6 hover:underline hover:underline-offset-4 ${path === href && "text-blue-500"}`}
     >
       {children}
     </Link>
