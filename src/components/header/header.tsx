@@ -19,12 +19,20 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { useState } from "react";
+import SearchBar from "../search-bar/SearchBar";
 
 const navLinks: string[] = ["/", "/shop", "/contact"];
 
 function Header() {
+  const [searchFormOpen, setSearchFormOpem] = useState(false);
+
+  const handleToggleSearchForm = () => {
+    setSearchFormOpem((searchFormOpen) => !searchFormOpen);
+  };
+
   return (
-    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b px-[10px] md:px-12 md:py-4">
+    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b px-[10px] md:px-12 ">
       <div className="flex items-center justify-between">
         <Link href="/" className="hidden p-1.5 md:flex">
           <Image
@@ -35,26 +43,29 @@ function Header() {
           />
         </Link>
 
-        <div className=" hidden md:flex">
-          <ul className="flex gap-8">
-            {navLinks.map((navLink, index) => (
-              <li key={index}>
-                <NavLink href={navLink}>
-                  {navLink === "/"
-                    ? "Home"
-                    : navLink.split("/")[1].charAt(0).toUpperCase() +
-                      navLink.split("/")[1].slice(1)}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {!searchFormOpen && (
+          <div className=" hidden md:flex">
+            <ul className="flex gap-6">
+              {navLinks.map((navLink, index) => (
+                <li key={index}>
+                  <NavLink href={navLink}>
+                    {navLink === "/"
+                      ? "Home"
+                      : navLink.split("/")[1].charAt(0).toUpperCase() +
+                        navLink.split("/")[1].slice(1)}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="hidden gap-8 md:flex md:justify-end">
           <div className=" mt-[6px] flex flex-row gap-4">
-            <Link href="#">
-              <AiOutlineSearch className=" text-2xl font-semibold hover:text-blue-500" />
-            </Link>
+            <AiOutlineSearch
+              onClick={handleToggleSearchForm}
+              className=" text-2xl font-semibold hover:text-blue-500"
+            />
 
             <Link href="#">
               <AiOutlineUser className=" text-2xl hover:text-blue-500 " />
@@ -68,6 +79,7 @@ function Header() {
           <ModeToggle />
         </div>
       </div>
+      {searchFormOpen && <SearchBar />}
 
       <div className="flex items-center justify-between px-6 py-4 md:hidden ">
         <div>

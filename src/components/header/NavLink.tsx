@@ -3,6 +3,15 @@
 import React, { ReactElement } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@radix-ui/react-navigation-menu";
+import { navigationMenuTriggerStyle } from "../ui/navigation-menu";
 
 type NavLinkProps = {
   href: string;
@@ -10,14 +19,18 @@ type NavLinkProps = {
 };
 
 function NavLink({ href, children }: NavLinkProps) {
-  const path: string = usePathname();
   return (
-    <Link
-      href={href}
-      className={` font-nav text-base font-medium leading-6 hover:underline hover:underline-offset-4 ${path === href && "text-blue-500"}`}
-    >
-      {children}
-    </Link>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <Link href={href} legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              {children}
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 
