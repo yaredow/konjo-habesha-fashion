@@ -33,12 +33,12 @@ function Home() {
             className=" w-full max-w-[78rem]"
           >
             <CarouselContent>
-              {Array.from({ length: 10 }).map((_, index) => (
+              {Array.from({ length: 8 }).map((_, index) => (
                 <CarouselItem key={index} className="md:basis-1/4">
                   <div className="p-1">
                     <Card>
                       <CardContent className="flex aspect-square items-center justify-center p-6">
-                        <span className="font-semibol d  text-3xl">
+                        <span className="font-semibol text-3xl">
                           {index + 1}
                         </span>
                       </CardContent>

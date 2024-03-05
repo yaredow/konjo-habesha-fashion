@@ -1,19 +1,24 @@
 "use client";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTrigger,
-} from "../ui/drawer";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import { CiSearch, CiShoppingCart, CiUser } from "react-icons/ci";
+import {
+  HiOutlineHome,
+  HiOutlinePhoneOutgoing,
+  HiOutlineShoppingBag,
+} from "react-icons/hi";
+import {
+  AiOutlineSearch,
+  AiOutlineShoppingCart,
+  AiOutlineUser,
+} from "react-icons/ai";
+
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 const navLinks: string[] = ["/", "/shop", "/contact"];
 
@@ -48,15 +53,15 @@ function Header() {
         <div className="hidden gap-8 md:flex md:justify-end">
           <div className=" mt-[6px] flex flex-row gap-4">
             <Link href="#">
-              <CiSearch className=" text-2xl font-semibold hover:text-blue-500" />
+              <AiOutlineSearch className=" text-2xl font-semibold hover:text-blue-500" />
             </Link>
 
             <Link href="#">
-              <CiUser className=" text-2xl hover:text-blue-500 " />
+              <AiOutlineUser className=" text-2xl hover:text-blue-500 " />
             </Link>
 
             <Link href="#">
-              <CiShoppingCart className=" text-2xl font-semibold hover:text-blue-500" />
+              <AiOutlineShoppingCart className=" text-2xl font-semibold hover:text-blue-500" />
             </Link>
           </div>
 
@@ -71,44 +76,68 @@ function Header() {
           </Link>
         </div>
 
-        <Drawer direction="left">
-          <div className=" flex justify-end">
-            <DrawerTrigger>
+        <div className="">
+          <Sheet>
+            <SheetTrigger asChild>
               <MenuIcon />
-            </DrawerTrigger>
-          </div>
-          <DrawerContent>
-            <div className="mx-4 mt-16 flex flex-col gap-4">
-              <div className="flex flex-col items-start justify-center gap-4">
-                <ul className=" flex flex-col gap-8">
-                  {navLinks.map((navLink, index) => (
-                    <li key={index}>
-                      <NavLink href={navLink}>
-                        {navLink === "/"
-                          ? "Home"
-                          : navLink.split("/")[1].charAt(0).toUpperCase() +
-                            navLink.split("/")[1].slice(1)}
-                      </NavLink>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <div className="mx-2 mt-8 flex flex-col gap-8">
+                <div className="flex flex-col items-start justify-center gap-4">
+                  <ul className=" flex flex-col gap-8">
+                    <li>
+                      <Link
+                        href="/"
+                        className=" base flex flex-row items-center gap-2 font-semibold"
+                      >
+                        <span>
+                          <HiOutlineHome className=" text-xl" />
+                        </span>{" "}
+                        Home
+                      </Link>
                     </li>
-                  ))}
-                </ul>
-              </div>
 
-              <div className=" w-full border"></div>
+                    <li>
+                      <Link
+                        href="/shop"
+                        className="flex flex-row items-center gap-2 text-base font-semibold"
+                      >
+                        <span>
+                          <HiOutlineShoppingBag className=" text-xl" />
+                        </span>{" "}
+                        Shop
+                      </Link>
+                    </li>
 
-              <div className=" mt-4 flex flex-row justify-between">
-                <Link href="#" className=" flex items-center gap-2">
-                  Log in{" "}
-                  <span>
-                    <FaArrowRightLong />
-                  </span>
-                </Link>
-                <ModeToggle />
+                    <li>
+                      <Link
+                        href="/contact"
+                        className="base flex flex-row items-center gap-2 font-semibold"
+                      >
+                        <span>
+                          <HiOutlinePhoneOutgoing className=" text-xl" />
+                        </span>{" "}
+                        Contact
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className=" w-full border"></div>
+
+                <div className="flex flex-row justify-between">
+                  <Link href="#" className="flex items-center gap-2">
+                    Log in{" "}
+                    <span>
+                      <FaArrowRightLong />
+                    </span>
+                  </Link>
+                  <ModeToggle />
+                </div>
               </div>
-            </div>
-            <DrawerClose />
-          </DrawerContent>
-        </Drawer>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </nav>
   );
