@@ -21,6 +21,7 @@ import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
 import SearchBar from "../search-bar/SearchBar";
+import { useRouter } from "next/router";
 
 const navLinks: string[] = ["/", "/shop", "/contact"];
 
@@ -67,7 +68,7 @@ function Header() {
               className=" text-2xl font-semibold hover:text-blue-500"
             />
 
-            <Link href="#">
+            <Link href="/account">
               <AiOutlineUser className=" text-2xl hover:text-blue-500 " />
             </Link>
 
