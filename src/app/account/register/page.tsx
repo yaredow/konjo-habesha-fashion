@@ -49,8 +49,11 @@ function page() {
   return (
     <main className=" fixed inset-0 my-auto flex items-center justify-center">
       <Card className=" mx-auto max-w-[36rem] flex-grow items-center p-6">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
+        <CardHeader className=" mb-2">
+          <CardTitle className=" mb-2">Create an account</CardTitle>
+          <CardDescription>
+            Fill out the detail below to create your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -66,7 +69,26 @@ function page() {
                     return (
                       <FormItem>
                         <FormControl>
-                          <Input {...field} placeholder="email" type="text" />
+                          <Input {...field} placeholder="Name" type="text" />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Email"
+                            type="password"
+                          />
                         </FormControl>
                         <FormMessage className=" mx-2" />
                       </FormItem>
@@ -92,56 +114,38 @@ function page() {
                     );
                   }}
                 />
-                <Button type="submit">Login</Button>
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Confirm Password"
+                            type="password"
+                          />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <Button type="submit">Register</Button>
               </div>
             </form>
           </Form>
-
-          <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
-            <Link
-              className=" hover:underline hover:underline-offset-4"
-              href="/account/register"
-            >
-              Register here
-            </Link>
-            <Link
-              className=" hover:underline hover:underline-offset-4"
-              href="#"
-            >
-              Forgot your password?
-            </Link>
-          </div>
         </CardContent>
-        <CardFooter className=" grid grid-rows-1">
-          <div className="mb-8 mt-2 flex flex-grow items-center">
-            <hr className="border-1 w-full rounded-full" />
-            <div className="mx-4 flex-none text-xs font-normal">
-              OR LOGIN WITH
-            </div>
-            <hr className="border-1 w-full rounded-full" />
-          </div>
-
-          <div className="flex flex-row gap-4">
-            <Button
-              variant="outline"
-              className=" flex w-1/2 items-center gap-2 text-lg"
-            >
-              <span>
-                <FaGoogle />
-              </span>
-              Google
-            </Button>
-
-            <Button
-              variant="outline"
-              className=" flex w-1/2 items-center gap-2 text-lg font-semibold"
-            >
-              <span>
-                <FaFacebookF />
-              </span>
-              Facebook
-            </Button>
-          </div>
+        <CardFooter className=" -my-2 mx-4 flex flex-row justify-between text-sm">
+          <p>Already have an account?</p>
+          <Link
+            className=" hover:underline hover:underline-offset-4"
+            href="/account"
+          >
+            Login
+          </Link>
         </CardFooter>
       </Card>
     </main>

@@ -44,7 +44,7 @@ function Header() {
           />
         </Link>
 
-        <div className=" hidden md:flex">
+        <div className=" hidden font-nav md:flex">
           <ul className="flex gap-[1.3rem]">
             {navLinks.map((navLink, index) => (
               <li key={index}>
@@ -136,7 +136,7 @@ function Header() {
                 <div className=" w-full border"></div>
 
                 <div className="flex flex-row justify-between">
-                  <Link href="/account" className="flex items-center gap-2">
+                  <Link href="/" className="flex items-center gap-2">
                     Log in{" "}
                     <span>
                       <FaArrowRightLong />
