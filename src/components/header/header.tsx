@@ -136,7 +136,7 @@ function Header() {
                 <div className=" w-full border"></div>
 
                 <div className="flex flex-row justify-between">
-                  <Link href="#" className="flex items-center gap-2">
+                  <Link href="/account" className="flex items-center gap-2">
                     Log in{" "}
                     <span>
                       <FaArrowRightLong />

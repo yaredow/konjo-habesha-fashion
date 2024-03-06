@@ -1,6 +1,21 @@
 "use client";
-
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { FaGoogle } from "react-icons/fa";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -8,11 +23,14 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { FaFacebookF } from "react-icons/fa6";
+import Link from "next/link";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+} from "@radix-ui/react-navigation-menu";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -24,6 +42,7 @@ function page() {
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
+      password: "",
     },
   });
 
@@ -34,46 +53,103 @@ function page() {
   };
 
   return (
-    <main className=" mx-auto mt-20 flex flex-col items-center justify-center gap-8 font-nav">
-      <h2 className="mx-auto mb-8 text-center text-4xl font-bold">Login</h2>
+    <main className=" fixed inset-0 my-auto flex items-center justify-center">
+      <Card className=" mx-auto max-w-[36rem] flex-grow items-center p-6">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex-grow items-center justify-center gap-4"
+            >
+              <div className=" flex flex-col space-y-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input {...field} placeholder="email" type="text" />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex w-full max-w-xl flex-col justify-center gap-6"
-        >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="email" type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="password"
+                            type="password"
+                          />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <Button type="submit">Login</Button>
+              </div>
+            </form>
+          </Form>
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="password" type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </form>
-      </Form>
-      <Button type="submit">Submit</Button>
+          <div className=" mx-2 my-4 flex flex-row justify-between text-sm ">
+            <Link
+              className=" hover:underline hover:underline-offset-4"
+              href="#"
+            >
+              Register here
+            </Link>
+            <Link
+              className=" hover:underline hover:underline-offset-4"
+              href="#"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+        </CardContent>
+        <CardFooter className=" grid grid-rows-1">
+          <div className="mb-8 mt-2 flex flex-grow items-center">
+            <hr className="border-1 w-full rounded-full" />
+            <div className="mx-4 flex-none text-xs font-normal">
+              OR LOGIN WITH
+            </div>
+            <hr className="border-1 w-full rounded-full" />
+          </div>
+
+          <div className="flex flex-row gap-4">
+            <Button
+              variant="outline"
+              className=" flex w-1/2 items-center gap-2 text-lg"
+            >
+              <span>
+                <FaGoogle />
+              </span>
+              Google
+            </Button>
+
+            <Button
+              variant="outline"
+              className=" flex w-1/2 items-center gap-2 text-lg font-semibold"
+            >
+              <span>
+                <FaFacebookF />
+              </span>
+              Facebook
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
     </main>
   );
 }
