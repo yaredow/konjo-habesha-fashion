@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/form";
 import { FaFacebookF } from "react-icons/fa6";
 import Link from "next/link";
+import { useState } from "react";
+import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -32,6 +34,7 @@ const loginFormSchema = z.object({
 });
 
 function page() {
+  const [registerFormOpen, setRegisterFormOpen] = useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -39,6 +42,10 @@ function page() {
       password: "",
     },
   });
+
+  const handleRegisterLinkClicked = () => {
+    setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
+  };
 
   const onSubmit = () => {
     toast({
@@ -98,12 +105,7 @@ function page() {
           </Form>
 
           <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
-            <Link
-              className=" hover:underline hover:underline-offset-4"
-              href="/account/register"
-            >
-              Register here
-            </Link>
+            <RegistrationDialog />
             <Link
               className=" hover:underline hover:underline-offset-4"
               href="#"
