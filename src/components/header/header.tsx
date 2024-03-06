@@ -44,43 +44,40 @@ function Header() {
           />
         </Link>
 
-        {!searchFormOpen && (
-          <div className=" hidden md:flex">
-            <ul className="flex gap-6">
-              {navLinks.map((navLink, index) => (
-                <li key={index}>
-                  <NavLink href={navLink}>
-                    {navLink === "/"
-                      ? "Home"
-                      : navLink.split("/")[1].charAt(0).toUpperCase() +
-                        navLink.split("/")[1].slice(1)}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className=" hidden md:flex">
+          <ul className="flex gap-[1.3rem]">
+            {navLinks.map((navLink, index) => (
+              <li key={index}>
+                <NavLink href={navLink}>
+                  {navLink === "/"
+                    ? "Home"
+                    : navLink.split("/")[1].charAt(0).toUpperCase() +
+                      navLink.split("/")[1].slice(1)}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="hidden gap-8 md:flex md:justify-end">
-          <div className=" mt-[6px] flex flex-row gap-4">
+          <div className=" mt-[6px] flex flex-row gap-[1.3rem]">
             <AiOutlineSearch
               onClick={handleToggleSearchForm}
-              className=" text-2xl font-semibold hover:text-blue-500"
+              className=" text-xl font-semibold hover:text-blue-500"
             />
 
             <Link href="/account">
-              <AiOutlineUser className=" text-2xl hover:text-blue-500 " />
+              <AiOutlineUser className=" text-xl hover:text-blue-500 " />
             </Link>
 
             <Link href="#">
-              <AiOutlineShoppingCart className=" text-2xl font-semibold hover:text-blue-500" />
+              <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
             </Link>
           </div>
 
           <ModeToggle />
         </div>
       </div>
-      {searchFormOpen && <SearchBar />}
 
       <div className="flex items-center justify-between px-6 py-4 md:hidden ">
         <div>
