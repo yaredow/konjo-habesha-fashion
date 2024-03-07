@@ -27,6 +27,7 @@ import { FaFacebookF } from "react-icons/fa6";
 import Link from "next/link";
 import { useState } from "react";
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
+import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -106,12 +107,7 @@ function page() {
 
           <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
             <RegistrationDialog />
-            <Link
-              className=" hover:underline hover:underline-offset-4"
-              href="#"
-            >
-              Forgot your password?
-            </Link>
+            <ForgotPasswordDialog />
           </div>
         </CardContent>
         <CardFooter className=" grid grid-rows-1">

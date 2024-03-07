@@ -153,7 +153,7 @@ export function RegistrationDialog() {
                 }}
               />
               <Button className=" mt-4" type="submit">
-                Save changes
+                Sign up
               </Button>
             </form>
           </Form>
