@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectMongoDB = async () => {
   const url = process.env.MONGO_DATABASE!.replace(
-    "<PASSWORD",
+    "<PASSWORD>",
     process.env.MONGO_PASSWORD!,
   );
 
