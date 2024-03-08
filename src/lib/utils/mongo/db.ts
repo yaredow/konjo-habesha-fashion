@@ -1,26 +1,17 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-let globalWithMongo = global as typeof globalThis & {
-  _mongoClientPromise: Promise<MongoClient>;
-};
-const URI = process.env.MONGO_DATABSE!.replace(
-  "<PASSWORD>",
-  process.env.PASSWORD!,
-);
+const connectMongoDB = async () => {
+  const url = process.env.MONGO_DATABASE!.replace(
+    "<PASSWORD",
+    process.env.MONGO_PASSWORD!,
+  );
 
-const options = {};
-
-if (!URI) throw new Error("Please add your URI to .env.local");
-let client = new MongoClient(URI, options);
-let clientPromise;
-
-if (process.env.NODE_ENV !== "production") {
-  if (!globalWithMongo._mongoClientPromise) {
-    globalWithMongo._mongoClientPromise = client.connect();
+  try {
+    await mongoose.connect(url);
+    console.log("Database connection successful");
+  } catch (err) {
+    console.error(err);
   }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  clientPromise = client.connect();
-}
+};
 
-export default clientPromise;
+export default connectMongoDB;
