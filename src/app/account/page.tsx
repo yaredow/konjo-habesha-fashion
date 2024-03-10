@@ -6,12 +6,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { FaGoogle } from "react-icons/fa";
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -24,10 +22,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { FaFacebookF } from "react-icons/fa6";
-import Link from "next/link";
 import { useState } from "react";
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
+import { SignInResponse, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -35,6 +34,7 @@ const loginFormSchema = z.object({
 });
 
 function page() {
+  const router = useRouter();
   const [registerFormOpen, setRegisterFormOpen] = useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -44,14 +44,25 @@ function page() {
     },
   });
 
-  const handleRegisterLinkClicked = () => {
-    setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
-  };
-
-  const onSubmit = () => {
-    toast({
-      description: "You have logged in successfully!",
-    });
+  const onSubmit = async () => {
+    const formData = form.getValues();
+    try {
+      const res = await signIn("credentials", formData);
+      if (res?.error) {
+        toast({
+          variant: "destructive",
+          description: "Something went wrong while signing in",
+        });
+      } else {
+        router.replace("/");
+        console.log("Login successful!");
+      }
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        description: "Something happend!",
+      });
+    }
   };
 
   return (
