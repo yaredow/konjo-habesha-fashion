@@ -10,7 +10,10 @@ export async function POST(Request: NextRequest) {
     const user = await User.findOne({ email });
 
     if (user) {
-      return NextResponse.json({ message: "Account already exists" });
+      return NextResponse.json(
+        { message: "Account already exists" },
+        { status: 400 },
+      );
     }
 
     const newUser = await User.create({

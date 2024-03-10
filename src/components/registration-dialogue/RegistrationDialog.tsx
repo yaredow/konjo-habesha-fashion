@@ -61,10 +61,32 @@ export function RegistrationDialog() {
     },
   });
 
-  const onSubmit = () => {
-    toast({
-      description: "You have successfully registered",
-    });
+  const onSubmit = async () => {
+    const formData = form.getValues();
+    try {
+      const res = await fetch("api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (res.status === 201) {
+        toast({
+          description: data.message,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Oh, something went wrong",
+          description: data.message,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Dialog>
