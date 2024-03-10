@@ -1,15 +1,20 @@
-import User from "@/models/authModel";
-import { NextResponse } from "next/server";
 import connectMongoDB from "@/lib/utils/mongo/db";
+import User from "@/models/authModel";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(Request: NextRequest) {
   try {
-    const { fullName, email, password, passwordConfirm } = await req.json();
+    const { fullName, email, password, passwordConfirm } = await Request.json();
     await connectMongoDB();
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json({ message: "User already exists" });
+
+    console.log(fullName, email, password);
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      NextResponse.json({ message: "Account already exists" });
     }
+
     const newUser = await User.create({
       fullName,
       email,
@@ -18,12 +23,14 @@ export async function POST(req: Request, res: Response) {
     });
 
     NextResponse.json(
-      { message: "Account created successfully", data: newUser },
+      { message: "Account created successfully" },
       { status: 201 },
     );
   } catch (err) {
     NextResponse.json(
-      { message: "An error occurred while registering user" },
+      {
+        message: "An error occurred while registering user",
+      },
       { status: 500 },
     );
   }
