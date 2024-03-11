@@ -49,7 +49,7 @@ const userSchema = new Schema<IUser>({
   password: {
     type: String,
     select: false,
-    required: [true, "Please enter your password"],
+    required: false,
     validate: {
       validator: (value: string) => {
         return validator.isLength(value, { min: 8 });
@@ -59,7 +59,7 @@ const userSchema = new Schema<IUser>({
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password"],
+    required: false,
     validate: {
       validator: function (this: IUser, value: string) {
         return value === this.password;

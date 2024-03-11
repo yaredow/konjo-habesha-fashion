@@ -22,11 +22,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { FaFacebookF } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import GoogleButton from "@/components/GoogleSigninButton";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -34,6 +35,7 @@ const loginFormSchema = z.object({
 });
 
 function page() {
+  const session = useSession();
   const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -59,16 +61,20 @@ function page() {
       } else {
         toast({
           variant: "destructive",
-          description: "Something went wrong while signing in",
+          description: res?.error,
         });
       }
-    } catch (err) {
-      toast({
-        variant: "destructive",
-        description: "Something happend!",
-      });
+    } catch (error: any) {
+      throw new Error("Unexpected error during sign-in");
     }
   };
+
+  // useEffect(() => {
+  //   console.log(session?.status === "authenticated");
+  //   if (session?.status === "authenticated") {
+  //     router.replace("/");
+  //   }
+  // }, [session, router]);
 
   return (
     <main className=" fixed inset-0 my-auto flex items-center justify-center">
@@ -136,15 +142,7 @@ function page() {
           </div>
 
           <div className="flex flex-row gap-4">
-            <Button
-              variant="outline"
-              className=" flex w-1/2 items-center gap-2 text-lg"
-            >
-              <span>
-                <FaGoogle />
-              </span>
-              Google
-            </Button>
+            <GoogleButton />
 
             <Button
               variant="outline"
