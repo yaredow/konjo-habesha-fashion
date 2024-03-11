@@ -5,6 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -13,33 +14,35 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.NEXTAUTH_SECRET as string,
     }),
     CredentialsProvider({
+      id: "credentials",
       name: "Credentials",
       credentials: {},
 
-      async authorize(credentials) {
-        const { email, password } = credentials;
+      async authorize(credentials: any) {
+        await connectMongoDB();
         try {
-          await connectMongoDB();
-          const user = await User.findOne({ email });
-          if (!user) {
-            return NextResponse.json(
-              { message: "user does not exist" },
-              { status: 404 },
-            );
-          }
+          const user = await User.findOne({ email: credentials.email }).select(
+            "+password",
+          );
 
-          if (!user && !(await user.correctPassword(password, user.password))) {
-            return NextResponse.json(
-              {
-                message: "The email or password are not correct",
-              },
-              { status: 401 },
+          console.log(user);
+          if (user) {
+            const isPasswordCorrect = await bcrypt.compare(
+              credentials.password,
+              user.password,
             );
+            console.log(isPasswordCorrect);
+            if (isPasswordCorrect) {
+              return user;
+            } else {
+              return NextResponse.json(
+                { message: "The email and password are not correct" },
+                { status: 401 },
+              );
+            }
           }
-
-          return user;
-        } catch (error) {
-          console.log(error);
+        } catch (err: any) {
+          throw new Error(err);
         }
       },
     }),

@@ -25,7 +25,7 @@ import { FaFacebookF } from "react-icons/fa6";
 import { useState } from "react";
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
-import { SignInResponse, signIn } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const loginFormSchema = z.object({
@@ -35,7 +35,6 @@ const loginFormSchema = z.object({
 
 function page() {
   const router = useRouter();
-  const [registerFormOpen, setRegisterFormOpen] = useState(false);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -47,15 +46,21 @@ function page() {
   const onSubmit = async () => {
     const formData = form.getValues();
     try {
-      const res = await signIn("credentials", formData);
-      if (res?.error) {
+      const res = await signIn("credentials", {
+        redirect: false,
+        ...formData,
+      });
+      console.log(res);
+      if (res?.ok) {
+        toast({
+          description: "You have successfully signed in",
+        });
+        router.replace("/");
+      } else {
         toast({
           variant: "destructive",
           description: "Something went wrong while signing in",
         });
-      } else {
-        router.replace("/");
-        console.log("Login successful!");
       }
     } catch (err) {
       toast({

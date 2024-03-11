@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import {
-  Inter,
-  League_Spartan,
-  Roboto,
-  Plus_Jakarta_Sans,
-} from "next/font/google";
+import { Inter, League_Spartan, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { getServerSession } from "next-auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,11 +32,12 @@ export const metadata: Metadata = {
   description: "The best habesha attire shop in Addis",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
   return (
     <html
       lang="en"
@@ -53,7 +50,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
+          <AuthProvider session={session}>
             <div className=" flex min-h-screen flex-col">
               <Header />
               <div className="mx-auto my-8 w-[90%] flex-grow">{children}</div>
