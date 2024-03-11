@@ -53,6 +53,28 @@ const authOptions: AuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async session({ session }) {
+      return session;
+    },
+    async signIn({ profile }) {
+      console.log(profile);
+      try {
+        await connectMongoDB();
+        const userExist = await User.findOne({ email: profile?.email });
+        if (!userExist) {
+          await User.create({
+            fullName: profile?.name,
+            email: profile?.email,
+            verified: true,
+          });
+        }
+        return true;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
   session: {
     strategy: "jwt",
   },
