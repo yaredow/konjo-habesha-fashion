@@ -41,6 +41,7 @@ function Header() {
             alt="An animated habesha women wearing traditiona cloth"
             width={64}
             height={64}
+            priority
           />
         </Link>
 

@@ -16,7 +16,7 @@ const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {},
 
-      async authorize(credentials: any) {
+      async authorize(credentials) {
         const { email, password } = credentials;
         try {
           await connectMongoDB();
