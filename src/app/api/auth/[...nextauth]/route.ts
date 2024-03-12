@@ -96,9 +96,6 @@ const authOptions: AuthOptions = {
                 verified: true,
               }),
             });
-
-            console.log(res);
-
             if (res.ok) {
               return user;
             }
