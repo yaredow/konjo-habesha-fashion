@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
@@ -15,6 +16,16 @@ const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+
+      authorization: {
+        params: {
+          prompt: "consent",
+        },
+      },
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_APP_ID as string,
+      clientSecret: process.env.FACEBOOK_APP_ID_SECRET as string,
     }),
     CredentialsProvider({
       id: "credentials",
@@ -22,15 +33,18 @@ const authOptions: AuthOptions = {
       credentials: {},
 
       async authorize(credentials: any) {
+        if (!credentials) return null;
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
         try {
           await connectMongoDB();
-          const user = await User.findOne({ email: credentials.email }).select(
-            "+password",
-          );
+          const user = await User.findOne({ email }).select("+password");
 
           if (user) {
             const isPasswordCorrect = await bcrypt.compare(
-              credentials.password,
+              password,
               user.password,
             );
 
@@ -52,32 +66,37 @@ const authOptions: AuthOptions = {
     async session({ session }) {
       return session;
     },
-    async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        const { name, email } = user;
-        try {
-          await connectMongoDB();
-          const userExists = await User.findOne({ email });
-          if (!userExists) {
-            const res = await fetch("http://localhost:3000/api/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                fullName: name,
-                email,
-                verified: true,
-              }),
-            });
-            console.log(res);
-            if (res.ok) {
-              return user;
-            }
+    async signIn({ user }) {
+      const { name, email } = user as {
+        name: string;
+        email: string;
+      };
+
+      try {
+        await connectMongoDB();
+        const userExists = await User.findOne({ email });
+
+        if (!userExists) {
+          const res = await fetch("http://localhost:3000/api/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fullName: name,
+              email,
+              verified: true,
+            }),
+          });
+
+          console.log(res);
+
+          if (res.ok) {
+            return user;
           }
-        } catch (error) {
-          console.log(error);
         }
+      } catch (error) {
+        console.log(error);
       }
       return user;
     },

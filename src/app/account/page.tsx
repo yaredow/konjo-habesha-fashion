@@ -26,8 +26,9 @@ import { useEffect, useState } from "react";
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 import { useSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import GoogleButton from "@/components/GoogleSigninButton";
+import FacebookSigninButton from "@/components/FacebookSigninButton";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -144,15 +145,7 @@ function page() {
           <div className="flex flex-row gap-4">
             <GoogleButton />
 
-            <Button
-              variant="outline"
-              className=" flex w-1/2 items-center gap-2 text-lg font-semibold"
-            >
-              <span>
-                <FaFacebookF />
-              </span>
-              Facebook
-            </Button>
+            <FacebookSigninButton />
           </div>
         </CardFooter>
       </Card>
