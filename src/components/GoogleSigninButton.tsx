@@ -2,7 +2,7 @@ import { signIn } from "next-auth/react";
 import { Button } from "./ui/button";
 const GoogleButton = () => {
   const loginWithGoogle = () =>
-    signIn("google", { callbackUrl: "http:localhost:3000" });
+    signIn("google", { callbackUrl: "http://localhost:3000" });
 
   return (
     <Button

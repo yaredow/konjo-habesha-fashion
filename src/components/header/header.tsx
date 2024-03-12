@@ -23,8 +23,10 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
 import SearchBar from "../search-bar/SearchBar";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
 function Header() {
+  const session = useSession();
   const [searchFormOpen, setSearchFormOpem] = useState(false);
 
   const handleToggleSearchForm = () => {
@@ -62,7 +64,11 @@ function Header() {
             />
 
             <Link href="/account">
-              <AiOutlineUser className=" text-xl hover:text-blue-500 " />
+              {session.status === "authenticated" ? (
+                <button onClick={() => signOut()}>Log out</button>
+              ) : (
+                <AiOutlineUser className=" text-xl hover:text-blue-500 " />
+              )}
             </Link>
 
             <Link href="#">

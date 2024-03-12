@@ -64,7 +64,7 @@ export function RegistrationDialog() {
   const onSubmit = async () => {
     const formData = form.getValues();
     try {
-      const res = await fetch("api/auth/register", {
+      const res = await fetch("api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,6 @@ export function RegistrationDialog() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (res.status === 201) {
         toast({
           description: data.message,

@@ -32,12 +32,11 @@ export const metadata: Metadata = {
   description: "The best habesha attire shop in Addis",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
   return (
     <html
       lang="en"
@@ -50,7 +49,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider session={session}>
+          <AuthProvider>
             <div className=" flex min-h-screen flex-col">
               <Header />
               <div className="mx-auto my-8 w-[90%] flex-grow">{children}</div>

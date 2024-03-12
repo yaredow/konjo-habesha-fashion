@@ -11,7 +11,7 @@ export async function POST(Request: NextRequest) {
 
     if (user) {
       return NextResponse.json(
-        { message: "Account already exists" },
+        { message: "Account already exists", data: user },
         { status: 400 },
       );
     }
@@ -27,12 +27,7 @@ export async function POST(Request: NextRequest) {
       { message: "Account created successfully", data: newUser },
       { status: 201 },
     );
-  } catch (err) {
-    return NextResponse.json(
-      {
-        message: "An error occurred while registering user",
-      },
-      { status: 500 },
-    );
+  } catch (err: any) {
+    throw new Error(err);
   }
 }

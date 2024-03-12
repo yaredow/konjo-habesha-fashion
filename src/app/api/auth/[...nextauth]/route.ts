@@ -7,6 +7,10 @@ import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 
 const authOptions: AuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -15,16 +19,7 @@ const authOptions: AuthOptions = {
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
-      credentials: {
-        email: {
-          label: "E-mail",
-          type: "text",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-        },
-      },
+      credentials: {},
 
       async authorize(credentials: any) {
         try {
@@ -57,30 +52,35 @@ const authOptions: AuthOptions = {
     async session({ session }) {
       return session;
     },
-    async signIn({ profile }) {
-      console.log(profile);
-      try {
-        await connectMongoDB();
-        const userExist = await User.findOne({ email: profile?.email });
-        if (!userExist) {
-          await User.create({
-            fullName: profile?.name,
-            email: profile?.email,
-            verified: true,
-          });
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const { name, email } = user;
+        try {
+          await connectMongoDB();
+          const userExists = await User.findOne({ email });
+          if (!userExists) {
+            const res = await fetch("http://localhost:3000/api/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                fullName: name,
+                email,
+                verified: true,
+              }),
+            });
+            console.log(res);
+            if (res.ok) {
+              return user;
+            }
+          }
+        } catch (error) {
+          console.log(error);
         }
-        return true;
-      } catch (err) {
-        console.log(err);
       }
+      return user;
     },
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.JWT_SECRET,
-  pages: {
-    signIn: "/",
   },
 };
 
