@@ -26,9 +26,8 @@ import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 
 function Header() {
-  const session = useSession();
+  const { data: session, status } = useSession();
   const [searchFormOpen, setSearchFormOpem] = useState(false);
-
   const handleToggleSearchForm = () => {
     setSearchFormOpem((searchFormOpen) => !searchFormOpen);
   };
@@ -64,7 +63,7 @@ function Header() {
             />
 
             <Link href="/account">
-              {session.status === "authenticated" ? (
+              {status === "authenticated" ? (
                 <button onClick={() => signOut()}>Log out</button>
               ) : (
                 <AiOutlineUser className=" text-xl hover:text-blue-500 " />

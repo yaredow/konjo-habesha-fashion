@@ -22,10 +22,17 @@ const authOptions: AuthOptions = {
           prompt: "consent",
         },
       },
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_APP_ID as string,
       clientSecret: process.env.FACEBOOK_APP_ID_SECRET as string,
+
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     CredentialsProvider({
       id: "credentials",
@@ -66,39 +73,41 @@ const authOptions: AuthOptions = {
     async session({ session }) {
       return session;
     },
-    async signIn({ user }) {
-      const { name, email } = user as {
-        name: string;
-        email: string;
-      };
+    async signIn({ user, account }) {
+      if (account?.provider === "google" || "facebook") {
+        const { name, email } = user as {
+          name: string;
+          email: string;
+        };
 
-      try {
-        await connectMongoDB();
-        const userExists = await User.findOne({ email });
+        try {
+          await connectMongoDB();
+          const userExists = await User.findOne({ email });
 
-        if (!userExists) {
-          const res = await fetch("http://localhost:3000/api/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              fullName: name,
-              email,
-              verified: true,
-            }),
-          });
+          if (!userExists) {
+            const res = await fetch("http://localhost:3000/api/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                fullName: name,
+                email,
+                verified: true,
+              }),
+            });
 
-          console.log(res);
+            console.log(res);
 
-          if (res.ok) {
-            return user;
+            if (res.ok) {
+              return user;
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+        return user;
       }
-      return user;
     },
   },
 };
