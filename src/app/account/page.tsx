@@ -142,7 +142,7 @@ function page() {
             <hr className="border-1 w-full rounded-full" />
           </div>
 
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-col gap-4 md:flex-row">
             <GoogleButton />
 
             <FacebookSigninButton />
