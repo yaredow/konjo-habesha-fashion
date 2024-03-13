@@ -33,22 +33,21 @@ function FeaturedProductsCarousel({ featuredProducts = [] }: any) {
             plugins={[plugin.current]}
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
-            className=" w-full max-w-[78rem]"
+            className=" w-full max-w-[80rem]"
           >
             <CarouselContent>
-              {featuredProducts.data.slice(0, 8).map((product: any) => (
+              {featuredProducts.data.map((product: any) => (
                 <CarouselItem key={product._id} className="md:basis-1/4">
                   <div className="p-1">
                     <Card>
                       <CardContent className="justify-cente flex aspect-square items-center p-2">
-                        <div className=" mb-4 w-full">
-                          <AspectRatio ratio={4 / 5}>
+                        <div className=" relative mb-4 w-full bg-cover">
+                          <AspectRatio ratio={1 / 1}>
                             <Image
                               src={product.images[0].url}
                               alt="images of habesha traditional clothes"
-                              width={800}
-                              height={1000}
-                              className=" rounded-md object-cover"
+                              layout="fill"
+                              className="rounded-md object-cover "
                             />
                           </AspectRatio>
                         </div>
