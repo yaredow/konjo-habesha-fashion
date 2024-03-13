@@ -46,7 +46,7 @@ function FeaturedProductsCarousel({ featuredProducts = [] }: any) {
                             <Image
                               src={product.images[0].url}
                               alt="images of habesha traditional clothes"
-                              layout="fill"
+                              fill
                               className="rounded-md object-cover "
                             />
                           </AspectRatio>
