@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { FaGoogle } from "react-icons/fa";
 
 import {
   Card,
@@ -21,12 +20,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { FaFacebookF } from "react-icons/fa6";
-import { useEffect, useState } from "react";
+
 import { RegistrationDialog } from "@/components/registration-dialogue/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 import { useSession, signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import GoogleButton from "@/components/GoogleSigninButton";
 import FacebookSigninButton from "@/components/FacebookSigninButton";
 
@@ -69,13 +67,6 @@ function page() {
       throw new Error("Unexpected error during sign-in");
     }
   };
-
-  // useEffect(() => {
-  //   console.log(session?.status === "authenticated");
-  //   if (session?.status === "authenticated") {
-  //     router.replace("/");
-  //   }
-  // }, [session, router]);
 
   return (
     <main className=" fixed inset-0 my-auto flex items-center justify-center">
