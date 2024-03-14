@@ -12,11 +12,11 @@ function Footer() {
     <footer className=" h-auto  border-t px-[10px] md:mt-8 md:px-12 md:py-4">
       <div className=" mt-8 flex flex-col items-center justify-center gap-6 border-b">
         <div className=" flex flex-col items-center justify-center gap-4">
-          <h1 className=" font-roboto text-xl font-bold">
+          <h1 className=" font-roboto text-xl font-semibold">
             Subscribe to our Newsletter
           </h1>
 
-          <p className="text-sans">
+          <p className="text-sans text-sm">
             Stay updated with our latest products and promotions.
           </p>
         </div>
