@@ -69,7 +69,7 @@ function page() {
   };
 
   return (
-    <main className=" fixed inset-0 my-auto flex items-center justify-center">
+    <main className=" my-auto flex items-center justify-center">
       <Card className=" mx-auto max-w-[36rem] flex-grow items-center p-6">
         <CardHeader>
           <CardTitle>Login</CardTitle>

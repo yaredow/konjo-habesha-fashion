@@ -178,7 +178,6 @@ export function RegistrationDialog() {
             </form>
           </Form>
         </div>
-        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
