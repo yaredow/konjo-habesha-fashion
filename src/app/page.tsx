@@ -1,5 +1,6 @@
 import ProductItem from "@/components/product/ProductItem";
 import FeaturedProductsCarousel from "@/components/product/featured/featuredProductsCarousel";
+import TrendingProduct from "@/components/product/treding/TrendingProducts";
 
 const getFeaturedProducts = async () => {
   const res = await fetch("http://localhost:3000/api/products", {
@@ -20,11 +21,7 @@ async function page() {
   return (
     <div>
       <FeaturedProductsCarousel featuredProducts={featuredProducts} />
-      <div className=" mt-12 flex flex-row gap-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <ProductItem key={index} />
-        ))}
-      </div>
+      <TrendingProduct />
     </div>
   );
 }
