@@ -18,7 +18,7 @@ function ProductItem() {
           />
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="-mb-[12px] flex justify-between">
         <div className=" mt-2 flex flex-col justify-between gap-2">
           <h2>Product name</h2>
           <h2>$50</h2>

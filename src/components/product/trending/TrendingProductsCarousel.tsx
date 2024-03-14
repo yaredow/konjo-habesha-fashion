@@ -13,7 +13,7 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
 
-function FeaturedProductsCarousel({ featuredProducts = [] }: any) {
+function TrendingProductCarousel({ featuredProducts = [] }: any) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
@@ -64,4 +64,4 @@ function FeaturedProductsCarousel({ featuredProducts = [] }: any) {
   );
 }
 
-export default FeaturedProductsCarousel;
+export default TrendingProductCarousel;

@@ -1,6 +1,6 @@
-import ProductItem from "@/components/product/ProductItem";
-import FeaturedProductsCarousel from "@/components/product/featured/featuredProductsCarousel";
-import TrendingProduct from "@/components/product/treding/TrendingProducts";
+import FeaturedProducts from "@/components/product/featured/TrendingProducts";
+import NewArrivals from "@/components/product/new-arrival/NewArrivedProducts";
+import TrendingProductCarousel from "@/components/product/trending/TrendingProductsCarousel";
 
 const getFeaturedProducts = async () => {
   const res = await fetch("http://localhost:3000/api/products", {
@@ -20,8 +20,9 @@ async function page() {
   const featuredProducts = await getFeaturedProducts();
   return (
     <div>
-      <FeaturedProductsCarousel featuredProducts={featuredProducts} />
-      <TrendingProduct />
+      <TrendingProductCarousel featuredProducts={featuredProducts} />
+      <FeaturedProducts />
+      <NewArrivals />
     </div>
   );
 }
