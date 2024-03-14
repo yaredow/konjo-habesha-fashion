@@ -52,7 +52,7 @@ export default function RootLayout({
           <AuthProvider>
             <div className=" flex min-h-screen flex-col">
               <Header />
-              <div className="mx-auto my-8 w-[90%] flex-grow">{children}</div>
+              <div className="mx-auto my-12 w-[90%] flex-grow">{children}</div>
               <Footer />
               <Toaster />
             </div>

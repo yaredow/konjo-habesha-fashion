@@ -4,6 +4,8 @@ import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
 import { CiInstagram } from "react-icons/ci";
 import NewsLetter from "./NewsLetter";
+import paymentIcons from "@/assets/payment-icons.png";
+import Image from "next/image";
 
 function Footer() {
   return (
@@ -46,8 +48,14 @@ function Footer() {
         </div>
       </div>
 
-      <div className=" py-6">
-        <p>Copyright © 2023. All rights are reserved</p>
+      <div className="flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
+        <Image
+          src={paymentIcons}
+          alt="secure payment methods icons"
+          height={40}
+          width={450}
+        />
+        <p className=" text-sm">Copyright © 2023. All rights are reserved</p>
       </div>
     </footer>
   );
