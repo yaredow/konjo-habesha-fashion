@@ -11,3 +11,5 @@ export async function GET() {
     data: products,
   });
 }
+
+export async function POST() {}

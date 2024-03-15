@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { MdOutlineDelete } from "react-icons/md";
 
 function DeleteItem() {
