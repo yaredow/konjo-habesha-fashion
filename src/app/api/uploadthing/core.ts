@@ -25,6 +25,8 @@ export const ourFileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
 
       console.log("file url", file.url);
+
+      return file.url;
     }),
   mediaPost: f({
     image: { maxFileSize: "2MB", maxFileCount: 4 },
