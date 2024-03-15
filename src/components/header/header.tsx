@@ -70,7 +70,7 @@ function Header() {
               )}
             </Link>
 
-            <Link href="#">
+            <Link href="/cart">
               <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
             </Link>
           </div>
