@@ -33,7 +33,7 @@ function Header() {
   };
 
   return (
-    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground md:px-12 ">
+    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
       <div className="flex items-center justify-between">
         <Link href="/" className="hidden p-1.5 md:flex">
           <Image
