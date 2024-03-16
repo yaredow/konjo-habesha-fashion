@@ -5,11 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const type = request.url.slice(request.url.lastIndexOf("/") + 1);
-  console.log(request);
 
   await connectMongoDB();
   switch (type) {
-    case "":
+    case null:
       const products = await Product.find();
       return NextResponse.json({ products }, { status: 200 });
 
