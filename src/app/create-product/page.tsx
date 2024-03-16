@@ -14,9 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import Select from "react-select";
 
-import Link from "next/link";
 import {
   Select as SingleSelect,
   SelectContent,
@@ -24,17 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const phoneRegex = new RegExp(
-  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
-);
+import MultipleSelector from "@/components/ui/multiple-selector";
+import { useState } from "react";
+import ImageUploadButton from "@/components/UploadButton";
+import { json } from "stream/consumers";
 
 const formSchema = z.object({
-  productName: z.string(),
-  price: z.number(),
+  name: z.string(),
+  price: z.coerce.number(),
   category: z.string(),
   size: z.string(),
-  stockQuantity: z.number(),
+  stockQuantity: z.coerce.number(),
   description: z.string(),
 });
 
@@ -48,12 +46,14 @@ const options = [
 ];
 
 function page() {
-  const { control } = useForm();
+  const [images, setImages] = useState([]);
+  console.log(images);
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productName: "",
+      name: "",
       price: 0,
       category: "",
       size: "",
@@ -62,25 +62,41 @@ function page() {
     },
   });
 
-  const onSubmit = () => {
-    toast({
-      description: "Your message has been sent successfully!",
+  const onSubmit = async () => {
+    const formData = form.getValues();
+
+    const res = await fetch("api/products/create-product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...formData, images }),
     });
+
+    const data = await res.json();
+
+    if (res?.ok) {
+      toast({
+        description: data.message,
+      });
+    } else {
+      console.log(data.message);
+    }
   };
 
   return (
     <main className="my-auto flex flex-col items-center justify-center">
-      <h2 className="mb-4 text-start text-xl font-bold">Add a new product</h2>
+      <h2 className="mb-8 text-start text-xl font-bold">Add a new product</h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" w-full max-w-2xl items-center justify-center gap-6"
+          className=" w-full max-w-2xl items-center justify-center gap-8"
         >
-          <div className=" flex flex-col space-y-6">
+          <div className=" flex flex-col space-y-8">
             <div className=" w-full ">
               <FormField
                 control={form.control}
-                name="productName"
+                name="name"
                 render={({ field }) => {
                   return (
                     <FormItem>
@@ -106,7 +122,7 @@ function page() {
                     return (
                       <FormItem>
                         <FormControl>
-                          <Input {...field} placeholder="$200" type="text" />
+                          <Input {...field} placeholder="Price" type="number" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -129,9 +145,9 @@ function page() {
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="kids">Kids</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Kids">Kids</SelectItem>
                         </SelectContent>
                       </SingleSelect>
                     </FormItem>
@@ -142,34 +158,25 @@ function page() {
 
             <div className="flex flex-col gap-4 md:flex-row">
               <div className=" w-full md:w-1/2">
-                <Controller
-                  control={control}
-                  name="sizes"
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      options={options}
-                      onChange={onChange}
-                      isMulti={true}
-                      onBlur={onBlur}
-                      value={value}
-                      name={name}
-                      ref={ref}
-                    />
-                  )}
+                <MultipleSelector
+                  defaultOptions={options}
+                  placeholder="Select Size"
                 />
               </div>
 
               <div className=" w-full md:w-1/2">
                 <FormField
                   control={form.control}
-                  name="price"
+                  name="stockQuantity"
                   render={({ field }) => {
                     return (
                       <FormItem>
                         <FormControl>
-                          <Input {...field} placeholder="$200" type="text" />
+                          <Input
+                            {...field}
+                            placeholder="Stock Quantity"
+                            type="number"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -186,7 +193,7 @@ function page() {
                 <FormItem>
                   <FormControl>
                     <Textarea
-                      placeholder="Write your message here"
+                      placeholder="Write product description"
                       className="resize-none"
                       {...field}
                     />
@@ -195,6 +202,8 @@ function page() {
                 </FormItem>
               )}
             />
+
+            <ImageUploadButton setImages={setImages} />
 
             <Button type="submit" className="w-full">
               Submit

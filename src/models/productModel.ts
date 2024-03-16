@@ -23,7 +23,7 @@ const prodcutScheme = new mongoose.Schema({
   },
   images: [
     {
-      public_id: {
+      key: {
         type: String,
         required: true,
       },
