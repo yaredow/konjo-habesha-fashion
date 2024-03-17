@@ -6,7 +6,6 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { ReactQueryClientProvider } from "@/components/providers/ReactQueryClientProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,25 +42,21 @@ export default function RootLayout({
       className={`${inter.variable} ${league_spartan.variable} ${plus_jakarta_sans.variable}`}
     >
       <body>
-        <ReactQueryClientProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <AuthProvider>
-              <div className=" flex min-h-screen flex-col">
-                <Header />
-                <div className="mx-auto my-12 w-[90%] flex-grow">
-                  {children}
-                </div>
-                <Footer />
-                <Toaster />
-              </div>
-            </AuthProvider>
-          </ThemeProvider>
-        </ReactQueryClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <div className=" flex min-h-screen flex-col">
+              <Header />
+              <div className="mx-auto my-12 w-[90%] flex-grow">{children}</div>
+              <Footer />
+              <Toaster />
+            </div>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

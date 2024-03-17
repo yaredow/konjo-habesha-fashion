@@ -5,9 +5,6 @@ import ProductItem from "@/components/product/ProductItem";
 import useGetProducts from "@/components/product/useGetProducts";
 
 function page() {
-  const { isPending, products = [] } = useGetProducts();
-  console.log(products);
-
   if (isPending) return <h>Loading....</h>;
   return (
     <div className=" flex flex-col">
