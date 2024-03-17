@@ -4,7 +4,7 @@ type Product = {
   description: string;
   category: string;
   price: number;
-  images: { key: string; value: string }[];
+  images: { url: string; value: string }[];
   stockQuantity: number;
   unitsSold: number;
   productAddedDate: Date;

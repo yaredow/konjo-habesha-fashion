@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import habeshaImage from "@/assets/habesha.webp";
 import { Button } from "../ui/button";
 import { FaCartPlus } from "react-icons/fa";
 import { formatCurrency } from "@/lib/utils/helpers";
@@ -11,9 +10,10 @@ function ProductItem({ product }: { product: Product }) {
     <div className=" ">
       <div className=" justify-cente flex items-center p-[2px]">
         <Image
-          src={habeshaImage}
+          src={product.images && product.images[0].url}
           alt="Images of habesha woman with a dress"
           className="rounded-xl object-cover"
+          fill
         />
       </div>
       <div className="flex justify-between">
