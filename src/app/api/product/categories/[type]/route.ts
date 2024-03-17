@@ -8,10 +8,6 @@ export async function GET(request: Request) {
 
   await connectMongoDB();
   switch (type) {
-    case null:
-      const products = await Product.find();
-      return NextResponse.json({ products }, { status: 200 });
-
     case "trending":
       const minUnitSold = 10;
       const trendingProducts = await Product.aggregate([
