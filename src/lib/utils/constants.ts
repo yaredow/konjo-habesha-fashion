@@ -1,3 +1,5 @@
+export const itemsPerPage = 8;
+
 export const navLinks = [
   { path: "/", name: "Home" },
   { path: "/shop", name: "Shope" },
