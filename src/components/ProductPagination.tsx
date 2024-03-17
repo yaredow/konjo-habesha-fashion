@@ -3,7 +3,6 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -48,7 +47,7 @@ function ProductPagination({
             <PaginationItem>
               <PaginationLink
                 href="#"
-                className={`${currentPage === page ? " rounded-md bg-slate-100" : null}`}
+                className={`${currentPage === page ? " rounded-m" : null}`}
                 onClick={() => setCurrentPage(page)}
               >
                 {page}
