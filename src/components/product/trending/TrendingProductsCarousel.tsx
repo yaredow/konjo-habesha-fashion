@@ -13,7 +13,11 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
 
-function TrendingProductCarousel({ featuredProducts = [] }: any) {
+function TrendingProductCarousel({
+  featuredProducts = [],
+}: {
+  featuredProducts: Product;
+}) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
@@ -35,7 +39,7 @@ function TrendingProductCarousel({ featuredProducts = [] }: any) {
           className=" w-full max-w-[80rem]"
         >
           <CarouselContent>
-            {featuredProducts.data.map((product: any) => (
+            {featuredProducts.data.map((product: Product) => (
               <CarouselItem key={product._id} className="md:basis-1/4">
                 <div className="p-1">
                   <Card>
