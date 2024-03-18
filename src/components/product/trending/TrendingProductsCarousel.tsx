@@ -12,11 +12,12 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
+import TrendingImage from "@/assets/habesha.webp";
 
 function TrendingProductCarousel({
-  featuredProducts = [],
+  trendingProducts,
 }: {
-  featuredProducts: Product;
+  trendingProducts: Product[];
 }) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
@@ -39,7 +40,7 @@ function TrendingProductCarousel({
           className=" w-full max-w-[80rem]"
         >
           <CarouselContent>
-            {featuredProducts.data.map((product: Product) => (
+            {trendingProducts.map((product) => (
               <CarouselItem key={product._id} className="md:basis-1/4">
                 <div className="p-1">
                   <Card>

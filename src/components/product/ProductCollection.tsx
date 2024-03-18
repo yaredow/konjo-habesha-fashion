@@ -15,7 +15,7 @@ function ProductCollection({ products }: any) {
   return (
     <div className=" flex flex-col gap-8">
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {currentitems?.map((product) => (
+        {currentitems?.map((product: any) => (
           <ProductItem key={product._id} product={product} />
         ))}
       </div>

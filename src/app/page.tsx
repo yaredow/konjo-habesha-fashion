@@ -1,28 +1,21 @@
-import FeaturedProducts from "@/components/product/featured/TrendingProducts";
+import FeaturedProducts from "@/components/product/featured/FeaturedProducts";
 import NewArrivals from "@/components/product/new-arrival/NewArrivedProducts";
 import TrendingProductCarousel from "@/components/product/trending/TrendingProductsCarousel";
+import { getProductWithCategory } from "@/server/actions/actions";
+import { Suspense } from "react";
 
-const getFeaturedProducts = async () => {
-  const res = await fetch("http://localhost:3000/api/products", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res?.ok) {
-    throw new Error("There was an error fetching the featured products");
-  }
-
-  return res.json();
-};
 async function page() {
-  const featuredProducts = await getFeaturedProducts();
+  const data = await getProductWithCategory("trending");
+
   return (
     <div>
-      <TrendingProductCarousel featuredProducts={featuredProducts} />
-      <FeaturedProducts />
-      <NewArrivals />
+      <TrendingProductCarousel trendingProducts={data.trendingProducts} />
+      <Suspense fallback={<p>Loading...</p>}>
+        <FeaturedProducts />
+      </Suspense>
+      <Suspense fallback={<p>Loading...</p>}>
+        <NewArrivals />
+      </Suspense>
     </div>
   );
 }

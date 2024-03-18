@@ -13,7 +13,8 @@ function ProductItem({ product }: { product: Product }) {
           src={product.images && product.images[0].url}
           alt="Images of habesha woman with a dress"
           className="rounded-xl object-cover"
-          fill
+          width={1000}
+          height={1000}
         />
       </div>
       <div className="flex justify-between">
