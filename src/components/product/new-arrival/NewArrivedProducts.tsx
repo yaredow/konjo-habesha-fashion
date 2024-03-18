@@ -1,10 +1,19 @@
+"use client";
+
 import { getProductWithCategory } from "@/server/actions/actions";
 import ProductItem from "../ProductItem";
-import { unstable_noStore } from "next/cache";
+import { useState } from "react";
 
 async function NewArrivals() {
-  unstable_noStore();
-  const data = await getProductWithCategory("new-arrival");
+  const [isLoading, setIsLoading] = useState(false);
+  const [newArrivedProducts, setNewArriveProducts] = useState<Product[]>([]);
+
+  const getNewlyArrivedProducts = async () => {
+    const data = await getProductWithCategory("new-arrival");
+
+    console.log(data);
+  };
+
   return (
     <div className="mt-[5rem]">
       <h3 className="text-center text-2xl font-medium md:text-start">
