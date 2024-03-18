@@ -6,7 +6,6 @@ import ProductItem from "./ProductItem";
 import { itemsPerPage } from "@/lib/utils/constants";
 
 function ProductCollection({ products }: any) {
-  console.log(products);
   const [currentPage, setCurrentPage] = useState(1);
 
   const lastItemIndex = currentPage * itemsPerPage;

@@ -4,29 +4,29 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { FaCartPlus } from "react-icons/fa";
 import { formatCurrency } from "@/lib/utils/helpers";
+import { Card, CardContent, CardFooter } from "../ui/card";
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 function ProductItem({ product }: { product: Product }) {
   return (
-    <div className=" ">
-      <div className=" justify-cente flex items-center p-[2px]">
-        <Image
-          src={product.images && product.images[0].url}
-          alt="Images of habesha woman with a dress"
-          className="rounded-xl object-cover"
-          width={1000}
-          height={1000}
-        />
-      </div>
-      <div className="flex justify-between">
-        <div className=" mt-2 flex flex-row justify-between gap-2 md:flex-col">
-          <h2>{product.name}</h2>
-          <h2>{formatCurrency(product.price)}</h2>
+    <Card className=" rounded-lg shadow-md">
+      <CardContent className="justify-cente flex aspect-square items-center p-2">
+        <div className=" relative  w-full bg-cover">
+          <AspectRatio ratio={1 / 1}>
+            <Image
+              src={product.images[0].url}
+              alt="images of habesha traditional clothes"
+              fill
+              className="rounded-md object-cover "
+            />
+          </AspectRatio>
         </div>
-        <Button size="icon" className="hidden rounded-full md:-mt-6 md:flex">
-          <FaCartPlus />
-        </Button>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="-mb-4 flex flex-col items-center justify-start md:flex-row md:justify-between">
+        <h2>{product.name}</h2>
+        <h2>{formatCurrency(product.price)}</h2>
+      </CardFooter>
+    </Card>
   );
 }
 

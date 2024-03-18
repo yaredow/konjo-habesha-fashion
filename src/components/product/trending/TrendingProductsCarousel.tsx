@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductSkeleton } from "@/components/skeletons/ProductSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -12,7 +13,6 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
-import TrendingImage from "@/assets/habesha.webp";
 
 function TrendingProductCarousel({
   trendingProducts,

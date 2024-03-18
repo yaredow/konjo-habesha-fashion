@@ -2,10 +2,10 @@ import ProductCollection from "@/components/product/ProductCollection";
 import { getProducts } from "@/server/actions/actions";
 
 async function page() {
-  const products = await getProducts();
+  const data = await getProducts();
   return (
     <div>
-      <ProductCollection products={products} />
+      <ProductCollection products={data.products} />
     </div>
   );
 }

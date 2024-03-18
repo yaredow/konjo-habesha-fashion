@@ -10,8 +10,10 @@ export async function getProducts() {
       throw new Error("There was an error fetching products");
     }
 
+    revalidatePath("/shop");
+
     const data = await res?.json();
-    return data.products;
+    return data;
   } catch (err) {
     console.log(err);
   }
@@ -19,18 +21,16 @@ export async function getProducts() {
   revalidatePath("/shop");
 }
 
-export async function getProductWithCategory(type: string) {
+export async function getProductWithCategory(category: string) {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/product/categories/${type}`,
+      `http://localhost:3000/api/product/categories/${category}`,
     );
 
     const data = await res?.json();
 
     return data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
-
-  revalidatePath("/");
 }

@@ -12,3 +12,9 @@ type Product = {
   inStock: boolean;
   sizes: [string];
 };
+
+type Data = {
+  trendingProducts: Product[];
+  featuredProducts: Product[];
+  newArrivalProducts: Product[];
+};
