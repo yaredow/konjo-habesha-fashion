@@ -11,10 +11,10 @@ async function page() {
   return (
     <div>
       <TrendingProductCarousel trendingProducts={data.trendingProducts} />
-      <Suspense fallback={<h1>Loading...</h1>}>
+      <Suspense fallback={<ProductSkeleton />}>
         <FeaturedProducts />
       </Suspense>
-      <Suspense fallback={<h1>Loading...</h1>}>
+      <Suspense fallback={<ProductSkeleton />}>
         <NewArrivals />
       </Suspense>
     </div>

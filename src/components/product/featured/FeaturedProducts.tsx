@@ -1,7 +1,9 @@
 import { getProductWithCategory } from "@/server/actions/actions";
 import ProductItem from "../ProductItem";
+import { unstable_noStore } from "next/cache";
 
 async function FeaturedProducts() {
+  unstable_noStore();
   const data = await getProductWithCategory("featured");
   return (
     <div className="mt-[5rem]">
