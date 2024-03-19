@@ -7,6 +7,7 @@ type Product = {
   images: { url: string; value: string }[];
   stockQuantity: number;
   unitsSold: number;
+  quantity: number;
   productAddedDate: Date;
   isFeatured: boolean;
   inStock: boolean;
@@ -17,4 +18,17 @@ type Data = {
   trendingProducts: Product[];
   featuredProducts: Product[];
   newArrivalProducts: Product[];
+};
+
+type CartItem = Omit<
+  Product,
+  | "description"
+  | "stockQuantity"
+  | "unitsSold"
+  | "productAddedDate"
+  | "isFeatured"
+  | "inStock"
+> & {
+  quantity: number;
+  totalPrice?: number;
 };

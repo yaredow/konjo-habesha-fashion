@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface CartItem {
-  _id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  totalPrice: number;
-}
+import { RootState } from "../store";
 
 // Retrieve cart items from local storage or use an empty array if none exists
 const cartItems: CartItem[] = JSON.parse(
