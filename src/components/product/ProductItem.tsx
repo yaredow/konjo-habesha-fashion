@@ -13,8 +13,23 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { TooltipProvider } from "../ui/tooltip";
+import { toast } from "../ui/use-toast";
+import useAddToCart from "@/hook/useAddToCart";
 
 function ProductItem({ product }: { product: Product }) {
+  const { handleAddToCart } = useAddToCart(product);
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    if (!product.inStock) {
+      toast({
+        description: "This item is out of stock",
+      });
+      e.stopPropagation();
+      return;
+    }
+    handleAddToCart();
+    e.stopPropagation();
+  };
+
   return (
     <Card className=" rounded-lg shadow-md hover:cursor-pointer">
       <CardContent className="justify-cente flex aspect-square items-center p-2">
@@ -37,7 +52,11 @@ function ProductItem({ product }: { product: Product }) {
                 <Button variant="outline" size="icon" className=" rounded-full">
                   <FaHeart className=" text-xl" />
                 </Button>
-                <Button size="icon" className=" rounded-full">
+                <Button
+                  onClick={handleAddToCartClick}
+                  size="icon"
+                  className=" rounded-full"
+                >
                   <FaCartPlus className=" text-xl" />
                 </Button>
               </div>

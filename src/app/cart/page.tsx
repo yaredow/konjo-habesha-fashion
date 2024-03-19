@@ -25,7 +25,7 @@ const Cart = () => {
       </h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
-          {cart?.map((_, index) => <CartItem key={index} />)}
+          {cart?.map((item) => <CartItem key={item._id} item={item} />)}
         </div>
         {/* Sub total */}
         <div className="sticky top-28 mb-6 mt-6 h-full rounded-lg border p-4 shadow-md md:mt-0 md:h-64 md:w-1/3">

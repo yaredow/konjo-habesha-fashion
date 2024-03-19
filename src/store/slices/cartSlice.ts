@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Retrieve cart items from local storage or use an empty array if none exists
-const cartItems: CartItem[] = JSON.parse(
-  localStorage.getItem("cartItems") || "[]",
-);
+// const cartItems: CartItem[] = JSON.parse(
+//   localStorage.getItem("cartItems") || "[]",
+// );
 
 const initialState: CartState = {
-  cart: cartItems,
+  cart: [],
 };
 
 export const cartSlice = createSlice({
@@ -18,12 +18,12 @@ export const cartSlice = createSlice({
       newItem.totalPrice = newItem.price * newItem.quantity;
       state.cart.push(newItem);
       // Update local storage whenever the cart items change
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      // localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     deleteItem: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.filter((item) => item._id !== action.payload);
       // Update local storage whenever the cart items change
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      // localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     increaseItemQuantity: (state, action: PayloadAction<string>) => {
       const item = state.cart.find((item) => item._id === action.payload);
@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
         item.totalPrice = item.price * item.quantity;
       }
       // Update local storage whenever the cart items change
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      // localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     decreaseItemQuantity: (state, action: PayloadAction<string>) => {
       const item = state.cart.find((item) => item._id === action.payload);
@@ -50,12 +50,12 @@ export const cartSlice = createSlice({
         }
       }
       // Update local storage whenever the cart items change
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      // localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     clearCart: (state) => {
       state.cart = [];
       // Update local storage whenever the cart items change
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      // localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
   },
 });
