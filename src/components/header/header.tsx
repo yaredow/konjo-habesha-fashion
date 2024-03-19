@@ -24,10 +24,13 @@ import { useState } from "react";
 import SearchBar from "../search-bar/SearchBar";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import { useAppSelector } from "@/store/hooks";
+import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 
 function Header() {
   const { data: session, status } = useSession();
   const [searchFormOpen, setSearchFormOpem] = useState(false);
+  const cartQuantity = useAppSelector(getTotalCartQuantity);
   const handleToggleSearchForm = () => {
     setSearchFormOpem((searchFormOpen) => !searchFormOpen);
   };
@@ -70,9 +73,17 @@ function Header() {
               )}
             </Link>
 
-            <Link href="/cart">
-              <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
-            </Link>
+            <div className=" relative">
+              <Link href="/cart">
+                <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
+              </Link>
+
+              {cartQuantity > 0 && (
+                <div className=" absolute bottom-5 left-5 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
+                  {cartQuantity}
+                </div>
+              )}
+            </div>
           </div>
 
           <ModeToggle />

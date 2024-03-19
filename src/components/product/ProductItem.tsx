@@ -36,7 +36,7 @@ function ProductItem({ product }: { product: Product }) {
         <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className=" relative  w-full bg-cover">
+              <div className=" relative w-full bg-cover">
                 <AspectRatio ratio={1 / 1}>
                   <Image
                     src={product.images[0].url}

@@ -8,15 +8,13 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 function CartItem({ item }: { item: CartItem }) {
   return (
     <div className="mb-6 justify-between rounded-lg border p-6 shadow-md sm:flex sm:justify-start md:h-64">
-      <AspectRatio ratio={1 / 1}>
-        <Image
-          src={item.images[0].url}
-          alt="images of habesha traditional clothes"
-          height={500}
-          width={150}
-          className="rounded-md object-cover"
-        />
-      </AspectRatio>
+      <Image
+        src={item.images[0].url}
+        alt="images of habesha traditional clothes"
+        height={600}
+        width={200}
+        className="rounded-md object-cover"
+      />
 
       <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
         <div className="mt-5 sm:mt-0">
