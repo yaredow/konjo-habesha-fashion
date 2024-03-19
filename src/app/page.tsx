@@ -2,14 +2,13 @@ import FeaturedProducts from "@/components/product/featured/FeaturedProducts";
 import NewArrivals from "@/components/product/new-arrival/NewArrivedProducts";
 import TrendingProductCarousel from "@/components/product/trending/TrendingProductsCarousel";
 import { ProductSkeleton } from "@/components/skeletons/ProductSkeleton";
+import { productCategories } from "@/lib/utils/constants";
 import { getProductWithCategory } from "@/server/actions/product/getProductCatagories";
 import { Suspense } from "react";
 
 async function page() {
-  const categories: string[] = ["trending", "featured", "new-arrival"];
-
   const data = await Promise.all(
-    categories.map(async (category) => {
+    productCategories.map(async (category) => {
       return await getProductWithCategory(category);
     }),
   );

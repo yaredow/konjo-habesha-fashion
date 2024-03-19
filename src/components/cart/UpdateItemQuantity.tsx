@@ -4,7 +4,13 @@ import {
   increaseItemQuantity,
 } from "@/store/slices/cartSlice";
 
-function UpdateItemQuantity({ id }: { id: string }) {
+function UpdateItemQuantity({
+  id,
+  currentQuantity,
+}: {
+  id: string;
+  currentQuantity: number;
+}) {
   const dispatch = useAppDispatch();
   return (
     <div className="flex items-center border-gray-100">
@@ -17,7 +23,7 @@ function UpdateItemQuantity({ id }: { id: string }) {
       <input
         className="h-8 w-8 border bg-white text-center text-xs outline-none"
         type="number"
-        value={1}
+        value={currentQuantity}
         min="1"
         readOnly
       />
