@@ -1,5 +1,5 @@
 import ProductCollection from "@/components/product/ProductCollection";
-import { getProducts } from "@/server/actions/actions";
+import { getProducts } from "@/server/actions/product/getProduct";
 
 async function page() {
   const data = await getProducts();

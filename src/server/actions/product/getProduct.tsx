@@ -1,5 +1,3 @@
-"use server";
-
 import { revalidatePath } from "next/cache";
 
 export async function getProducts() {
@@ -19,18 +17,4 @@ export async function getProducts() {
   }
 
   revalidatePath("/shop");
-}
-
-export async function getProductWithCategory(category: string) {
-  try {
-    const res = await fetch(
-      `http://localhost:3000/api/product/categories/${category}`,
-    );
-
-    const data = await res?.json();
-
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
 }
