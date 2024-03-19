@@ -6,6 +6,7 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import StoreProvider from "@/components/providers/StoreProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,12 +50,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <div className=" flex min-h-screen flex-col">
-              <Header />
-              <div className="mx-auto my-12 w-[90%] flex-grow">{children}</div>
-              <Footer />
-              <Toaster />
-            </div>
+            <StoreProvider>
+              <div className=" flex min-h-screen flex-col">
+                <Header />
+                <div className="mx-auto my-12 w-[90%] flex-grow">
+                  {children}
+                </div>
+                <Footer />
+                <Toaster />
+              </div>
+            </StoreProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
