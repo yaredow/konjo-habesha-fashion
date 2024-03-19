@@ -3,7 +3,6 @@
 import Image from "next/image";
 import UpdateItemQuantity from "./UpdateItemQuantity";
 import DeleteItem from "./DeleteItem";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 function CartItem({ item }: { item: CartItem }) {
   return (
@@ -22,10 +21,10 @@ function CartItem({ item }: { item: CartItem }) {
           <p className="mt-1 text-sm">{item.category}</p>
         </div>
         <div className="mt-4 flex justify-between sm:mt-0 sm:block sm:space-x-6 sm:space-y-6">
-          <UpdateItemQuantity />
+          <UpdateItemQuantity id={item._id} />
           <div className="flex items-center space-x-4">
             <p className="text-sm dark:text-gray-100">{item.price}</p>
-            <DeleteItem />
+            <DeleteItem id={item._id} />
           </div>
         </div>
       </div>
