@@ -32,3 +32,7 @@ type CartItem = Omit<
   quantity: number;
   totalPrice?: number;
 };
+
+type CartState = {
+  cart: CartItem[];
+};
