@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { RegistrationDialog } from "@/components/account/registration-dialogue/RegistrationDialog";
+import { RegistrationDialog } from "@/components/account/RegistrationDialog";
 import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

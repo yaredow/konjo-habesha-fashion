@@ -1,7 +1,6 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { IoIosLogOut } from "react-icons/io";
 import { Button } from "../ui/button";
 
 function Logout() {
