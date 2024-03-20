@@ -8,13 +8,9 @@ export async function getProducts() {
       throw new Error("There was an error fetching products");
     }
 
-    revalidatePath("/shop");
-
     const data = await res?.json();
     return data;
   } catch (err) {
     console.log(err);
   }
-
-  revalidatePath("/shop");
 }

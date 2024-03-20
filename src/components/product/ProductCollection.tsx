@@ -5,7 +5,7 @@ import ProductPagination from "../ProductPagination";
 import ProductItem from "./ProductItem";
 import { itemsPerPage } from "@/lib/utils/constants";
 
-function ProductCollection({ products }: any) {
+function ProductCollection({ products }: { products: Product[] }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const lastItemIndex = currentPage * itemsPerPage;

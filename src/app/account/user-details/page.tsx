@@ -1,7 +1,9 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Logout from "../Logout";
+import Logout from "../../../components/account/Logout";
+import { Card } from "@/components/ui/card";
+import UpdateAccount from "@/components/account/UpdateAccount";
 
 const UserDetails = () => {
   const { data: session } = useSession();
@@ -12,18 +14,19 @@ const UserDetails = () => {
         <Logout />
 
         <div>
-          <h1>Update</h1>
-          <h1>Create product</h1>
+          <UpdateAccount />
         </div>
       </div>
 
       <div className="mx-auto flex flex-col items-start justify-between gap-8 md:container md:flex-row md:items-center">
         {/* Order History */}
-        <div className="mt-8 w-full pr-8 md:w-2/4">
-          <h2 className="mb-4 text-xl font-bold dark:text-gray-100">
-            Order History
-          </h2>
-        </div>
+        <Card>
+          <div className="mt-8 w-full pr-8 md:w-2/4">
+            <h2 className="mb-4 text-xl font-bold dark:text-gray-100">
+              Order History
+            </h2>
+          </div>
+        </Card>
 
         {/* Account Details */}
         <div className="sticky top-0 h-full w-full md:w-1/3">

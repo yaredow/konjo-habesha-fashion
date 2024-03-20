@@ -2,6 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import { IoIosLogOut } from "react-icons/io";
+import { Button } from "../ui/button";
 
 function Logout() {
   const handleLogout = () => {
@@ -10,13 +11,13 @@ function Logout() {
 
   return (
     <div className=" mb-2 mt-4 flex items-center gap-1 dark:text-gray-100">
-      <IoIosLogOut className="text-xl text-red-500 dark:text-white" />
-      <button
+      <Button
+        variant="link"
         className="hover:text-blue-500 dark:hover:text-blue-400"
         onClick={handleLogout}
       >
-        logout
-      </button>
+        Logout
+      </Button>
     </div>
   );
 }

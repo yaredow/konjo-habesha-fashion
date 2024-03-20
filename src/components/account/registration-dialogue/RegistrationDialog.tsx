@@ -19,9 +19,9 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "../ui/use-toast";
+import { toast } from "../../ui/use-toast";
 
 const registrationFormSchema = z
   .object({
