@@ -12,10 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Input } from "../ui/input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -23,37 +19,31 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { updatePasswordFormSchema } from "@/Schema/formSchemas";
 import { updatePassword } from "@/server/actions/account/updatePassword";
+import SpinnerMini from "../ui/SpinnerMini";
 
-const updateAccountFormSchema = z.object({
-  fullName: z.string().refine(
-    (value) => {
-      if (value !== "") {
-        const names = value.trim().split(" ");
-        return names.length === 2 && names.every((name) => name.length > 0);
-      }
-    },
-    {
-      message: "Please enter your full name with both first and last names.",
-    },
-  ),
-  email: z.string().email(),
-});
-
-function SubmitPassword() {
+export function SubmitPassword() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" aria-disabled={pending}>
-      Submit Password
+    <Button type="submit">
+      {pending ? <SpinnerMini /> : "Submit Passowrd"}
     </Button>
   );
 }
+
 function UpdateAccount({ email }: { email: string }) {
   const [state, formAction] = useFormState(updatePassword, {
-    message: null,
-    email,
+    message: "",
+    fieldValues: {
+      email,
+    },
   });
 
   const accountForm = useForm<z.infer<typeof updateAccountFormSchema>>({
