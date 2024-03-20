@@ -64,14 +64,23 @@ function Header() {
               onClick={handleToggleSearchForm}
               className=" text-xl font-semibold hover:text-blue-500"
             />
-
-            <Link href="/account">
-              {status === "authenticated" ? (
-                <button onClick={() => signOut()}>Log out</button>
-              ) : (
+            <div className=" flex flex-row gap-2">
+              <Link
+                href={
+                  status === "authenticated"
+                    ? "/account/user-details"
+                    : "/account"
+                }
+              >
                 <AiOutlineUser className=" text-xl hover:text-blue-500 " />
-              )}
-            </Link>
+              </Link>
+
+              <p
+                className={`${status === "unauthenticated" ? "hidden" : "flex"}`}
+              >
+                {session?.user?.name?.split(" ")[0]}
+              </p>
+            </div>
 
             <div className=" relative">
               <Link href="/cart">

@@ -27,6 +27,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import GoogleButton from "@/components/GoogleSigninButton";
 import FacebookSigninButton from "@/components/FacebookSigninButton";
+import SpinnerMini from "@/components/ui/SpinnerMini";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -34,7 +35,7 @@ const loginFormSchema = z.object({
 });
 
 function page() {
-  const session = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -56,7 +57,7 @@ function page() {
         toast({
           description: "You have successfully signed in",
         });
-        router.replace("/");
+        router.replace("/account/user-details");
       } else {
         toast({
           variant: "destructive",
@@ -114,7 +115,9 @@ function page() {
                     );
                   }}
                 />
-                <Button type="submit">Login</Button>
+                <Button type="submit">
+                  {status === "loading" ? <SpinnerMini /> : "Sign in"}
+                </Button>
               </div>
             </form>
           </Form>
