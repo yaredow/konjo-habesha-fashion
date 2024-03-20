@@ -1,3 +1,7 @@
+"use client";
+
+import { useFormState, useFormStatus } from "react-dom";
+
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -5,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -20,21 +23,8 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-
-const updatePasswordFormSchema = z
-  .object({
-    password: z.string().min(8),
-    passwordConfirm: z.string(),
-  })
-  .refine(
-    (data) => {
-      return (data.password = data.passwordConfirm);
-    },
-    {
-      message: "Password do not match",
-      path: ["passwordConfirm"],
-    },
-  );
+import { updatePasswordFormSchema } from "@/Schema/formSchemas";
+import { updatePassword } from "@/server/actions/account/updatePassword";
 
 const updateAccountFormSchema = z.object({
   fullName: z.string().refine(
@@ -51,7 +41,21 @@ const updateAccountFormSchema = z.object({
   email: z.string().email(),
 });
 
-function UpdateAccount() {
+function SubmitPassword() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" aria-disabled={pending}>
+      Submit Password
+    </Button>
+  );
+}
+function UpdateAccount({ email }: { email: string }) {
+  const [state, formAction] = useFormState(updatePassword, {
+    message: null,
+    email,
+  });
+
   const accountForm = useForm<z.infer<typeof updateAccountFormSchema>>({
     resolver: zodResolver(updateAccountFormSchema),
     defaultValues: {
@@ -63,8 +67,6 @@ function UpdateAccount() {
   const passwordForm = useForm<z.infer<typeof updatePasswordFormSchema>>({
     resolver: zodResolver(updatePasswordFormSchema),
   });
-
-  const onSubmitAccountForm = () => {};
 
   const onSubmitPasswordForm = () => {};
 
@@ -95,7 +97,7 @@ function UpdateAccount() {
                   <Form {...accountForm}>
                     <form
                       className=" grid gap-4 py-4"
-                      onSubmit={accountForm.handleSubmit(onSubmitAccountForm)}
+                      onSubmit={accountForm.handleSubmit(onSubmitPasswordForm)}
                     >
                       <FormField
                         control={accountForm.control}
@@ -157,20 +159,36 @@ function UpdateAccount() {
               <CardContent className="space-y-2">
                 <div className="grid gap-4">
                   <Form {...passwordForm}>
-                    <form
-                      className=" grid gap-4 py-4"
-                      onSubmit={passwordForm.handleSubmit(onSubmitPasswordForm)}
-                    >
+                    <form className=" grid gap-4 py-4" action={formAction}>
                       <FormField
                         control={passwordForm.control}
-                        name="password"
+                        name="currentPassword"
                         render={({ field }) => {
                           return (
                             <FormItem>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  placeholder="Password"
+                                  placeholder="Current Password"
+                                  type="password"
+                                />
+                              </FormControl>
+                              <FormMessage className=" mx-2" />
+                            </FormItem>
+                          );
+                        }}
+                      />
+
+                      <FormField
+                        control={passwordForm.control}
+                        name="newPassword"
+                        render={({ field }) => {
+                          return (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  placeholder="New Password"
                                   type="password"
                                 />
                               </FormControl>
@@ -199,9 +217,7 @@ function UpdateAccount() {
                         }}
                       />
 
-                      <Button className=" mt-4" type="submit">
-                        Save Passowrd
-                      </Button>
+                      <SubmitPassword />
                     </form>
                   </Form>
                 </div>

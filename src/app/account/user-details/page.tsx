@@ -14,7 +14,7 @@ const UserDetails = () => {
         <Logout />
 
         <div>
-          <UpdateAccount />
+          <UpdateAccount email={session?.user?.email as string} />
         </div>
       </div>
 
