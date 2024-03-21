@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const updateAccountFormSchema = z.object({
+export const UpdateAccountFormSchema = z.object({
   fullName: z.string().refine(
     (value) => {
       if (value !== "") {
@@ -15,15 +15,15 @@ export const updateAccountFormSchema = z.object({
   email: z.string().email(),
 });
 
-export const updatePasswordFormSchema = z
+export const UpdatePasswordFormSchema = z
   .object({
-    currentPassword: z.string().min(8),
+    currentPassword: z.string(),
     newPassword: z.string().min(8),
     passwordConfirm: z.string(),
   })
   .refine(
     (data) => {
-      return (data.newPassword = data.passwordConfirm);
+      return data.newPassword === data.passwordConfirm;
     },
     {
       message: "Password do not match",

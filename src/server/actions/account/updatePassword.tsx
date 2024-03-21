@@ -1,24 +1,33 @@
 "use server";
 
-import { updatePasswordFormSchema } from "@/Schema/formSchemas";
+import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-export async function updatePassword(
-  prevState: { message: string; fieldValues: { email: string } },
-  formData: FormData,
+export async function updatePasswordAction(
+  email: string,
+  formData: z.infer<typeof UpdatePasswordFormSchema>,
 ) {
-  const data = updatePasswordFormSchema.parse({
-    password: formData.get("password"),
-    confirmPassword: formData.get("passwordConfirm"),
+  console.log(formData);
+  const validatedFields = UpdatePasswordFormSchema.safeParse({
+    currentPassword: formData.currentPassword,
+    newPassword: formData.newPassword,
+    passwordConfirm: formData.passwordConfirm,
   });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 
   try {
     await connectMongoDB();
     const user = await User.findOne({
-      email: prevState.fieldValues.email,
+      email: email,
     }).select("+password");
 
     if (!user) {
@@ -26,7 +35,7 @@ export async function updatePassword(
     }
 
     const isCorrectPasswod = await bcrypt.compare(
-      data.currentPassword,
+      parsedFormData.currentPassword,
       user.password,
     );
 
@@ -34,11 +43,10 @@ export async function updatePassword(
       return { message: "The passowrd you provided is inccorect" };
     }
 
-    user.password = data.newPassword;
-    user.passwordConfirm = data.passwordConfirm;
-
-    revalidatePath("/");
+    user.password = parsedFormData.newPassword;
+    user.passwordConfirm = parsedFormData.passwordConfirm;
     await user.save();
+    revalidatePath("/");
     return { message: "Passowrd updated successfully" };
   } catch (err) {
     return { message: err };

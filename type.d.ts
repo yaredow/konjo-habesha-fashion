@@ -38,3 +38,8 @@ type CartItem = Omit<
 type CartState = {
   cart: CartItem[];
 };
+
+type FormState = {
+  messaage: string;
+  fieldValues: { email: string };
+};

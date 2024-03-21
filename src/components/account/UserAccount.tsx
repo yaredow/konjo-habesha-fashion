@@ -24,9 +24,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { updatePasswordFormSchema } from "@/Schema/formSchemas";
-import { updatePassword } from "@/server/actions/account/updatePassword";
+import { updatePasswordAction } from "@/server/actions/account/updatePassword";
 import SpinnerMini from "../ui/SpinnerMini";
+import {
+  UpdateAccountFormSchema,
+  UpdatePasswordFormSchema,
+} from "@/lib/utils/Schemas";
+import { FormState } from "../../../type";
 
 export function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -39,23 +43,29 @@ export function SubmitPassword() {
 }
 
 function UpdateAccount({ email }: { email: string }) {
-  const [state, formAction] = useFormState(updatePassword, {
+  const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
+  const [state, formAction] = useFormState(updatePasswordActionWithEmail, {
     message: "",
     fieldValues: {
       email,
     },
   });
 
-  const accountForm = useForm<z.infer<typeof updateAccountFormSchema>>({
-    resolver: zodResolver(updateAccountFormSchema),
+  const accountForm = useForm<z.infer<typeof UpdateAccountFormSchema>>({
+    resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
       fullName: "",
       email: "",
     },
   });
 
-  const passwordForm = useForm<z.infer<typeof updatePasswordFormSchema>>({
-    resolver: zodResolver(updatePasswordFormSchema),
+  const passwordForm = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
+    resolver: zodResolver(UpdatePasswordFormSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      passwordConfirm: "",
+    },
   });
 
   const onSubmitPasswordForm = () => {};
@@ -149,7 +159,10 @@ function UpdateAccount({ email }: { email: string }) {
               <CardContent className="space-y-2">
                 <div className="grid gap-4">
                   <Form {...passwordForm}>
-                    <form className=" grid gap-4 py-4" action={formAction}>
+                    <form
+                      className=" grid gap-4 py-4"
+                      action={formAction.bind(null, email)}
+                    >
                       <FormField
                         control={passwordForm.control}
                         name="currentPassword"

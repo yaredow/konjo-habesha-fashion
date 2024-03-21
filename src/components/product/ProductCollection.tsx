@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProductPagination from "../ProductPagination";
 import ProductItem from "./ProductItem";
 import { itemsPerPage } from "@/lib/utils/constants";
+import { Product } from "../../../type";
 
 function ProductCollection({ products }: { products: Product[] }) {
   const [currentPage, setCurrentPage] = useState(1);
