@@ -40,6 +40,11 @@ type CartState = {
 };
 
 type FormState = {
-  messaage: string;
-  fieldValues: { email: string };
+  message: string;
+  errors: string | undefined;
+  fieldValues: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  };
 };
