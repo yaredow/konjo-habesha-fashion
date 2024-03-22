@@ -1,32 +1,30 @@
 "use server";
 
-import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
+import { toast } from "@/components/ui/use-toast";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
-import { FormState } from "../../../../type";
 
 export async function updatePasswordAction(
   email: string,
-  prevState: FormState,
-  formData: z.infer<typeof UpdatePasswordFormSchema>,
-) {
-  console.log(formData);
-  console.log(email);
-  const validatedFields = UpdatePasswordFormSchema.safeParse({
-    currentPassword: formData.currentPassword,
-    newPassword: formData.newPassword,
-    passwordConfirm: formData.passwordConfirm,
-  });
+  prevState: any,
+  formData: FormData,
+): Promise<{
+  errors: {
+    currentPassword?: string[] | undefined;
+    newPassword?: string[] | undefined;
+    confirmPassword?: string[] | undefined;
+  };
+  message: string | null;
+}> {
+  const data = {
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+    passwordConfirm: formData.get("passwordConfirm"),
+  };
 
-  console.log(validatedFields.success);
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
+  console.log(data);
 
   try {
     await connectMongoDB();
@@ -37,24 +35,29 @@ export async function updatePasswordAction(
     console.log(user);
 
     if (!user) {
-      return { message: "You are not logged in" };
+      toast({
+        description: "Please login first",
+      });
     }
 
     const isCorrectPasswod = await bcrypt.compare(
-      validatedFields.data.currentPassword,
+      data.currentPassword as string,
       user.password,
     );
 
     if (!isCorrectPasswod) {
-      return { message: "The passowrd you provided is inccorect" };
+      toast({
+        description: "Passwords do not match",
+      });
     }
 
-    user.password = validatedFields.data.newPassword;
-    user.passwordConfirm = validatedFields.data.passwordConfirm;
+    user.password = data.newPassword;
+    user.passwordConfirm = data.passwordConfirm;
+    console.log("password changed successfully");
     await user.save();
     revalidatePath("/");
-    return { message: "Passowrd updated successfully" };
+    return { message: "Passowrd updated successfully", errors: {} };
   } catch (err) {
-    return { message: err };
+    return { message: "Changing user password failed", errors: {} };
   }
 }

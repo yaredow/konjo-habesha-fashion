@@ -20,8 +20,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useFormState, useFormStatus } from "react-dom";
+import { updateUserData } from "@/server/actions/account/updateUserData";
+import SpinnerMini from "../ui/SpinnerMini";
+
+const initialState = {
+  message: "",
+  errors: {},
+};
+
+function SubmitUserData() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit">{pending ? <SpinnerMini /> : "Submit change"}</Button>
+  );
+}
 
 function UpdateUserData() {
+  const [state, formAction] = useFormState(updateUserData, initialState);
   const accountForm = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
@@ -29,8 +46,6 @@ function UpdateUserData() {
       email: "",
     },
   });
-
-  const onSubmit = () => {};
 
   return (
     <Card>
@@ -43,10 +58,7 @@ function UpdateUserData() {
       <CardContent className="space-y-2">
         <div className="grid gap-4">
           <Form {...accountForm}>
-            <form
-              className=" grid gap-4 py-4"
-              onSubmit={accountForm.handleSubmit(onSubmit)}
-            >
+            <form className=" grid gap-4 py-4" action={formAction}>
               <FormField
                 control={accountForm.control}
                 name="fullName"
@@ -87,9 +99,7 @@ function UpdateUserData() {
                 }}
               />
 
-              <Button className=" mt-4" type="submit">
-                Save Changes
-              </Button>
+              <SubmitUserData />
             </form>
           </Form>
         </div>

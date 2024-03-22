@@ -23,7 +23,6 @@ import { Button } from "../ui/button";
 import SpinnerMini from "../ui/SpinnerMini";
 import { useFormState, useFormStatus } from "react-dom";
 import { updatePasswordAction } from "@/server/actions/account/updatePassword";
-import { FormState } from "../../../type";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -35,14 +34,9 @@ function SubmitPassword() {
   );
 }
 
-const initialState: FormState = {
+const initialState = {
   message: "",
-  errors: undefined,
-  fieldValues: {
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  },
+  errors: {},
 };
 
 function UpdateUserPassword({ email }: { email: string }) {
@@ -51,7 +45,8 @@ function UpdateUserPassword({ email }: { email: string }) {
     updatePasswordActionWithEmail,
     initialState,
   );
-  const passwordForm = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
+
+  const form = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
     resolver: zodResolver(UpdatePasswordFormSchema),
     defaultValues: {
       currentPassword: "",
@@ -70,10 +65,10 @@ function UpdateUserPassword({ email }: { email: string }) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid gap-4">
-          <Form {...passwordForm}>
+          <Form {...form}>
             <form className=" grid gap-4 py-4" action={formAction}>
               <FormField
-                control={passwordForm.control}
+                control={form.control}
                 name="currentPassword"
                 render={({ field }) => {
                   return (
@@ -93,7 +88,7 @@ function UpdateUserPassword({ email }: { email: string }) {
               />
 
               <FormField
-                control={passwordForm.control}
+                control={form.control}
                 name="newPassword"
                 render={({ field }) => {
                   return (
@@ -113,7 +108,7 @@ function UpdateUserPassword({ email }: { email: string }) {
               />
 
               <FormField
-                control={passwordForm.control}
+                control={form.control}
                 name="passwordConfirm"
                 render={({ field }) => {
                   return (

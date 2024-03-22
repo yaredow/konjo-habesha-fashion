@@ -41,7 +41,7 @@ type CartState = {
 
 type FormState = {
   message: string;
-  errors: string | undefined;
+  errors: string[] | undefined;
   fieldValues: {
     currentPassword: string;
     newPassword: string;
