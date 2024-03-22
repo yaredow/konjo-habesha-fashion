@@ -6,31 +6,30 @@ import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
+type FormState = {
+  message: string;
+  fields?: Record<string, string>;
+};
+
 export async function updatePasswordAction(
   email: string,
-  prevState: any,
+  prevState: FormState,
   formData: FormData,
-): Promise<{
-  error?: string | null;
-  message?: string | null;
-}> {
-  const { currentPassword, newPassword, passwordConfirm } = {
+): Promise<FormState> {
+  const validatedFields = UpdatePasswordFormSchema.safeParse({
     currentPassword: formData.get("currentPassword"),
     newPassword: formData.get("newPassword"),
     passwordConfirm: formData.get("passwordConfirm"),
-  };
-
-  const validatedFields = UpdatePasswordFormSchema.safeParse({
-    currentPassword,
-    newPassword,
-    passwordConfirm,
   });
 
   if (!validatedFields.success) {
     return {
-      error: validatedFields.error.flatten().fieldErrors,
+      message: "invalid form data",
     };
   }
+
+  const { currentPassword, newPassword, passwordConfirm } =
+    validatedFields.data;
 
   try {
     await connectMongoDB();
@@ -39,7 +38,7 @@ export async function updatePasswordAction(
     }).select("+password");
 
     if (!user) {
-      return { error: "You have to log in first" };
+      return { message: "You have to login first" };
     }
 
     const isCorrectPasswod = await bcrypt.compare(
@@ -49,17 +48,16 @@ export async function updatePasswordAction(
 
     if (!isCorrectPasswod) {
       return {
-        error: "Passwords do not match",
+        message: "Passwords do not match",
       };
     }
 
     user.password = newPassword;
     user.passwordConfirm = passwordConfirm;
-    console.log("password changed successfully");
     await user.save();
     revalidatePath("/");
     return { message: "Passowrd updated successfully" };
   } catch (err) {
-    return { error: "Changing user password failed" };
+    return { message: "Changing user password failed" };
   }
 }

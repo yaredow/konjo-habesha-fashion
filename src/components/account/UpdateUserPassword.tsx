@@ -1,6 +1,15 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import SpinnerMini from "../ui/SpinnerMini";
+import { useFormState, useFormStatus } from "react-dom";
+import { updatePasswordAction } from "@/server/actions/account/updatePassword";
+import { useEffect, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -15,15 +24,6 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import SpinnerMini from "../ui/SpinnerMini";
-import { useFormState, useFormStatus } from "react-dom";
-import { updatePasswordAction } from "@/server/actions/account/updatePassword";
-import { useRef } from "react";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -37,12 +37,13 @@ function SubmitPassword() {
 
 const initialState = {
   message: "",
-  errors: {},
 };
 
 function UpdateUserPassword({ email }: { email: string }) {
   const formRef = useRef<HTMLFormElement>(null);
+
   const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
+
   const [state, formAction] = useFormState(
     updatePasswordActionWithEmail,
     initialState,
@@ -57,6 +58,12 @@ function UpdateUserPassword({ email }: { email: string }) {
     },
   });
 
+  useEffect(() => {
+    if (state?.message === "success") {
+      formRef.current?.reset();
+    }
+  }, []);
+
   return (
     <Card>
       <CardHeader>
@@ -68,11 +75,19 @@ function UpdateUserPassword({ email }: { email: string }) {
       <CardContent className="space-y-2">
         <div className="grid gap-4">
           <Form {...form}>
+            {state?.message !== "" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
             <form
               ref={formRef}
               className=" grid gap-4 py-4"
               action={formAction}
-              onSubmit={form.handleSubmit(() => formRef.current?.submit())}
+              onSubmit={(evt) => {
+                evt.preventDefault();
+                form.handleSubmit(() => {
+                  formAction(new FormData(formRef.current!));
+                })(evt);
+              }}
             >
               <FormField
                 control={form.control}

@@ -16,9 +16,9 @@ export const UpdateAccountFormSchema = z.object({
 
 export const UpdatePasswordFormSchema = z
   .object({
-    currentPassword: z.string(),
-    newPassword: z.string().min(8),
-    passwordConfirm: z.string(),
+    currentPassword: z.string().trim().min(8),
+    newPassword: z.string().trim().min(8),
+    passwordConfirm: z.string().trim().min(8),
   })
   .refine(
     (data) => {

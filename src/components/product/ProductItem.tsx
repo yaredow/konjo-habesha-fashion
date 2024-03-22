@@ -15,6 +15,7 @@ import {
 import { TooltipProvider } from "../ui/tooltip";
 import { toast } from "../ui/use-toast";
 import useAddToCart from "@/hook/useAddToCart";
+import { Product } from "../../../type";
 
 function ProductItem({ product }: { product: Product }) {
   const { handleAddToCart } = useAddToCart(product);
