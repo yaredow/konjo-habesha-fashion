@@ -23,6 +23,7 @@ import { Button } from "../ui/button";
 import SpinnerMini from "../ui/SpinnerMini";
 import { useFormState, useFormStatus } from "react-dom";
 import { updatePasswordAction } from "@/server/actions/account/updatePassword";
+import { useRef } from "react";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -40,6 +41,7 @@ const initialState = {
 };
 
 function UpdateUserPassword({ email }: { email: string }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
   const [state, formAction] = useFormState(
     updatePasswordActionWithEmail,
@@ -66,7 +68,12 @@ function UpdateUserPassword({ email }: { email: string }) {
       <CardContent className="space-y-2">
         <div className="grid gap-4">
           <Form {...form}>
-            <form className=" grid gap-4 py-4" action={formAction}>
+            <form
+              ref={formRef}
+              className=" grid gap-4 py-4"
+              action={formAction}
+              onSubmit={form.handleSubmit(() => formRef.current?.submit())}
+            >
               <FormField
                 control={form.control}
                 name="currentPassword"
@@ -78,7 +85,6 @@ function UpdateUserPassword({ email }: { email: string }) {
                           {...field}
                           placeholder="Current Password"
                           type="password"
-                          name="currentPassword"
                         />
                       </FormControl>
                       <FormMessage className=" mx-2" />
@@ -98,7 +104,6 @@ function UpdateUserPassword({ email }: { email: string }) {
                           {...field}
                           placeholder="New Password"
                           type="password"
-                          name="newPassword"
                         />
                       </FormControl>
                       <FormMessage className=" mx-2" />
@@ -118,7 +123,6 @@ function UpdateUserPassword({ email }: { email: string }) {
                           {...field}
                           placeholder="Confirm Password"
                           type="password"
-                          name="passwordConfirm"
                         />
                       </FormControl>
                       <FormMessage className=" mx-2" />

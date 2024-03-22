@@ -12,7 +12,6 @@ export const UpdateAccountFormSchema = z.object({
       message: "Please enter your full name with both first and last names.",
     },
   ),
-  email: z.string().email(),
 });
 
 export const UpdatePasswordFormSchema = z

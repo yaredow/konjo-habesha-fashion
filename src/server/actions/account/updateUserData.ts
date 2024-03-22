@@ -1,6 +1,5 @@
 "use server";
 import { UpdateAccountFormSchema } from "@/lib/utils/Schemas";
-import { z } from "zod";
 
 export async function updateUserData(
   prevState: any,
@@ -10,7 +9,7 @@ export async function updateUserData(
     fullName?: string[] | undefined;
     email?: string[] | undefined;
   };
-  message: string | null; // here
+  message: string | null;
 }> {
   const validatedFields = UpdateAccountFormSchema.safeParse(formData);
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { toast } from "@/components/ui/use-toast";
+import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
@@ -11,20 +11,26 @@ export async function updatePasswordAction(
   prevState: any,
   formData: FormData,
 ): Promise<{
-  errors: {
-    currentPassword?: string[] | undefined;
-    newPassword?: string[] | undefined;
-    confirmPassword?: string[] | undefined;
-  };
-  message: string | null;
+  error?: string | null;
+  message?: string | null;
 }> {
-  const data = {
+  const { currentPassword, newPassword, passwordConfirm } = {
     currentPassword: formData.get("currentPassword"),
     newPassword: formData.get("newPassword"),
     passwordConfirm: formData.get("passwordConfirm"),
   };
 
-  console.log(data);
+  const validatedFields = UpdatePasswordFormSchema.safeParse({
+    currentPassword,
+    newPassword,
+    passwordConfirm,
+  });
+
+  if (!validatedFields.success) {
+    return {
+      error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 
   try {
     await connectMongoDB();
@@ -32,32 +38,28 @@ export async function updatePasswordAction(
       email: email,
     }).select("+password");
 
-    console.log(user);
-
     if (!user) {
-      toast({
-        description: "Please login first",
-      });
+      return { error: "You have to log in first" };
     }
 
     const isCorrectPasswod = await bcrypt.compare(
-      data.currentPassword as string,
+      currentPassword as string,
       user.password,
     );
 
     if (!isCorrectPasswod) {
-      toast({
-        description: "Passwords do not match",
-      });
+      return {
+        error: "Passwords do not match",
+      };
     }
 
-    user.password = data.newPassword;
-    user.passwordConfirm = data.passwordConfirm;
+    user.password = newPassword;
+    user.passwordConfirm = passwordConfirm;
     console.log("password changed successfully");
     await user.save();
     revalidatePath("/");
-    return { message: "Passowrd updated successfully", errors: {} };
+    return { message: "Passowrd updated successfully" };
   } catch (err) {
-    return { message: "Changing user password failed", errors: {} };
+    return { error: "Changing user password failed" };
   }
 }

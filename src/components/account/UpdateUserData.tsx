@@ -79,26 +79,6 @@ function UpdateUserData() {
                 }}
               />
 
-              <FormField
-                control={accountForm.control}
-                name="email"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Email"
-                          type="email"
-                          name="email"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
               <SubmitUserData />
             </form>
           </Form>
