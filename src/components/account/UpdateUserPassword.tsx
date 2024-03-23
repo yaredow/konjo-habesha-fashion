@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import SpinnerMini from "../ui/SpinnerMini";
 import { useFormState, useFormStatus } from "react-dom";
 import { updatePasswordAction } from "@/server/actions/account/updatePassword";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { toast } from "../ui/use-toast";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -41,6 +42,7 @@ const initialState = {
 
 function UpdateUserPassword({ email }: { email: string }) {
   const formRef = useRef<HTMLFormElement>(null);
+  const [toastKey, setToastKey] = useState("");
 
   const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
 
@@ -58,11 +60,28 @@ function UpdateUserPassword({ email }: { email: string }) {
     },
   });
 
+  const handlePasswordSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    formAction(new FormData(formRef.current!));
+    form.reset();
+  };
+
   useEffect(() => {
-    if (state?.message === "success") {
-      formRef.current?.reset();
+    if (state?.message !== "") {
+      console.log(state.message);
+      if (state.message === "success") {
+        toast({
+          description: "Password has been updated successfully",
+          key: toastKey,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          description: state.message,
+        });
+      }
     }
-  }, []);
+  }, [state?.message]);
 
   return (
     <Card>
@@ -75,19 +94,11 @@ function UpdateUserPassword({ email }: { email: string }) {
       <CardContent className="space-y-2">
         <div className="grid gap-4">
           <Form {...form}>
-            {state?.message !== "" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
             <form
               ref={formRef}
               className=" grid gap-4 py-4"
               action={formAction}
-              onSubmit={(evt) => {
-                evt.preventDefault();
-                form.handleSubmit(() => {
-                  formAction(new FormData(formRef.current!));
-                })(evt);
-              }}
+              onSubmit={handlePasswordSubmit}
             >
               <FormField
                 control={form.control}

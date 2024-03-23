@@ -6,9 +6,16 @@ import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
+type Fields = {
+  currentPassword: string;
+  newPassword: string;
+  passwordConfirm: string;
+};
+
 type FormState = {
   message: string;
-  fields?: Record<string, string>;
+  fields?: Record<keyof Fields, string>;
+  issues?: string[];
 };
 
 export async function updatePasswordAction(
@@ -49,6 +56,7 @@ export async function updatePasswordAction(
     if (!isCorrectPasswod) {
       return {
         message: "Passwords do not match",
+        fields: validatedFields.data,
       };
     }
 
@@ -56,7 +64,7 @@ export async function updatePasswordAction(
     user.passwordConfirm = passwordConfirm;
     await user.save();
     revalidatePath("/");
-    return { message: "Passowrd updated successfully" };
+    return { message: "success" };
   } catch (err) {
     return { message: "Changing user password failed" };
   }
