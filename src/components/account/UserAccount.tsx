@@ -21,7 +21,7 @@ function UpdateAccount({ email }: { email: string }) {
           </TabsList>
 
           <TabsContent value="account">
-            <UpdateUserData />
+            <UpdateUserData email={email} />
           </TabsContent>
 
           <TabsContent value="password">

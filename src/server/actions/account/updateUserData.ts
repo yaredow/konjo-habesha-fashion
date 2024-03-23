@@ -1,24 +1,41 @@
 "use server";
 import { UpdateAccountFormSchema } from "@/lib/utils/Schemas";
+import connectMongoDB from "@/lib/utils/mongo/db";
+import User from "@/models/authModel";
+
+export type FormState = {
+  message: string;
+};
 
 export async function updateUserData(
-  prevState: any,
+  email: string,
+  prevState: FormState,
   formData: FormData,
-): Promise<{
-  errors: {
-    fullName?: string[] | undefined;
-    email?: string[] | undefined;
-  };
-  message: string | null;
-}> {
-  const validatedFields = UpdateAccountFormSchema.safeParse(formData);
+): Promise<FormState> {
+  const validatedFields = UpdateAccountFormSchema.safeParse({
+    fullName: formData.get("fullName"),
+  });
 
   if (!validatedFields.success) {
-    return { message: "Validation failed", errors: {} };
+    return { message: "Invalid data" };
   }
 
-  const data = validatedFields.data;
-  console.log(data);
+  try {
+    const { fullName } = validatedFields.data;
+    await connectMongoDB();
 
-  return { message: "validation successful", errors: {} };
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return { message: "You have to login first" };
+    }
+
+    user.fullName = fullName;
+    await user.save();
+
+    return { message: "success" };
+  } catch (err) {
+    throw err;
+  }
+  return { message: "Updating user data failed" };
 }

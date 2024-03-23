@@ -21,12 +21,16 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useFormState, useFormStatus } from "react-dom";
-import { updateUserData } from "@/server/actions/account/updateUserData";
+import {
+  FormState,
+  updateUserData,
+} from "@/server/actions/account/updateUserData";
 import SpinnerMini from "../ui/SpinnerMini";
+import React, { useEffect, useRef } from "react";
+import { toast } from "../ui/use-toast";
 
-const initialState = {
+const initialState: FormState = {
   message: "",
-  errors: {},
 };
 
 function SubmitUserData() {
@@ -37,15 +41,35 @@ function SubmitUserData() {
   );
 }
 
-function UpdateUserData() {
-  const [state, formAction] = useFormState(updateUserData, initialState);
-  const accountForm = useForm<z.infer<typeof UpdateAccountFormSchema>>({
+function UpdateUserData({ email }: { email: string }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const updateUserDataWithEmail = updateUserData.bind(null, email);
+  const [state, formAction] = useFormState(
+    updateUserDataWithEmail,
+    initialState,
+  );
+
+  const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
       fullName: "",
-      email: "",
     },
   });
+
+  const handleSubmitData = () => {
+    formAction(new FormData(formRef.current!));
+  };
+
+  useEffect(() => {
+    if (state?.message !== "") {
+      if (state?.message === "success") {
+        toast({
+          description: "Username updated successfully",
+        });
+      }
+      form.reset();
+    }
+  }, [state?.message]);
 
   return (
     <Card>
@@ -57,21 +81,24 @@ function UpdateUserData() {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid gap-4">
-          <Form {...accountForm}>
-            <form className=" grid gap-4 py-4" action={formAction}>
+          <Form {...form}>
+            {state?.message !== "" && state?.message !== "success" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
+            <form
+              ref={formRef}
+              className=" grid gap-4 py-4"
+              action={formAction}
+              onSubmit={handleSubmitData}
+            >
               <FormField
-                control={accountForm.control}
+                control={form.control}
                 name="fullName"
                 render={({ field }) => {
                   return (
                     <FormItem>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Name"
-                          type="text"
-                          name="fullName"
-                        />
+                        <Input {...field} placeholder="Name" type="text" />
                       </FormControl>
                       <FormMessage className=" mx-2" />
                     </FormItem>
