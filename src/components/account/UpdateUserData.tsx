@@ -15,7 +15,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { UpdateAccountFormSchema } from "@/lib/utils/Schemas";
+import { UpdateAccountFormSchema } from "@/lib/utils/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";

@@ -3,6 +3,8 @@ import {
   decreaseItemQuantity,
   increaseItemQuantity,
 } from "@/store/slices/cartSlice";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 function UpdateItemQuantity({
   id,
@@ -13,26 +15,16 @@ function UpdateItemQuantity({
 }) {
   const dispatch = useAppDispatch();
   return (
-    <div className="flex items-center border-gray-100">
-      <span
-        onClick={() => dispatch(decreaseItemQuantity(id))}
-        className="cursor-pointer rounded-l bg-gray-100 px-3.5 py-1 duration-100 hover:bg-blue-500 hover:text-blue-50"
-      >
-        -
-      </span>
-      <input
-        className="h-8 w-8 border bg-white text-center text-xs outline-none"
+    <div className="flex items-center gap-[4px] border-gray-100">
+      <Button onClick={() => dispatch(decreaseItemQuantity(id))}>-</Button>
+      <Input
+        className="h-10 w-16 items-center"
         type="number"
         value={currentQuantity}
         min="1"
         readOnly
       />
-      <span
-        onClick={() => dispatch(increaseItemQuantity(id))}
-        className={`cursor-pointer rounded-r bg-gray-100 px-3 py-1 duration-100`}
-      >
-        +
-      </span>
+      <Button onClick={() => dispatch(increaseItemQuantity(id))}>+</Button>
     </div>
   );
 }

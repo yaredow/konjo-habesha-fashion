@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { UpdatePasswordFormSchema } from "@/lib/utils/Schemas";
+import { UpdatePasswordFormSchema } from "@/lib/utils/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
@@ -58,7 +58,7 @@ function UpdateUserPassword({ email }: { email: string }) {
     },
   });
 
-  const handlePasswordSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = () => {
     formAction(new FormData(formRef.current!));
   };
 

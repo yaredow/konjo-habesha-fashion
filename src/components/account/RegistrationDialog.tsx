@@ -21,35 +21,27 @@ import {
 } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "../ui/use-toast";
+import { registrationFormSchema } from "@/lib/utils/form-schemas";
+import { useEffect, useRef, useState } from "react";
+import { register } from "@/server/actions/account/register";
+import { useFormState, useFormStatus } from "react-dom";
+import SpinnerMini from "../ui/SpinnerMini";
 
-const registrationFormSchema = z
-  .object({
-    fullName: z.string().refine(
-      (value) => {
-        if (value !== "") {
-          const names = value.trim().split(" ");
-          return names.length === 2 && names.every((name) => name.length > 0);
-        }
-      },
-      {
-        message: "Please enter your full name with both first and last names.",
-      },
-    ),
-    email: z.string().email(),
-    password: z.string().min(8),
-    passwordConfirm: z.string(),
-  })
-  .refine(
-    (data) => {
-      return (data.password = data.passwordConfirm);
-    },
-    {
-      message: "Password do not match",
-      path: ["passwordConfirm"],
-    },
+function RegistrationButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit">{pending ? <SpinnerMini /> : "Register"}</Button>
   );
+}
+
+const initialState = {
+  message: "",
+};
 
 export function RegistrationDialog() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction] = useFormState(register, initialState);
+
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
     defaultValues: {
@@ -60,32 +52,22 @@ export function RegistrationDialog() {
     },
   });
 
-  const onSubmit = async () => {
-    const formData = form.getValues();
-    try {
-      const res = await fetch("api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (res.status === 201) {
-        toast({
-          description: data.message,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Oh, something went wrong",
-          description: data.message,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    form.handleSubmit(() => {
+      formAction(new FormData(formRef.current!));
+    })(evt);
   };
+
+  useEffect(() => {
+    if (state?.message !== "" && state.message === "success") {
+      toast({
+        description: "You have registered successfully",
+      });
+    }
+    form.reset();
+  }, [state?.message]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -100,9 +82,14 @@ export function RegistrationDialog() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
+            {state?.message !== "" && state?.message !== "success" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
             <form
+              ref={formRef}
               className=" grid gap-4 py-4"
-              onSubmit={form.handleSubmit(onSubmit)}
+              action={formAction}
+              onSubmit={handleSubmitRegistration}
             >
               <FormField
                 control={form.control}
@@ -171,9 +158,7 @@ export function RegistrationDialog() {
                   );
                 }}
               />
-              <Button className=" mt-4" type="submit">
-                Sign up
-              </Button>
+              <RegistrationButton />
             </form>
           </Form>
         </div>

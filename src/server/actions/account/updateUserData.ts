@@ -1,5 +1,5 @@
 "use server";
-import { UpdateAccountFormSchema } from "@/lib/utils/Schemas";
+import { UpdateAccountFormSchema } from "@/lib/utils/form-schemas";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 

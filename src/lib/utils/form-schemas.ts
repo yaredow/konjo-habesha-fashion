@@ -29,3 +29,30 @@ export const UpdatePasswordFormSchema = z
       path: ["passwordConfirm"],
     },
   );
+
+export const registrationFormSchema = z
+  .object({
+    fullName: z.string().refine(
+      (value) => {
+        if (value !== "") {
+          const names = value.trim().split(" ");
+          return names.length === 2 && names.every((name) => name.length > 0);
+        }
+      },
+      {
+        message: "Please enter your full name with both first and last names.",
+      },
+    ),
+    email: z.string().email(),
+    password: z.string().min(8),
+    passwordConfirm: z.string().min(8),
+  })
+  .refine(
+    (data) => {
+      return (data.password = data.passwordConfirm);
+    },
+    {
+      message: "Password do not match",
+      path: ["passwordConfirm"],
+    },
+  );
