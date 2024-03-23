@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { toast } from "../ui/use-toast";
+import { signOut } from "next-auth/react";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
@@ -42,7 +43,7 @@ const initialState = {
 
 function UpdateUserPassword({ email }: { email: string }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [toastKey, setToastKey] = useState("");
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
 
@@ -63,23 +64,15 @@ function UpdateUserPassword({ email }: { email: string }) {
   const handlePasswordSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     formAction(new FormData(formRef.current!));
-    form.reset();
   };
 
   useEffect(() => {
-    if (state?.message !== "") {
-      console.log(state.message);
-      if (state.message === "success") {
-        toast({
-          description: "Password has been updated successfully",
-          key: toastKey,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: state.message,
-        });
-      }
+    if (state?.message !== "" && state?.message === "success") {
+      toast({
+        description: "Password has been updated successfully",
+      });
+      form.reset();
+      signOut({ callbackUrl: "http://localhost:3000/account" });
     }
   }, [state?.message]);
 
@@ -94,6 +87,9 @@ function UpdateUserPassword({ email }: { email: string }) {
       <CardContent className="space-y-2">
         <div className="grid gap-4">
           <Form {...form}>
+            {state?.message !== "" && state?.message !== "success" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
             <form
               ref={formRef}
               className=" grid gap-4 py-4"

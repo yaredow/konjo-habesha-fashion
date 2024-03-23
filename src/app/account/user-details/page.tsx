@@ -7,7 +7,6 @@ import UpdateAccount from "@/components/account/UserAccount";
 
 const UserDetails = () => {
   const { data: session } = useSession();
-  console.log(session);
   return (
     <div className="container ">
       <div className="mb-6 flex flex-row items-center justify-between">
@@ -34,8 +33,8 @@ const UserDetails = () => {
             Account Details
           </h2>
           <div className="rounded border border-gray-300 p-4">
-            <p className="dark:text-g`ray-100 pb-4">{session?.user?.name}</p>
-            <p className="dark:text-gray-100">{session?.user?.email}</p>
+            <p className="pb-4">{session?.user?.name}</p>
+            <p className="">{session?.user?.email}</p>
           </div>
         </div>
       </div>
