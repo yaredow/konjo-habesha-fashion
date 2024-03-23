@@ -56,8 +56,11 @@ function UpdateUserData({ email }: { email: string }) {
     },
   });
 
-  const handleSubmitData = () => {
-    formAction(new FormData(formRef.current!));
+  const handleSubmitData = (evt: React.MouseEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    form.handleSubmit(() => {
+      formAction(new FormData(formRef.current!));
+    })(evt);
   };
 
   useEffect(() => {

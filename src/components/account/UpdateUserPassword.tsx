@@ -58,8 +58,11 @@ function UpdateUserPassword({ email }: { email: string }) {
     },
   });
 
-  const handlePasswordSubmit = () => {
-    formAction(new FormData(formRef.current!));
+  const handlePasswordSubmit = (evt: React.MouseEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    form.handleSubmit(() => {
+      formAction(new FormData(formRef.current!));
+    })(evt);
   };
 
   useEffect(() => {
