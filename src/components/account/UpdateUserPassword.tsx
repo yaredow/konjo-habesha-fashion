@@ -29,7 +29,6 @@ import { signOut } from "next-auth/react";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
-
   return (
     <Button type="submit">
       {pending ? <SpinnerMini /> : "Submit Passowrd"}
@@ -43,8 +42,6 @@ const initialState = {
 
 function UpdateUserPassword({ email }: { email: string }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [submitClicked, setSubmitClicked] = useState(false);
-
   const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
 
   const [state, formAction] = useFormState(
@@ -62,7 +59,6 @@ function UpdateUserPassword({ email }: { email: string }) {
   });
 
   const handlePasswordSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
     formAction(new FormData(formRef.current!));
   };
 
