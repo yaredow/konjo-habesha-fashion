@@ -4,7 +4,7 @@ export const productCategories = ["trending", "featured", "new-arrival"];
 
 export const navLinks = [
   { path: "/", name: "Home" },
-  { path: "/shop", name: "Shope" },
+  { path: "/shop", name: "Shop" },
   { path: "/contact", name: "Contact" },
 ];
 

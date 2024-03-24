@@ -42,7 +42,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${league_spartan.variable} ${plus_jakarta_sans.variable}`}
     >
-      <body>
+      <body className=" min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -51,9 +51,9 @@ export default function RootLayout({
         >
           <AuthProvider>
             <StoreProvider>
-              <div className=" flex min-h-screen flex-col">
+              <div className=" flex flex-col">
                 <Header />
-                <div className="mx-auto my-12 w-[90%] flex-grow">
+                <div className="flex items-center justify-center p-20">
                   {children}
                 </div>
                 <Footer />

@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SpinnerMini from "../ui/SpinnerMini";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 function RegistrationButton() {
   const { pending } = useFormStatus();
@@ -62,13 +62,13 @@ export function RegistrationDialog() {
   };
 
   useEffect(() => {
-    if (state?.message !== "" && state.message === "success") {
+    if (state?.message !== "" && state?.message === "success") {
       toast({
         description: "You have registered successfully",
       });
     }
     form.reset();
-    router.push("/account/user-details");
+    redirect("/account/user-details");
   }, [state?.message]);
 
   return (
