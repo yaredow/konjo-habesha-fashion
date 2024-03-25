@@ -48,3 +48,7 @@ type FormState = {
     confirmPassword: string;
   };
 };
+
+interface SessionUserWithID extends SessionUser {
+  id: string;
+}

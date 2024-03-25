@@ -6,6 +6,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
+import { SessionUserWithID } from "../../../../../type";
 
 const authOptions: AuthOptions = {
   session: {
@@ -49,6 +50,8 @@ const authOptions: AuthOptions = {
           await connectMongoDB();
           const user = await User.findOne({ email }).select("+password");
 
+          console.log(user);
+
           if (user) {
             const isPasswordCorrect = await bcrypt.compare(
               password,
@@ -71,9 +74,15 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session }) {
+      const sessionUser = await User.findOne({ email: session.user?.email });
+
+      if (session.user) {
+        (session.user as SessionUserWithID).id = sessionUser._id;
+      }
+
       return session;
     },
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider === "google" || "facebook") {
         const { name, email } = user as {
           name: string;
@@ -85,26 +94,19 @@ const authOptions: AuthOptions = {
           const userExists = await User.findOne({ email });
 
           if (!userExists) {
-            const res = await fetch("http://localhost:3000/api/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                fullName: name,
-                email,
-                verified: true,
-              }),
+            const newUser = await User.create({
+              fullName: name,
+              email,
+              verified: true,
             });
-            if (res.ok) {
-              return user;
-            }
+
+            return newUser;
           }
         } catch (error) {
           console.log(error);
         }
-        return user;
       }
+      return user;
     },
   },
 };

@@ -6,14 +6,13 @@ import { Card } from "@/components/ui/card";
 import UpdateAccount from "@/components/account/UserAccount";
 
 const UserDetails = () => {
-  const { data: session } = useSession();
   return (
     <div className="container ">
       <div className="mb-6 flex flex-row items-center justify-between">
         <Logout />
 
         <div>
-          <UpdateAccount email={session?.user?.email as string} />
+          <UpdateAccount />
         </div>
       </div>
 

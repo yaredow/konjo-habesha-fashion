@@ -6,8 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 import UpdateUserPassword from "./UpdateUserPassword";
 import UpdateUserData from "./UpdateUserData";
+import { useSession } from "next-auth/react";
+import { SessionUserWithID } from "../../../type";
 
-function UpdateAccount({ email }: { email: string }) {
+function UpdateAccount() {
+  const { data: session } = useSession();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -21,11 +24,11 @@ function UpdateAccount({ email }: { email: string }) {
           </TabsList>
 
           <TabsContent value="account">
-            <UpdateUserData email={email} />
+            <UpdateUserData id={(session?.user as SessionUserWithID).id} />
           </TabsContent>
 
           <TabsContent value="password">
-            <UpdateUserPassword email={email} />
+            <UpdateUserPassword id={(session?.user as SessionUserWithID).id} />
           </TabsContent>
         </Tabs>
       </DialogContent>

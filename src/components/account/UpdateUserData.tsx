@@ -1,6 +1,19 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { UpdateAccountFormSchema } from "@/lib/utils/form-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useFormState, useFormStatus } from "react-dom";
+import {
+  FormState,
+  updateUserData,
+} from "@/server/actions/account/updateUserData";
+import SpinnerMini from "../ui/SpinnerMini";
+import React, { useEffect, useRef } from "react";
+import { toast } from "../ui/use-toast";
 import {
   Card,
   CardContent,
@@ -15,19 +28,6 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { UpdateAccountFormSchema } from "@/lib/utils/form-schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useFormState, useFormStatus } from "react-dom";
-import {
-  FormState,
-  updateUserData,
-} from "@/server/actions/account/updateUserData";
-import SpinnerMini from "../ui/SpinnerMini";
-import React, { useEffect, useRef } from "react";
-import { toast } from "../ui/use-toast";
 
 const initialState: FormState = {
   message: "",
@@ -41,13 +41,10 @@ function SubmitUserData() {
   );
 }
 
-function UpdateUserData({ email }: { email: string }) {
+function UpdateUserData({ id }: { id: string }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const updateUserDataWithEmail = updateUserData.bind(null, email);
-  const [state, formAction] = useFormState(
-    updateUserDataWithEmail,
-    initialState,
-  );
+  const updateUserDataWithId = updateUserData.bind(null, id);
+  const [state, formAction] = useFormState(updateUserDataWithId, initialState);
 
   const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),

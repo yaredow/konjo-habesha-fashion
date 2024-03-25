@@ -68,7 +68,6 @@ export function RegistrationDialog() {
       });
     }
     form.reset();
-    redirect("/account/user-details");
   }, [state?.message]);
 
   return (

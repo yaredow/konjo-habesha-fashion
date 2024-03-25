@@ -40,12 +40,12 @@ const initialState = {
   message: "",
 };
 
-function UpdateUserPassword({ email }: { email: string }) {
+function UpdateUserPassword({ id }: { id: string }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
+  const updatePasswordActionWithId = updatePasswordAction.bind(null, id);
 
   const [state, formAction] = useFormState(
-    updatePasswordActionWithEmail,
+    updatePasswordActionWithId,
     initialState,
   );
 
