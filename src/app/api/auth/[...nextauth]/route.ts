@@ -50,7 +50,11 @@ const authOptions: AuthOptions = {
           await connectMongoDB();
           const user = await User.findOne({ email }).select("+password");
 
-          console.log(user);
+          if (user && !user.password) {
+            throw new Error(
+              "It appears you previously signed up using social media. Please use your Google or Facebook account.",
+            );
+          }
 
           if (user) {
             const isPasswordCorrect = await bcrypt.compare(
@@ -74,12 +78,6 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session }) {
-      const sessionUser = await User.findOne({ email: session.user?.email });
-
-      if (session.user) {
-        (session.user as SessionUserWithID).id = sessionUser._id;
-      }
-
       return session;
     },
     async signIn({ user, account, profile }) {

@@ -8,7 +8,7 @@ export type FormState = {
 };
 
 export async function updateUserData(
-  id: string,
+  email: string,
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -24,7 +24,7 @@ export async function updateUserData(
     const { fullName } = validatedFields.data;
     await connectMongoDB();
 
-    const user = await User.findById({ _id: id });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return { message: "You have to login first" };

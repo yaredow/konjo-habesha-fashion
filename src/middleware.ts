@@ -1,3 +1,10 @@
-export { default } from "next-auth/middleware";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export const config = { matcher: ["/user-details"] };
+export function middleware(request: NextRequest) {
+  return NextResponse.redirect(new URL("/account", request.url));
+}
+
+export const config = {
+  matcher: "/account/user-details/:path*",
+};

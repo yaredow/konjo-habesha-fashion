@@ -41,10 +41,13 @@ function SubmitUserData() {
   );
 }
 
-function UpdateUserData({ id }: { id: string }) {
+function UpdateUserData({ email }: { email: string }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const updateUserDataWithId = updateUserData.bind(null, id);
-  const [state, formAction] = useFormState(updateUserDataWithId, initialState);
+  const updateUserDataWithEmail = updateUserData.bind(null, email);
+  const [state, formAction] = useFormState(
+    updateUserDataWithEmail,
+    initialState,
+  );
 
   const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),

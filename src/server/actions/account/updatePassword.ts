@@ -11,7 +11,7 @@ export type FormState = {
 };
 
 export async function updatePasswordAction(
-  id: string,
+  email: string,
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -32,7 +32,7 @@ export async function updatePasswordAction(
 
   try {
     await connectMongoDB();
-    const user = await User.findById({ _id: id }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return { message: "You have to login first" };
