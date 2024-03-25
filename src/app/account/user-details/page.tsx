@@ -7,6 +7,7 @@ import UpdateAccount from "@/components/account/UserAccount";
 
 const UserDetails = () => {
   const { data: session } = useSession();
+  console.log(session);
   return (
     <div className="container ">
       <div className="mb-6 flex flex-row items-center justify-between">

@@ -1,8 +1,9 @@
 "use client";
 
+import { Product } from "../../../../type";
 import ProductItem from "../ProductItem";
 
-async function NewArrivals({
+function NewArrivals({
   newArrivalProducts,
 }: {
   newArrivalProducts: Product[];

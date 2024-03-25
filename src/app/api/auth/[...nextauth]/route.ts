@@ -5,8 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
-import bcrypt from "bcryptjs";
-import { SessionUserWithID } from "../../../../../type";
+import { login } from "@/server/actions/account/login";
 
 const authOptions: AuthOptions = {
   session: {
@@ -36,50 +35,25 @@ const authOptions: AuthOptions = {
       },
     }),
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
-      credentials: {},
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "" },
+        password: { label: "Password", type: "password", placeholder: "" },
+      },
 
       async authorize(credentials: any) {
-        if (!credentials) return null;
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
-        try {
-          await connectMongoDB();
-          const user = await User.findOne({ email }).select("+password");
+        if (!credentials.email || !credentials.password) {
+          throw new Error("Invalid credentials");
+        }
+        const user = await login(credentials);
 
-          if (user && !user.password) {
-            throw new Error(
-              "It appears you previously signed up using social media. Please use your Google or Facebook account.",
-            );
-          }
-
-          if (user) {
-            const isPasswordCorrect = await bcrypt.compare(
-              password,
-              user.password,
-            );
-
-            if (isPasswordCorrect) {
-              return user;
-            } else {
-              throw new Error("Passord or email doesn't match");
-            }
-          } else {
-            throw new Error("User does not exist.");
-          }
-        } catch (err: any) {
-          throw new Error(err);
+        if (user) {
+          return user;
         }
       },
     }),
   ],
   callbacks: {
-    async session({ session }) {
-      return session;
-    },
     async signIn({ user, account, profile }) {
       if (account?.provider === "google" || "facebook") {
         const { name, email } = user as {
@@ -105,6 +79,17 @@ const authOptions: AuthOptions = {
         }
       }
       return user;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token._id = user._id;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      if (token._id) {
+        session.user._id = token._id;
+      }
     },
   },
 };
