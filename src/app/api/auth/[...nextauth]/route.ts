@@ -6,6 +6,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import { login } from "@/server/actions/account/login";
+import { ObjectId } from "mongoose";
 
 const authOptions: AuthOptions = {
   session: {
@@ -55,6 +56,7 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log("signin");
       if (account?.provider === "google" || "facebook") {
         const { name, email } = user as {
           name: string;
@@ -80,16 +82,32 @@ const authOptions: AuthOptions = {
       }
       return user;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, session }) {
+      console.log("jwt");
       if (user) {
-        token._id = user._id;
+        return {
+          ...token,
+          _id: user._id,
+          fullName: user.fullName,
+          role: user.role,
+        };
       }
       return token;
     },
     async session({ session, token, user }) {
-      if (token._id) {
-        session.user._id = token._id;
+      console.log("session");
+      if (session) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            id: token._id,
+            name: token.fullName,
+            role: token.role,
+          },
+        };
       }
+      return session;
     },
   },
 };
