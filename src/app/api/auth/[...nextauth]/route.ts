@@ -6,7 +6,6 @@ import FacebookProvider from "next-auth/providers/facebook";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import { login } from "@/server/actions/account/login";
-import { ObjectId } from "mongoose";
 
 const authOptions: AuthOptions = {
   session: {
@@ -83,7 +82,6 @@ const authOptions: AuthOptions = {
       return user;
     },
     async jwt({ token, user, session }) {
-      console.log("jwt");
       if (user) {
         return {
           ...token,
@@ -95,7 +93,6 @@ const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      console.log("session");
       if (session) {
         return {
           ...session,
