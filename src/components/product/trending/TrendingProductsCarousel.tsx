@@ -61,6 +61,9 @@ function TrendingProductCarousel({
                 </div>
               </CarouselItem>
             ))}
+
+            {trendingProducts.length === 0 &&
+              Array.from({ length: 8 }).map((_, index) => <ProductSkeleton />)}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
