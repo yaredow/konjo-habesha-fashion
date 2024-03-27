@@ -5,6 +5,7 @@ import UpdateItemQuantity from "./UpdateItemQuantity";
 import DeleteItem from "./DeleteItem";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getCurrentQuantityById } from "@/store/slices/cartSlice";
+import { CartItem } from "../../../type";
 
 function CartItem({ item }: { item: CartItem }) {
   const currentQuantity = useAppSelector(getCurrentQuantityById(item._id));

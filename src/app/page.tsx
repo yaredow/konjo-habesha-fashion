@@ -16,7 +16,9 @@ async function page() {
 
   return (
     <div>
-      <TrendingProductCarousel trendingProducts={data[0].trendingProducts} />
+      <Suspense fallback={<ProductSkeleton />}>
+        <TrendingProductCarousel trendingProducts={data[0].trendingProducts} />
+      </Suspense>
       <Suspense fallback={<ProductSkeleton />}>
         <FeaturedProducts featuredProducts={data[1].featuredProducts} />
       </Suspense>

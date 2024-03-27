@@ -4,18 +4,17 @@ import { useState } from "react";
 import { Product } from "../../../type";
 import useAddToCart from "@/hook/useAddToCart";
 import Image from "next/image";
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
-const ProductDetail = ({ product }: { product: Product }) => {
-  console.log(product);
+function ProductDetail({ product }: { product: Product }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [selectedSize, setSelectedSize] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  let url, altText;
 
   const { handleAddToCart } = useAddToCart({});
 
   function handleAddToCartClick() {
-    const [selectedSize, setSelectedSize] = useState(null);
-    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
     if (!product?.inStock) {
       console.log("The item is out of stock");
       return;
@@ -37,7 +36,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
       <div className="container mx-auto px-4">
         <div className="">
           <a
-            href="#"
+            href="/"
             className="rounded-md text-sm font-medium  hover:text-blue-500 focus:shadow"
           >
             Home
@@ -50,11 +49,13 @@ const ProductDetail = ({ product }: { product: Product }) => {
             <div className="lg:flex lg:items-start">
               {/* Main Image */}
               <div className="lg:order-2 lg:ml-5">
-                <div className="max-w-xl overflow-hidden rounded-lg">
+                <div className="relative max-w-xl overflow-hidden rounded-lg">
                   <Image
                     src={product.images[selectedPhotoIndex].url}
                     alt={product.images[selectedPhotoIndex].public_id}
                     className="h-full w-full max-w-full object-cover"
+                    height={1200}
+                    width={1000}
                   />
                 </div>
               </div>
@@ -73,10 +74,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
                       } text-center`}
                       onClick={() => handleThumbnailClick(index)}
                     >
-                      <img
+                      <Image
                         className="h-full w-full object-cover"
                         src={image.url}
                         alt={image.public_id}
+                        height={600}
+                        width={200}
                       />
                     </button>
                   ))}
@@ -89,37 +92,43 @@ const ProductDetail = ({ product }: { product: Product }) => {
           <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
             {/* name */}
 
-            <h1 className="font-bold text-gray-900 sm:text-3xl">name</h1>
+            <h1 className="font-bold  sm:text-3xl">{product.name}</h1>
             {/* description */}
             <div className="lg:col-span-3">
-              <div className=" font-body mt-6 font-normal">description</div>
+              <div className=" font-body mt-6 font-normal">
+                {product.description}
+              </div>
             </div>
 
-            <div className="mt-8 block text-base font-medium leading-6 text-gray-900">
-              Category: <span className=" font-normal italic">category</span>
+            <div className="mt-8 block text-base font-medium leading-6 ">
+              Category:{" "}
+              <span className=" font-normal italic">{product.category}</span>
             </div>
 
-            <div className=" mt-4 block text-base font-medium leading-6 text-gray-900">
-              Sold: <span className=" font-normal italic">15</span>
+            <div className=" mt-4 block text-base font-medium leading-6 ">
+              Sold:{" "}
+              <span className=" font-normal italic">{product.unitsSold}</span>
             </div>
 
-            <div className="mt-4 block text-base font-medium leading-6 text-gray-900">
+            <div className="mt-4 block text-base font-medium leading-6 ">
               Stock Quantity:
-              <span className=" font-normal italic">20</span>
+              <span className=" font-normal italic">
+                {product.stockQuantity}
+              </span>
             </div>
 
             {/* Sizes */}
             <div>
               <label
                 id="sizes-label"
-                className="mt-4 block text-base font-medium leading-6 text-gray-900"
+                className="mt-4 block text-base font-medium leading-6 "
               >
                 Sizes:
               </label>
               <div className="relative mt-4">
                 <button
                   type="button"
-                  className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  className="relative w-full cursor-default rounded-md py-1.5 pl-3 pr-10 text-left  shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   aria-haspopup="listbox"
                   aria-expanded={isDropdownOpen}
                   aria-labelledby="sizes-label"
@@ -149,7 +158,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
                 {/* {isDropdownOpen && (
                   <ul
-                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     tabIndex="-1"
                     role="listbox"
                     aria-labelledby="sizes-label"
@@ -157,7 +166,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                     {sizes.map((size) => (
                       <li
                         key={size}
-                        className={`relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 ${
+                        className={`relative cursor-default select-none py-2 pl-3 pr-9  ${
                           selectedSize === size
                             ? "bg-indigo-600 text-white"
                             : ""
@@ -204,6 +213,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
       </div>
     </section>
   );
-};
+}
 
 export default ProductDetail;
