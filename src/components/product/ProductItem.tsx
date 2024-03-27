@@ -16,8 +16,10 @@ import { TooltipProvider } from "../ui/tooltip";
 import { toast } from "../ui/use-toast";
 import useAddToCart from "@/hook/useAddToCart";
 import { Product } from "../../../type";
+import { useRouter } from "next/navigation";
 
 function ProductItem({ product }: { product: Product }) {
+  const router = useRouter();
   const { handleAddToCart } = useAddToCart(product);
   const handleAddToCartClick = (e: React.MouseEvent) => {
     if (!product.inStock) {
@@ -31,8 +33,15 @@ function ProductItem({ product }: { product: Product }) {
     e.stopPropagation();
   };
 
+  const handleProductClick = () => {
+    router.push(`/product/${product._id}`);
+  };
+
   return (
-    <Card className=" rounded-lg shadow-md hover:cursor-pointer">
+    <Card
+      onClick={handleProductClick}
+      className=" rounded-lg shadow-md hover:cursor-pointer"
+    >
       <CardContent className="justify-cente flex aspect-square items-center p-2">
         <TooltipProvider delayDuration={200}>
           <Tooltip>

@@ -13,6 +13,7 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
+import { Product } from "../../../../type";
 
 function TrendingProductCarousel({
   trendingProducts,

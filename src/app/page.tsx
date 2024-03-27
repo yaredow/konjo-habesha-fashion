@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import { unstable_noStore } from "next/cache";
 
 async function page() {
-  unstable_noStore();
   const data = await Promise.all(
     productCategories.map(async (category) => {
       return await getProductWithCategory(category);

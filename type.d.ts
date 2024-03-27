@@ -6,7 +6,7 @@ type Product = {
   description: string;
   category: string;
   price: number;
-  images: { url: string; value: string }[];
+  images: { url: string; public_id: string }[];
   stockQuantity: number;
   unitsSold: number;
   quantity: number;
