@@ -5,7 +5,6 @@ import { ProductSkeleton } from "@/components/skeletons/ProductSkeleton";
 import { productCategories } from "@/lib/utils/constants";
 import { getProductWithCategory } from "@/server/actions/product/getProductCatagories";
 import { Suspense } from "react";
-import { unstable_noStore } from "next/cache";
 
 async function page() {
   const data = await Promise.all(
@@ -16,13 +15,21 @@ async function page() {
 
   return (
     <div>
-      <Suspense fallback={<ProductSkeleton />}>
+      <Suspense
+        fallback={<ProductSkeleton length={data[0].trendingProducts.length} />}
+      >
         <TrendingProductCarousel trendingProducts={data[0].trendingProducts} />
       </Suspense>
-      <Suspense fallback={<ProductSkeleton />}>
+      <Suspense
+        fallback={<ProductSkeleton length={data[1].featuredProducts.length} />}
+      >
         <FeaturedProducts featuredProducts={data[1].featuredProducts} />
       </Suspense>
-      <Suspense fallback={<ProductSkeleton />}>
+      <Suspense
+        fallback={
+          <ProductSkeleton length={data[2].newArrivalProducts.length} />
+        }
+      >
         <NewArrivals newArrivalProducts={data[2].newArrivalProducts} />
       </Suspense>
     </div>
