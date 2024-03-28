@@ -3,7 +3,7 @@
 import { Product } from "../../../../type";
 import ProductItem from "../ProductItem";
 
-function NewArrivals({
+function NewArrivedProducts({
   newArrivalProducts,
 }: {
   newArrivalProducts: Product[];
@@ -22,4 +22,4 @@ function NewArrivals({
   );
 }
 
-export default NewArrivals;
+export default NewArrivedProducts;

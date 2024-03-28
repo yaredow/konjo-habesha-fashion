@@ -1,12 +1,11 @@
+import { Product } from "../../../../type";
 import ProductItem from "../ProductItem";
-import { unstable_noStore } from "next/cache";
 
 async function FeaturedProducts({
   featuredProducts,
 }: {
   featuredProducts: Product[];
 }) {
-  unstable_noStore();
   return (
     <div className="mt-[5rem]">
       <h3 className="text-center text-2xl font-medium   md:text-start">

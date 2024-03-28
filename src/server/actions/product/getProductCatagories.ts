@@ -2,6 +2,7 @@ export async function getProductWithCategory(category: string) {
   try {
     const res = await fetch(
       `http://localhost:3000/api/product/categories/${category}`,
+      { cache: "no-store" },
     );
 
     const data = await res?.json();

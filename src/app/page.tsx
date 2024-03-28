@@ -1,23 +1,21 @@
+import Featured from "@/components/product/featured/Featured";
 import FeaturedProducts from "@/components/product/featured/FeaturedProducts";
+import NewArrival from "@/components/product/new-arrival/NewArrival";
 import NewArrivals from "@/components/product/new-arrival/NewArrivedProducts";
-import TrendingProductCarousel from "@/components/product/trending/TrendingProductsCarousel";
+import Trending from "@/components/product/trending/Trending";
 import { ProductSkeleton } from "@/components/skeletons/ProductSkeleton";
-import { productCategories } from "@/lib/utils/constants";
-import { getProductWithCategory } from "@/server/actions/product/getProductCatagories";
 import { Suspense } from "react";
 
 async function page() {
-  const data = await Promise.all(
-    productCategories.map(async (category) => {
-      return await getProductWithCategory(category);
-    }),
-  );
-
   return (
     <div>
-      <TrendingProductCarousel trendingProducts={data[0].trendingProducts} />
-      <FeaturedProducts featuredProducts={data[1].featuredProducts} />
-      <NewArrivals newArrivalProducts={data[2].newArrivalProducts} />
+      <Trending />
+      <Suspense fallback={<ProductSkeleton />}>
+        <Featured />
+      </Suspense>
+      <Suspense fallback={<ProductSkeleton />}>
+        <NewArrival />
+      </Suspense>
     </div>
   );
 }
