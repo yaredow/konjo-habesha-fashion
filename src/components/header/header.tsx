@@ -17,12 +17,10 @@ import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
-import { navLinks } from "@/lib/utils/constants";
+import { NAV_LINKS } from "@/lib/utils/constants";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
-import SearchBar from "../search-bar/SearchBar";
-import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
@@ -50,7 +48,7 @@ function Header() {
 
         <div className=" hidden font-nav md:flex">
           <ul className="flex gap-[1.3rem]">
-            {navLinks.map((navLink, index) => (
+            {NAV_LINKS.map((navLink, index) => (
               <li key={index}>
                 <NavLink href={navLink.path}>{navLink.name}</NavLink>
               </li>

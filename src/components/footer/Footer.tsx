@@ -1,4 +1,4 @@
-import { qucikAccessLinks } from "@/lib/utils/constants";
+import { QUICK_ACCESS_LINKS } from "@/lib/utils/constants";
 import NavLink from "../header/NavLink";
 import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
@@ -26,7 +26,7 @@ function Footer() {
       <div className=" mx-auto flex flex-col items-center justify-center gap-8 border-b py-6 pt-4">
         <div className=" hidden font-nav md:flex">
           <ul className="flex gap-[1.3rem]">
-            {qucikAccessLinks.map((navLink, index) => (
+            {QUICK_ACCESS_LINKS.map((navLink, index) => (
               <li key={index}>
                 <NavLink href={navLink.path}>{navLink.name}</NavLink>
               </li>

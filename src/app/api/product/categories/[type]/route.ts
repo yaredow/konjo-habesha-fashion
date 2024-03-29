@@ -1,4 +1,4 @@
-import { groupObject } from "@/lib/utils/constants";
+import { GROUP_OBJECTS } from "@/lib/utils/constants";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import Product from "@/models/productModel";
 import { NextResponse } from "next/server";
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
           $match: { unitsSold: { $gte: minUnitSold } },
         },
         {
-          $group: groupObject,
+          $group: GROUP_OBJECTS,
         },
         {
           $limit: 8,
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
           },
         },
         {
-          $group: groupObject,
+          $group: GROUP_OBJECTS,
         },
       ]);
 
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
           },
         },
         {
-          $group: groupObject,
+          $group: GROUP_OBJECTS,
         },
         {
           $sort: { productAddedDate: -1 },

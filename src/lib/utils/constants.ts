@@ -1,18 +1,12 @@
-export const itemsPerPage = 8;
+export const ITEMS_PERPAGE = 8;
 
-export const productCategories: string[] = [
-  "trending",
-  "featured",
-  "new-arrival",
-];
-
-export const navLinks = [
+export const NAV_LINKS = [
   { path: "/", name: "Home" },
   { path: "/shop", name: "Shop" },
   { path: "/contact", name: "Contact" },
 ];
 
-export const qucikAccessLinks = [
+export const QUICK_ACCESS_LINKS = [
   { path: "/search", name: "Search" },
   { path: "/terms", name: "Terms of Service" },
   { path: "/shipping-and-returns", name: "Shipping & Returns" },
@@ -21,7 +15,7 @@ export const qucikAccessLinks = [
   { path: "About-us", name: "About Us" },
 ];
 
-export const groupObject = {
+export const GROUP_OBJECTS = {
   _id: "$_id",
   name: { $first: "$name" },
   price: { $first: "$price" },
