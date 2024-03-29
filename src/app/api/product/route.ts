@@ -1,8 +1,11 @@
 import connectMongoDB from "@/lib/utils/mongo/db";
 import Product from "@/models/productModel";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const query = searchParams.get("query");
+
   await connectMongoDB();
   const products = await Product.find();
 

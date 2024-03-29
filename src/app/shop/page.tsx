@@ -1,7 +1,11 @@
 "use client";
 
 import ProductPagination from "@/components/ProductPagination";
-import { ITEMS_PERPAGE, SORT_OPTIONS } from "@/lib/utils/constants";
+import {
+  FILTER_OPTIONS,
+  ITEMS_PERPAGE,
+  SORT_OPTIONS,
+} from "@/lib/utils/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import axios from "axios";
@@ -29,13 +33,8 @@ function page() {
   const { data: products, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const { data } = await axios.post("http://localhost:3000/api/product", {
-        filter: {
-          sort: filter.sort,
-        },
-      });
-
-      return data;
+      const { data } = await axios.post("http://localhost:3000/api/product");
+      return data.products;
     },
   });
 
@@ -70,8 +69,7 @@ function page() {
                 </button>
               ))}
             </DropdownMenuContent>
-
-            <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+            <button className="-m-2 ml-4 p-2 sm:ml-6 lg:hidden">
               <Filter className="h-5 w-5" />
             </button>
           </DropdownMenu>
@@ -82,8 +80,23 @@ function page() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
           {/* Filters */}
 
+          <div className=" mt-6 hidden lg:block">
+            <ul className="space-y-4 border-b pb-6 text-sm font-medium ">
+              {FILTER_OPTIONS.map((category) => (
+                <li key={category.label}>
+                  <button
+                    disabled={!category.selected}
+                    className="disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {category.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Product grid */}
-          <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3">
+          <ul className="grid grid-cols-1 gap-8 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3 ">
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
