@@ -7,6 +7,7 @@ import Footer from "@/components/footer/Footer";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import StoreProvider from "@/components/providers/StoreProvider";
+import QueryProviders from "@/components/providers/QueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,14 +52,16 @@ export default function RootLayout({
         >
           <AuthProvider>
             <StoreProvider>
-              <div className=" flex flex-col">
-                <Header />
-                <div className="flex items-center justify-center p-20">
-                  {children}
+              <QueryProviders>
+                <div className=" flex flex-col">
+                  <Header />
+                  <div className="flex items-center justify-center p-20">
+                    {children}
+                  </div>
+                  <Footer />
+                  <Toaster />
                 </div>
-                <Footer />
-                <Toaster />
-              </div>
+              </QueryProviders>
             </StoreProvider>
           </AuthProvider>
         </ThemeProvider>

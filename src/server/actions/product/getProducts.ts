@@ -1,5 +1,3 @@
-import { revalidatePath } from "next/cache";
-
 export async function getProducts() {
   try {
     const res = await fetch("http://localhost:3000/api/product", {

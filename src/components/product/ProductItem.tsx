@@ -19,66 +19,24 @@ import { Product } from "../../../type";
 import { useRouter } from "next/navigation";
 
 function ProductItem({ product }: { product: Product }) {
-  const router = useRouter();
-  const { handleAddToCart } = useAddToCart(product);
-  const handleAddToCartClick = (e: React.MouseEvent) => {
-    if (!product.inStock) {
-      toast({
-        description: "This item is out of stock",
-      });
-      e.stopPropagation();
-      return;
-    }
-    handleAddToCart();
-    e.stopPropagation();
-  };
-
-  const handleProductClick = () => {
-    router.push(`/product/${product._id}`);
-  };
-
   return (
-    <Card
-      onClick={handleProductClick}
-      className=" rounded-lg shadow-md hover:cursor-pointer"
-    >
-      <CardContent className="justify-cente flex aspect-square items-center p-2">
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className=" relative w-full bg-cover">
-                <AspectRatio ratio={1 / 1}>
-                  <Image
-                    src={product.images[0].url}
-                    alt="images of habesha traditional clothes"
-                    fill
-                    className="rounded-md object-cover"
-                  />
-                </AspectRatio>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="right" sticky="always" sideOffset={-44}>
-              <div className=" flex flex-col gap-2">
-                <Button variant="outline" size="icon" className=" rounded-full">
-                  <FaHeart className=" text-xl" />
-                </Button>
-                <Button
-                  onClick={handleAddToCartClick}
-                  size="icon"
-                  className=" rounded-full"
-                >
-                  <FaCartPlus className=" text-xl" />
-                </Button>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </CardContent>
-      <CardFooter className="-mb-4 flex flex-col items-center justify-start md:flex-row md:justify-between">
-        <h2>{product.name}</h2>
-        <h2>{formatCurrency(product.price)}</h2>
-      </CardFooter>
-    </Card>
+    <div className="group relative">
+      <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-80">
+        <img
+          src={product.images[0].url}
+          alt="product image"
+          className="h-full w-full object-cover object-center"
+        />
+      </div>
+      <div className="mt-4 flex justify-between">
+        <div>
+          <h3 className="text-sm ">{product.name}</h3>
+          <p className="mt-1 text-sm ">Size {product.category}</p>
+        </div>
+
+        <p className="text-sm font-medium ">{formatCurrency(product.price)}</p>
+      </div>
+    </div>
   );
 }
 
