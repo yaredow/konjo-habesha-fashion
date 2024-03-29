@@ -93,3 +93,4 @@ export const PRICE_FILTERS = {
 
 export const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"] as const;
 export const AVAILABLE_SORT = ["none", "price-asc", "price-desc"] as const;
+export const DEFAULT_CUSTOM_PRICE = [0, 100] as [number, number];

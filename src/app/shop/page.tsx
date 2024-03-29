@@ -2,8 +2,10 @@
 
 import ProductPagination from "@/components/ProductPagination";
 import {
+  DEFAULT_CUSTOM_PRICE,
   FILTER_OPTIONS,
   ITEMS_PERPAGE,
+  SIZE_FILTERS,
   SORT_OPTIONS,
 } from "@/lib/utils/constants";
 import { useQuery } from "@tanstack/react-query";
@@ -20,12 +22,22 @@ import { cn } from "@/lib/utils";
 import EmptyState from "@/components/product/EmptyState";
 import { Product } from "../../../type";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
+import { ProductState } from "@/lib/utils/validators/product-validators";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
-  const [filter, setFilter] = useState({
+
+  const [filter, setFilter] = useState<ProductState>({
+    price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
+    size: ["L", "M", "S", "XL", "XXL"],
     sort: "none",
   });
   // const currentitems = products?.slice(firstItemIndex, lastItemIndex);
@@ -37,6 +49,28 @@ function page() {
       return data.products;
     },
   });
+
+  const applyArrayFilter = ({
+    category,
+    value,
+  }: {
+    category: keyof Omit<typeof filter, "price" | "sort">;
+    value: string;
+  }) => {
+    const isFilterApplied = filter[category].includes(value as never);
+
+    if (isFilterApplied) {
+      setFilter((prev) => ({
+        ...prev,
+        [category]: prev[category].filter((v) => v !== value),
+      }));
+    } else {
+      setFilter((prev) => ({
+        ...prev,
+        [category]: [...prev[category], value],
+      }));
+    }
+  };
 
   return (
     <main className=" mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -109,6 +143,42 @@ function page() {
                 .map((_, i) => <ProductSkeleton key={i} />)
             )}
           </ul>
+
+          <Accordion type="multiple" className="animate-none">
+            {/* Color filter */}
+            <AccordionItem value="color">
+              <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+                <span className="font-medium text-gray-900">Color</span>
+              </AccordionTrigger>
+
+              <AccordionContent className="animate-none pt-6">
+                <ul className="space-y-4">
+                  {SIZE_FILTERS.options.map((option, optionIdx) => (
+                    <li key={option.value} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`color-${optionIdx}`}
+                        onChange={() => {
+                          applyArrayFilter({
+                            category: "size",
+                            value: option.value,
+                          });
+                        }}
+                        checked={filter.size.includes(option.value)}
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <label
+                        htmlFor={`color-${optionIdx}`}
+                        className="ml-3 text-sm text-gray-600"
+                      >
+                        {option.label}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
       {/* <ProductPagination
