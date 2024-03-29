@@ -2,7 +2,9 @@ import { revalidatePath } from "next/cache";
 
 export async function getProducts() {
   try {
-    const res = await fetch("http://localhost:3000/api/product");
+    const res = await fetch("http://localhost:3000/api/product", {
+      cache: "no-store",
+    });
 
     if (!res?.ok) {
       throw new Error("There was an error fetching products");

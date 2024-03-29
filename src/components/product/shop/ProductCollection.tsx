@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import ProductPagination from "../ProductPagination";
-import ProductItem from "./ProductItem";
-import { itemsPerPage } from "@/lib/utils/constants";
-import { Product } from "../../../type";
+import ProductPagination from "../../ProductPagination";
+import ProductItem from "../ProductItem";
+import { ITEMS_PERPAGE } from "@/lib/utils/constants";
+import { Product } from "../../../../type";
 
 function ProductCollection({ products }: { products: Product[] }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const lastItemIndex = currentPage * itemsPerPage;
-  const firstItemIndex = lastItemIndex - itemsPerPage;
+  const lastItemIndex = currentPage * ITEMS_PERPAGE;
+  const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
   const currentitems = products?.slice(firstItemIndex, lastItemIndex);
   return (
     <div className=" flex flex-col gap-8">

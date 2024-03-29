@@ -1,26 +1,16 @@
-import ProductCollection from "@/components/product/ProductCollection";
-import { getProducts } from "@/server/actions/product/getProducts";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { unstable_noStore } from "next/cache";
-
+import SortBy from "@/components/SortBy";
+import { Suspense } from "react";
+import { ProductSkeleton } from "@/components/skeletons/ProductSkeleton";
+import Shop from "@/components/product/shop/Shop";
 async function page() {
-  unstable_noStore();
-  const data = await getProducts();
   return (
     <>
+      <Suspense fallback={<ProductSkeleton />}>
+        <Shop />
+      </Suspense>
       <div>
-        <ProductCollection products={data.products} />
+        <SortBy />
       </div>
-      {/* <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger className=" group inline-flex justify-center text-sm font-medium">
-            Sort
-          </DropdownMenuTrigger>
-        </DropdownMenu>
-      </div> */}
     </>
   );
 }
