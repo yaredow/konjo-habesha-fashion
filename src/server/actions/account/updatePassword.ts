@@ -1,6 +1,6 @@
 "use server";
 
-import { UpdatePasswordFormSchema } from "@/lib/utils/form-schemas";
+import { UpdatePasswordFormSchema } from "@/lib/utils/validators/form-validators";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { UpdateAccountFormSchema } from "@/lib/utils/form-schemas";
+import { UpdateAccountFormSchema } from "@/lib/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";

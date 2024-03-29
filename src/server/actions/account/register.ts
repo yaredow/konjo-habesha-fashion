@@ -1,6 +1,6 @@
 "use server";
 
-import { registrationFormSchema } from "@/lib/utils/form-schemas";
+import { registrationFormSchema } from "@/lib/utils/validators/form-validators";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 
