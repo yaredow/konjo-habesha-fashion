@@ -111,7 +111,7 @@ function page() {
       </div>
 
       <section>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-4">
           {/* Filters */}
 
           <div className=" mt-6 hidden lg:block">
@@ -140,15 +140,15 @@ function page() {
             ) : (
               new Array(12)
                 .fill(null)
-                .map((_, i) => <ProductSkeleton key={i} />)
+                .map((_, index) => <ProductSkeleton key={index} />)
             )}
           </ul>
 
           <Accordion type="multiple" className="animate-none">
-            {/* Color filter */}
+            {/* size filter */}
             <AccordionItem value="color">
-              <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                <span className="font-medium text-gray-900">Color</span>
+              <AccordionTrigger className="py-3 text-sm ">
+                <span className="font-medium">Size</span>
               </AccordionTrigger>
 
               <AccordionContent className="animate-none pt-6">
@@ -157,7 +157,7 @@ function page() {
                     <li key={option.value} className="flex items-center">
                       <input
                         type="checkbox"
-                        id={`color-${optionIdx}`}
+                        id={`size-${optionIdx}`}
                         onChange={() => {
                           applyArrayFilter({
                             category: "size",
@@ -168,7 +168,7 @@ function page() {
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       />
                       <label
-                        htmlFor={`color-${optionIdx}`}
+                        htmlFor={`size-${optionIdx}`}
                         className="ml-3 text-sm text-gray-600"
                       >
                         {option.label}
