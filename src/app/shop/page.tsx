@@ -5,6 +5,7 @@ import {
   DEFAULT_CUSTOM_PRICE,
   FILTER_OPTIONS,
   ITEMS_PERPAGE,
+  PRICE_FILTERS,
   SIZE_FILTERS,
   SORT_OPTIONS,
 } from "@/lib/utils/constants";
@@ -41,6 +42,8 @@ function page() {
     sort: "none",
   });
   // const currentitems = products?.slice(firstItemIndex, lastItemIndex);
+
+  console.log(filter);
 
   const { data: products, refetch } = useQuery({
     queryKey: ["products"],
@@ -127,6 +130,81 @@ function page() {
                 </li>
               ))}
             </ul>
+
+            <Accordion type="multiple" className="animate-none">
+              {/* size filter */}
+              <AccordionItem value="size">
+                <AccordionTrigger className="py-3 text-sm hover:text-gray-500">
+                  <span className="font-medium">Size</span>
+                </AccordionTrigger>
+
+                <AccordionContent className="animate-none pt-6">
+                  <ul className="space-y-4">
+                    {SIZE_FILTERS.options.map((option, optionIdx) => (
+                      <li key={option.value} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`size-${optionIdx}`}
+                          onChange={() => {
+                            applyArrayFilter({
+                              category: "size",
+                              value: option.value,
+                            });
+                          }}
+                          checked={filter.size.includes(option.value)}
+                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <label
+                          htmlFor={`size-${optionIdx}`}
+                          className="ml-3 text-sm text-gray-600"
+                        >
+                          {option.label}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Price filtering section */}
+              <AccordionItem value="price">
+                <AccordionTrigger className="py-3 text-sm hover:text-gray-500">
+                  <span className="font-medium">Price</span>
+                </AccordionTrigger>
+
+                <AccordionContent className="animate-none pt-6">
+                  <ul className="space-y-4">
+                    {PRICE_FILTERS.options.map((option, optionIdx) => (
+                      <li key={option.label} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`price-${optionIdx}`}
+                          onChange={() =>
+                            setFilter((prev) => ({
+                              ...prev,
+                              isCustom: false,
+                              range: [...option.value],
+                            }))
+                          }
+                          checked={
+                            !filter.price.isCustom &&
+                            filter.price.range[0] === option.value[0] &&
+                            filter.price.range[1] === option.value[1]
+                          }
+                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <label
+                          htmlFor={`price-${optionIdx}`}
+                          className="ml-3 text-sm text-gray-600"
+                        >
+                          {option.label}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
 
           {/* Product grid */}
@@ -143,51 +221,18 @@ function page() {
                 .map((_, index) => <ProductSkeleton key={index} />)
             )}
           </ul>
-
-          <Accordion type="multiple" className="animate-none">
-            {/* size filter */}
-            <AccordionItem value="color">
-              <AccordionTrigger className="py-3 text-sm ">
-                <span className="font-medium">Size</span>
-              </AccordionTrigger>
-
-              <AccordionContent className="animate-none pt-6">
-                <ul className="space-y-4">
-                  {SIZE_FILTERS.options.map((option, optionIdx) => (
-                    <li key={option.value} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id={`size-${optionIdx}`}
-                        onChange={() => {
-                          applyArrayFilter({
-                            category: "size",
-                            value: option.value,
-                          });
-                        }}
-                        checked={filter.size.includes(option.value)}
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <label
-                        htmlFor={`size-${optionIdx}`}
-                        className="ml-3 text-sm text-gray-600"
-                      >
-                        {option.label}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
         </div>
       </section>
-      {/* <ProductPagination
-        totalItems={products?.length}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      /> */}
     </main>
   );
 }
 
 export default page;
+
+{
+  /* <ProductPagination
+        totalItems={products?.length}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      /> */
+}
