@@ -1,10 +1,11 @@
 import connectMongoDB from "@/lib/utils/mongo/db";
+import { ProductFilterValidator } from "@/lib/utils/validators/product-validators";
 import Product from "@/models/productModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get("query");
+  const body = await request.json();
+  const { sort, price, size } = ProductFilterValidator.parse(body.filter);
 
   await connectMongoDB();
   const products = await Product.find();

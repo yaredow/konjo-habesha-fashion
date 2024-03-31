@@ -32,16 +32,18 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 
+const initialState: ProductState = {
+  price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
+  size: ["L", "M", "S", "XL", "XXL"],
+  sort: "none",
+};
+
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
 
-  const [filter, setFilter] = useState<ProductState>({
-    price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
-    size: ["L", "M", "S", "XL", "XXL"],
-    sort: "none",
-  });
+  const [filter, setFilter] = useState<ProductState>(initialState);
 
   const minPrice = Math.min(filter.price.range[0], filter.price.range[1]);
   const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
@@ -52,7 +54,13 @@ function page() {
   const { data: products, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const { data } = await axios.post("http://localhost:3000/api/product");
+      const { data } = await axios.post("http://localhost:3000/api/product", {
+        filter: {
+          sort: filter.sort,
+          price: filter.price,
+          size: filter.size,
+        },
+      });
       return data.products;
     },
   });
@@ -95,8 +103,7 @@ function page() {
                 <button
                   key={option.label}
                   className={cn("block w-full px-4 py-2 text-left text-sm", {
-                    " bg-slate-100 text-slate-900":
-                      option.value === filter.sort,
+                    "bg-gray-100 text-gray-900": option.value === filter.sort,
                     "text-gray-500": option.value !== filter.sort,
                   })}
                   onClick={() => {
