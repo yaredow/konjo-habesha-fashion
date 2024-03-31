@@ -5,16 +5,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { sort, price, size } = ProductFilterValidator.parse(body.filter);
 
-  await connectMongoDB();
-  const products = await Product.find({
-    sort,
-    price,
-    size,
-  });
+  try {
+    const { sort, price, size } = ProductFilterValidator.parse(body.filter);
+    let query: any = {};
+    await connectMongoDB();
 
-  if (products) {
-    return NextResponse.json({ products }, { status: 200 });
+    if (sort) query.sort = sort;
+    if (price) query.price = { $gte: price[0], $lte: price[1] };
+    if (size) query.size = { $in: size };
+
+    const products = await Product.find(query);
+
+    if (products) {
+      return NextResponse.json({ products }, { status: 200 });
+    }
+  } catch (err) {
+    console.error(err);
   }
 }

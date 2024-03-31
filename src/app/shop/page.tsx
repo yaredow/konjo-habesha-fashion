@@ -57,7 +57,7 @@ function page() {
       const { data } = await axios.post("http://localhost:3000/api/product", {
         filter: {
           sort: filter.sort,
-          price: filter.price,
+          price: filter.price.range,
           size: filter.size,
         },
       });
