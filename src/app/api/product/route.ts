@@ -8,7 +8,11 @@ export async function POST(request: NextRequest) {
   const { sort, price, size } = ProductFilterValidator.parse(body.filter);
 
   await connectMongoDB();
-  const products = await Product.find();
+  const products = await Product.find({
+    sort,
+    price,
+    size,
+  });
 
   if (products) {
     return NextResponse.json({ products }, { status: 200 });
