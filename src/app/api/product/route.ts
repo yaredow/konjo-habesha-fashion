@@ -3,19 +3,47 @@ import { ProductFilterValidator } from "@/lib/utils/validators/product-validator
 import Product from "@/models/productModel";
 import { NextRequest, NextResponse } from "next/server";
 
+class Filter {
+  private filters: Map<string, string[]> = new Map();
+
+  hasFilter() {
+    return this.filters.size > 0;
+  }
+
+  add(key: string, value: any) {
+    this.filters.set(key, value);
+  }
+
+  get() {
+    const filterObj: any = {};
+
+    this.filters.forEach((value, key) => {
+      filterObj[key] = value;
+    });
+    return filterObj;
+  }
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  console.log(body);
 
   try {
     const { sort, price, size } = ProductFilterValidator.parse(body.filter);
-    let query: any = {};
+
+    const filter = new Filter();
+
+    if (size.length > 0) {
+      filter.add("size", { $in: size });
+    }
+
+    // if (!price.isCustom) {
+
+    // }
+
     await connectMongoDB();
 
-    if (sort) query.sort = sort;
-    if (price) query.price = { $gte: price[0], $lte: price[1] };
-    if (size) query.size = { $in: size };
-
-    const products = await Product.find(query);
+    const products = await Product.find();
 
     if (products) {
       return NextResponse.json({ products }, { status: 200 });

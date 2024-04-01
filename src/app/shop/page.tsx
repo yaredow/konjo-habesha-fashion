@@ -10,7 +10,7 @@ import {
   SORT_OPTIONS,
 } from "@/lib/utils/constants";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 import ProductItem from "@/components/product/ProductItem";
 import { ChevronDown, Filter } from "lucide-react";
@@ -31,6 +31,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
+import debounce from "lodash.debounce";
 
 const initialState: ProductState = {
   price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
@@ -65,6 +66,10 @@ function page() {
     },
   });
 
+  const onSubmit = () => {};
+  const debouncedSubmit = debounce(onSubmit, 400);
+  const _debouncedSubmit = useCallback(debouncedSubmit, []);
+
   const applyArrayFilter = ({
     category,
     value,
@@ -85,6 +90,8 @@ function page() {
         [category]: [...prev[category], value],
       }));
     }
+
+    _debouncedSubmit();
   };
 
   return (
@@ -198,6 +205,7 @@ function page() {
                                 range: [...option.value],
                               },
                             }));
+                            _debouncedSubmit();
                           }}
                           checked={
                             !filter.price.isCustom &&
@@ -227,6 +235,7 @@ function page() {
                                 range: [0, 100],
                               },
                             }));
+                            _debouncedSubmit();
                           }}
                           checked={filter.price.isCustom}
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
