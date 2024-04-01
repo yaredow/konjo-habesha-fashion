@@ -12,16 +12,26 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { Product } from "../../../../type";
 
-function TrendingProductCarousel({
-  trendingProducts,
-}: {
-  trendingProducts: Product[];
-}) {
+function TrendingProductCarousel() {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
+
+  const { data: trendingProducts } = useQuery({
+    queryKey: ["trendingProducts"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        "http://localhost:3000/api/product/categories/trending",
+      );
+      return data.trendingProducts;
+    },
+  });
+
+  console.log(trendingProducts);
 
   return (
     <div className=" mx-auto flex justify-center gap-4">
@@ -36,7 +46,7 @@ function TrendingProductCarousel({
         className=" w-full max-w-[80rem]"
       >
         <CarouselContent>
-          {trendingProducts.map((product) => (
+          {trendingProducts.map((product: Product) => (
             <CarouselItem key={product._id} className="md:basis-1/4">
               <div className="p-1">
                 <Card>

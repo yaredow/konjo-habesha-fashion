@@ -28,7 +28,9 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
 
   try {
-    const { sort, price, size } = ProductFilterValidator.parse(body.filter);
+    const { sort, price, size, category } = ProductFilterValidator.parse(
+      body.filter,
+    );
 
     const filter = new Filter();
 
@@ -55,5 +57,11 @@ export async function POST(request: NextRequest) {
     }
   } catch (err) {
     console.error(err);
+    return (
+      NextResponse.json({ message: "Internal Server Error" }),
+      {
+        status: 500,
+      }
+    );
   }
 }

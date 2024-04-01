@@ -36,6 +36,7 @@ import debounce from "lodash.debounce";
 const initialState: ProductState = {
   price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
   size: ["L", "M", "S", "XL", "XXL"],
+  category: ["All", "Men", "Female", "Kids"],
   sort: "none",
 };
 
@@ -50,8 +51,6 @@ function page() {
   const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
   // const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 
-  console.log(filter);
-
   const { data: products, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -60,13 +59,16 @@ function page() {
           sort: filter.sort,
           price: filter.price.range,
           size: filter.size,
+          category: filter.category,
         },
       });
+
       return data.products;
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = () => refetch();
+
   const debouncedSubmit = debounce(onSubmit, 400);
   const _debouncedSubmit = useCallback(debouncedSubmit, []);
 
@@ -108,7 +110,7 @@ function page() {
             <DropdownMenuContent align="end">
               {SORT_OPTIONS.map((option) => (
                 <button
-                  key={option.label}
+                  key={option.value}
                   className={cn("block w-full px-4 py-2 text-left text-sm", {
                     "bg-gray-100 text-gray-900": option.value === filter.sort,
                     "text-gray-500": option.value !== filter.sort,
@@ -139,13 +141,18 @@ function page() {
 
           <div className=" mt-6 hidden lg:block">
             <ul className="space-y-4 border-b pb-6 text-sm font-medium ">
-              {FILTER_OPTIONS.map((category) => (
-                <li key={category.label}>
+              {FILTER_OPTIONS.map((option) => (
+                <li key={option.label}>
                   <button
-                    disabled={!category.selected}
+                    onClick={() => {
+                      applyArrayFilter({
+                        category: "size",
+                        value: option.value,
+                      });
+                    }}
                     className="disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {category.label}
+                    {option.label}
                   </button>
                 </li>
               ))}

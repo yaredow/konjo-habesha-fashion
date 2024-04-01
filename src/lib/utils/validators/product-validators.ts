@@ -1,9 +1,14 @@
 import { z } from "zod";
-import { AVAILABLE_SIZES, AVAILABLE_SORT } from "../constants";
+import {
+  AVAILABLE_CATEGORY,
+  AVAILABLE_SIZES,
+  AVAILABLE_SORT,
+} from "../constants";
 
 export const ProductFilterValidator = z.object({
   size: z.array(z.enum(AVAILABLE_SIZES)),
   sort: z.enum(AVAILABLE_SORT),
+  category: z.array(AVAILABLE_CATEGORY),
   price: z.tuple([z.number(), z.number()]),
 });
 
