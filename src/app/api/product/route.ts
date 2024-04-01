@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     const filter = new Filter();
 
-    if (size.length > 0) filter.add("size", { $in: size });
+    if (size.length > 0) filter.add("sizes", { $in: size });
 
     if (price && Array.isArray(price)) {
       filter.add("price", { $gte: price[0], $lte: price[1] });
@@ -42,13 +42,13 @@ export async function POST(request: NextRequest) {
     if (sort === "price-asc") sortOption = { price: 1 };
     else if (sort === "price-desc") sortOption = { price: -1 };
 
-    console.log(filter.hasFilter());
+    console.log(filter.get());
 
     await connectMongoDB();
 
-    const products = await Product.find(filter.hasFilter() ? filter.get() : {})
-      .sort(sortOption)
-      .limit(12);
+    const products = await Product.find(
+      filter.hasFilter() ? filter.get() : {},
+    ).sort(sortOption);
 
     if (products) {
       return NextResponse.json({ products }, { status: 200 });

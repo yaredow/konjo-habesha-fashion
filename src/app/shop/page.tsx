@@ -118,6 +118,8 @@ function page() {
                       ...prev,
                       sort: option.value,
                     }));
+
+                    _debouncedSubmit();
                   }}
                 >
                   {option.label}
@@ -187,7 +189,7 @@ function page() {
               {/* Price filtering section */}
               <AccordionItem value="price">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="font-medium text-gray-900">Price</span>
+                  <span className="font-medium">Price</span>
                 </AccordionTrigger>
 
                 <AccordionContent className="animate-none pt-6">
