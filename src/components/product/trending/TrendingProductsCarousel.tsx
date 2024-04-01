@@ -15,6 +15,7 @@ import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "../../../../type";
+import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 function TrendingProductCarousel() {
   const plugin = React.useRef(
@@ -66,6 +67,11 @@ function TrendingProductCarousel() {
               </div>
             </CarouselItem>
           ))}
+
+          {!trendingProducts &&
+            Array.from({ length: 8 }).map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
