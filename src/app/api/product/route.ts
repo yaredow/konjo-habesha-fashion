@@ -26,24 +26,29 @@ class Filter {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  console.log(body);
 
   try {
     const { sort, price, size } = ProductFilterValidator.parse(body.filter);
 
     const filter = new Filter();
 
-    if (size.length > 0) {
-      filter.add("size", { $in: size });
+    if (size.length > 0) filter.add("size", { $in: size });
+
+    if (price && Array.isArray(price)) {
+      filter.add("price", { $gte: price[0], $lte: price[1] });
     }
 
-    // if (!price.isCustom) {
+    let sortOption = {};
+    if (sort === "price-asc") sortOption = { price: 1 };
+    else if (sort === "price-desc") sortOption = { price: -1 };
 
-    // }
+    console.log(filter.hasFilter());
 
     await connectMongoDB();
 
-    const products = await Product.find();
+    const products = await Product.find(filter.hasFilter() ? filter.get() : {})
+      .sort(sortOption)
+      .limit(12);
 
     if (products) {
       return NextResponse.json({ products }, { status: 200 });
