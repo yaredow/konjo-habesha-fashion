@@ -12,27 +12,18 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { Product } from "../../../../type";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
+import useGetTrendingProducts from "./useGetProductsWithCatagory";
 
 function TrendingProductCarousel() {
+  const { products, isFetching } = useGetTrendingProducts("trending");
+
+  console.log(products);
+
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
-
-  const { data: trendingProducts, isPending } = useQuery({
-    queryKey: ["trendingProducts"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "http://localhost:3000/api/product/categories/trending",
-      );
-      return data.trendingProducts;
-    },
-  });
-
-  if (isPending) return <h1>pending</h1>;
 
   return (
     <div className=" mx-auto flex justify-center gap-4">
@@ -47,7 +38,7 @@ function TrendingProductCarousel() {
         className=" w-full max-w-[80rem]"
       >
         <CarouselContent>
-          {trendingProducts.map((product: Product) => (
+          {products.map((product: Product) => (
             <CarouselItem key={product._id} className="md:basis-1/4">
               <div className="p-1">
                 <Card>
@@ -68,7 +59,7 @@ function TrendingProductCarousel() {
             </CarouselItem>
           ))}
 
-          {isPending &&
+          {isFetching &&
             Array.from({ length: 8 }).map((_, index) => (
               <ProductSkeleton key={index} />
             ))}
