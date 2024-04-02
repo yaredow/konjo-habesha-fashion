@@ -22,7 +22,7 @@ function TrendingProductCarousel() {
     Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
 
-  const { data: trendingProducts } = useQuery({
+  const { data: trendingProducts, isPending } = useQuery({
     queryKey: ["trendingProducts"],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -32,7 +32,7 @@ function TrendingProductCarousel() {
     },
   });
 
-  console.log(trendingProducts);
+  if (isPending) return <h1>pending</h1>;
 
   return (
     <div className=" mx-auto flex justify-center gap-4">
@@ -68,7 +68,7 @@ function TrendingProductCarousel() {
             </CarouselItem>
           ))}
 
-          {!trendingProducts &&
+          {isPending &&
             Array.from({ length: 8 }).map((_, index) => (
               <ProductSkeleton key={index} />
             ))}
