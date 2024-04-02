@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 import debounce from "lodash.debounce";
+import useGetProducts from "./useGetProducts";
 
 const initialState: ProductState = {
   price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
@@ -47,26 +48,11 @@ function page() {
 
   const [filter, setFilter] = useState<ProductState>(initialState);
   console.log(filter);
+  const { products, refetch } = useGetProducts(filter);
+  const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 
   const minPrice = Math.min(filter.price.range[0], filter.price.range[1]);
   const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
-  // const currentitems = products?.slice(firstItemIndex, lastItemIndex);
-
-  const { data: products, refetch } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const { data } = await axios.post("http://localhost:3000/api/product", {
-        filter: {
-          sort: filter.sort,
-          price: filter.price.range,
-          size: filter.size,
-          category: filter.category,
-        },
-      });
-
-      return data.products;
-    },
-  });
 
   const onSubmit = () => refetch();
 
@@ -99,8 +85,8 @@ function page() {
 
   return (
     <main className=" mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="flex items-baseline justify-between border-b pb-6 pt-24">
-        <h1 className="text-4xl font-bold tracking-tight">Products</h1>
+      <div className="flex items-baseline justify-between border-b p-6">
+        <h1 className="text-4xl font-bold tracking-tight">{filter.category}</h1>
 
         <div>
           <DropdownMenu>
@@ -196,7 +182,7 @@ function page() {
 
               {/* Price filtering section */}
               <AccordionItem value="price">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+                <AccordionTrigger className="py-3 text-sm ">
                   <span className="font-medium">Price</span>
                 </AccordionTrigger>
 
@@ -310,7 +296,7 @@ function page() {
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
-              products.map((product: Product) => (
+              currentitems.map((product: Product) => (
                 <ProductItem product={product} />
               ))
             ) : (
@@ -320,17 +306,15 @@ function page() {
             )}
           </ul>
         </div>
+
+        <ProductPagination
+          totalItems={products?.length}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </section>
     </main>
   );
 }
 
 export default page;
-
-{
-  /* <ProductPagination
-        totalItems={products?.length}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      /> */
-}
