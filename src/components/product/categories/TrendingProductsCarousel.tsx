@@ -17,9 +17,7 @@ import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import useGetTrendingProducts from "./useGetProductsWithCatagory";
 
 function TrendingProductCarousel() {
-  const { products, isFetching } = useGetTrendingProducts("trending");
-
-  console.log(products);
+  const { data } = useGetTrendingProducts("trending");
 
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true }),
@@ -38,31 +36,30 @@ function TrendingProductCarousel() {
         className=" w-full max-w-[80rem]"
       >
         <CarouselContent>
-          {products.map((product: Product) => (
-            <CarouselItem key={product._id} className="md:basis-1/4">
-              <div className="p-1">
-                <Card>
-                  <CardContent className="justify-cente flex aspect-square items-center p-2">
-                    <div className=" relative  w-full bg-cover">
-                      <AspectRatio ratio={1 / 1}>
-                        <Image
-                          src={product.images[0].url}
-                          alt="images of habesha traditional clothes"
-                          fill
-                          className="rounded-md object-cover "
-                        />
-                      </AspectRatio>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </CarouselItem>
-          ))}
-
-          {isFetching &&
-            Array.from({ length: 8 }).map((_, index) => (
-              <ProductSkeleton key={index} />
-            ))}
+          {data
+            ? data.trendingProducts.map((product: Product) => (
+                <CarouselItem key={product._id} className="md:basis-1/4">
+                  <div className="p-1">
+                    <Card>
+                      <CardContent className="justify-cente flex aspect-square items-center p-2">
+                        <div className=" relative  w-full bg-cover">
+                          <AspectRatio ratio={1 / 1}>
+                            <Image
+                              src={product.images[0].url}
+                              alt="images of habesha traditional clothes"
+                              fill
+                              className="rounded-md object-cover "
+                            />
+                          </AspectRatio>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))
+            : Array.from({ length: 8 }).map((_, index) => (
+                <ProductSkeleton key={index} />
+              ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />

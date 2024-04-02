@@ -2,17 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 function useGetProductsWithCatagory(type: string) {
-  const { data: products, isPending: isFetching } = useQuery({
-    queryKey: ["trendingProducts"],
+  const { data } = useQuery({
+    queryKey: ["products", type],
     queryFn: async () => {
       const { data } = await axios.get(
-        `http://localhost:3000/api/product/categories/trending/${type}`,
+        `http://localhost:3000/api/product/categories/${type}`,
       );
 
-      return data.trendingProducts;
+      return data;
     },
   });
-  return { products, isFetching };
+  return { data };
 }
 
 export default useGetProductsWithCatagory;
