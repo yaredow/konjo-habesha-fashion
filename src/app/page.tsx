@@ -1,13 +1,13 @@
-import FeaturedProducts from "@/components/product/featured/FeaturedProducts";
-import NewArrival from "@/components/product/new-arrival/NewArrival";
-import TrendingProductCarousel from "@/components/product/trending/TrendingProductsCarousel";
+import FeaturedProducts from "@/components/product/categories/FeaturedProducts";
+import NewArrivedProducts from "@/components/product/categories/NewArrivedProducts";
+import TrendingProductCarousel from "@/components/product/categories/TrendingProductsCarousel";
 
 function page() {
   return (
     <div>
       <TrendingProductCarousel />
       <FeaturedProducts />
-      <NewArrival />
+      <NewArrivedProducts />
     </div>
   );
 }
