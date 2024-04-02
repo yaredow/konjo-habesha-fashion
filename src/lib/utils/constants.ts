@@ -58,10 +58,10 @@ export const SORT_OPTIONS = [
 ] as const;
 
 export const FILTER_OPTIONS = [
-  { value: "all", selected: true, label: "All" },
-  { value: "men", selected: false, label: "Men" },
-  { value: "women", selected: false, label: "Women" },
-  { value: "kids", selected: false, label: "Kids" },
+  { value: "All", selected: true, label: "All" },
+  { value: "Men", selected: false, label: "Men" },
+  { value: "Women", selected: false, label: "Women" },
+  { value: "Kids", selected: false, label: "Kids" },
 ] as const;
 
 export const SIZE_FILTERS = {
@@ -94,6 +94,6 @@ export const PRICE_FILTERS = {
 } as const;
 
 export const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"];
-export const AVAILABLE_CATEGORY = ["All", "Men", "Female", "Kids"];
+export const AVAILABLE_CATEGORY = ["All", "Male", "Female", "Kids"];
 export const AVAILABLE_SORT = ["none", "price-asc", "price-desc"];
 export const DEFAULT_CUSTOM_PRICE = [0, 100] as [number, number];

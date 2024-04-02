@@ -36,7 +36,7 @@ import debounce from "lodash.debounce";
 const initialState: ProductState = {
   price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
   size: ["L", "M", "S", "XL", "XXL"],
-  category: ["All", "Men", "Female", "Kids"],
+  category: "All",
   sort: "none",
 };
 
@@ -46,6 +46,7 @@ function page() {
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
 
   const [filter, setFilter] = useState<ProductState>(initialState);
+  console.log(filter);
 
   const minPrice = Math.min(filter.price.range[0], filter.price.range[1]);
   const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
@@ -76,7 +77,7 @@ function page() {
     category,
     value,
   }: {
-    category: keyof Omit<typeof filter, "price" | "sort">;
+    category: keyof Omit<typeof filter, "price" | "sort" | "category">;
     value: string;
   }) => {
     const isFilterApplied = filter[category].includes(value as never);
@@ -145,14 +146,14 @@ function page() {
                 <li key={option.label}>
                   <button
                     onClick={() => {
-                      applyArrayFilter({
-                        category: "size",
-                        value: option.value,
-                      });
+                      setFilter((prev) => ({
+                        ...prev,
+                        category: option.value,
+                      }));
                     }}
                     className="disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {option.label}
+                    {option.value}
                   </button>
                 </li>
               ))}
