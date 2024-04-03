@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 function useGetProducts() {
-  const { data: responseData } = useQuery({
+  const { data: responseData, isPending } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -16,7 +16,7 @@ function useGetProducts() {
   const minPrice = responseData?.minPrice;
   const maxPrice = responseData?.maxPrice;
 
-  return { minPrice, maxPrice };
+  return { minPrice, maxPrice, isPending };
 }
 
 export default useGetProducts;

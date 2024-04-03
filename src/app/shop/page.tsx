@@ -34,13 +34,15 @@ import useGetFilteredProducts from "./useGetFilteredProducts";
 import useGetProducts from "./useGetProducts";
 
 function page() {
-  const { minPrice = 0, maxPrice = 0 } = useGetProducts();
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
 
   const [filter, setFilter] = useState<ProductState>({
-    price: { isCustom: false, range: [minPrice, maxPrice] },
+    price: {
+      isCustom: false,
+      range: DEFAULT_CUSTOM_PRICE,
+    },
     size: ["L", "M", "S", "XL", "XXL"],
     category: "All",
     sort: "none",
@@ -50,8 +52,8 @@ function page() {
   const { products, refetch } = useGetFilteredProducts(filter);
   const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 
-  const minPriceRange = Math.min(filter.price.range[0], filter.price.range[1]);
-  const maxPriceRange = Math.max(filter.price.range[0], filter.price.range[1]);
+  const minPrice = Math.min(filter.price.range[0], filter.price.range[1]);
+  const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
 
   const onSubmit = () => refetch();
 
@@ -227,7 +229,7 @@ function page() {
                               ...prev,
                               price: {
                                 isCustom: true,
-                                range: [minPrice, maxPrice],
+                                range: [0, 600],
                               },
                             }));
                             _debouncedSubmit();
@@ -247,11 +249,11 @@ function page() {
                         <p className="font-medium">Price</p>
                         <div>
                           {filter.price.isCustom
-                            ? minPriceRange.toFixed(0)
+                            ? minPrice.toFixed(0)
                             : filter.price.range[0].toFixed(0)}{" "}
                           € -{" "}
                           {filter.price.isCustom
-                            ? maxPriceRange.toFixed(0)
+                            ? maxPrice.toFixed(0)
                             : filter.price.range[1].toFixed(0)}{" "}
                           €
                         </div>

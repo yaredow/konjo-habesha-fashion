@@ -17,8 +17,6 @@ export async function GET() {
     const minPrice = Math.min(...allProducts.map((product) => product.price));
     const maxPrice = Math.max(...allProducts.map((product) => product.price));
 
-    console.log(minPrice, maxPrice);
-
     return NextResponse.json({ minPrice, maxPrice }, { status: 200 });
   } catch (err) {
     console.error(err);
