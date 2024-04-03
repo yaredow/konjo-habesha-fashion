@@ -8,8 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { itemsPerPage } from "@/lib/utils/constants";
-import { useState } from "react";
+import { ITEMS_PERPAGE } from "@/lib/utils/constants";
 
 function ProductPagination({
   totalItems,
@@ -21,7 +20,7 @@ function ProductPagination({
   setCurrentPage: any;
 }) {
   let pages = [];
-  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalItems / ITEMS_PERPAGE); i++) {
     pages.push(i);
   }
 

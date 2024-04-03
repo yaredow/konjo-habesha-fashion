@@ -27,6 +27,8 @@ class Filter {
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
+  console.log(body.filter);
+
   try {
     const { sort, price, size, category } = ProductFilterValidator.parse(
       body.filter,
@@ -40,6 +42,10 @@ export async function POST(request: NextRequest) {
       filter.add("price", { $gte: price[0], $lte: price[1] });
     }
 
+    if (category !== "All") {
+      filter.add("category", category);
+    }
+
     let sortOption = {};
     if (sort === "price-asc") sortOption = { price: 1 };
     else if (sort === "price-desc") sortOption = { price: -1 };
@@ -48,12 +54,22 @@ export async function POST(request: NextRequest) {
 
     await connectMongoDB();
 
+    const allProducts = await Product.find();
+
+    const minPrice = Math.min(...allProducts.map((product) => product.price));
+    const maxPrice = Math.max(...allProducts.map((product) => product.price));
+
+    console.log(maxPrice, minPrice);
+
     const products = await Product.find(
       filter.hasFilter() ? filter.get() : {},
     ).sort(sortOption);
 
     if (products) {
-      return NextResponse.json({ products }, { status: 200 });
+      return NextResponse.json(
+        { products, minPrice, maxPrice },
+        { status: 200 },
+      );
     }
   } catch (err) {
     console.error(err);

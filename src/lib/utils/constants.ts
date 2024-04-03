@@ -1,3 +1,5 @@
+import useGetProducts from "@/app/shop/useGetProducts";
+
 export const ITEMS_PERPAGE = 8;
 
 export const NAV_LINKS = [

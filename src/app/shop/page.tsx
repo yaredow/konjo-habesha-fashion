@@ -9,9 +9,7 @@ import {
   SIZE_FILTERS,
   SORT_OPTIONS,
 } from "@/lib/utils/constants";
-import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import axios from "axios";
 import ProductItem from "@/components/product/ProductItem";
 import { ChevronDown, Filter } from "lucide-react";
 import {
@@ -48,11 +46,11 @@ function page() {
 
   const [filter, setFilter] = useState<ProductState>(initialState);
   console.log(filter);
-  const { products, refetch } = useGetProducts(filter);
+  const { products, minPrice, maxPrice, refetch } = useGetProducts(filter);
   const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 
-  const minPrice = Math.min(filter.price.range[0], filter.price.range[1]);
-  const maxPrice = Math.max(filter.price.range[0], filter.price.range[1]);
+  const minPriceRange = Math.min(filter.price.range[0], filter.price.range[1]);
+  const maxPriceRange = Math.max(filter.price.range[0], filter.price.range[1]);
 
   const onSubmit = () => refetch();
 
@@ -228,7 +226,7 @@ function page() {
                               ...prev,
                               price: {
                                 isCustom: true,
-                                range: [0, 100],
+                                range: [minPrice, maxPrice],
                               },
                             }));
                             _debouncedSubmit();
@@ -248,11 +246,11 @@ function page() {
                         <p className="font-medium">Price</p>
                         <div>
                           {filter.price.isCustom
-                            ? minPrice.toFixed(0)
+                            ? minPriceRange.toFixed(0)
                             : filter.price.range[0].toFixed(0)}{" "}
                           € -{" "}
                           {filter.price.isCustom
-                            ? maxPrice.toFixed(0)
+                            ? maxPriceRange.toFixed(0)
                             : filter.price.range[1].toFixed(0)}{" "}
                           €
                         </div>

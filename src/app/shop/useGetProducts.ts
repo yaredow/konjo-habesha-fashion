@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export default function useGetProducts(filter: any) {
-  const { data: products, refetch } = useQuery({
+  const { data: responseData, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const { data } = await axios.post("http://localhost:3000/api/product", {
@@ -14,9 +14,13 @@ export default function useGetProducts(filter: any) {
         },
       });
 
-      return data.products;
+      return data;
     },
   });
 
-  return { products, refetch };
+  const products = responseData?.products;
+  const minPrice = responseData?.minPrice;
+  const maxPrice = responseData?.maxPrice;
+
+  return { products, minPrice, maxPrice, refetch };
 }
