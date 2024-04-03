@@ -36,7 +36,7 @@ function ProductPagination({
   };
 
   return (
-    <div>
+    <div className="">
       <Pagination>
         <PaginationContent>
           <PaginationItem>

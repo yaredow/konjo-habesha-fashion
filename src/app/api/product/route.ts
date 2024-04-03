@@ -54,22 +54,12 @@ export async function POST(request: NextRequest) {
 
     await connectMongoDB();
 
-    const allProducts = await Product.find();
-
-    const minPrice = Math.min(...allProducts.map((product) => product.price));
-    const maxPrice = Math.max(...allProducts.map((product) => product.price));
-
-    console.log(maxPrice, minPrice);
-
     const products = await Product.find(
       filter.hasFilter() ? filter.get() : {},
     ).sort(sortOption);
 
     if (products) {
-      return NextResponse.json(
-        { products, minPrice, maxPrice },
-        { status: 200 },
-      );
+      return NextResponse.json({ products }, { status: 200 });
     }
   } catch (err) {
     console.error(err);

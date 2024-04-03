@@ -30,23 +30,24 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 import debounce from "lodash.debounce";
+import useGetFilteredProducts from "./useGetFilteredProducts";
 import useGetProducts from "./useGetProducts";
 
-const initialState: ProductState = {
-  price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
-  size: ["L", "M", "S", "XL", "XXL"],
-  category: "All",
-  sort: "none",
-};
-
 function page() {
+  const { minPrice = 0, maxPrice = 0 } = useGetProducts();
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
 
-  const [filter, setFilter] = useState<ProductState>(initialState);
+  const [filter, setFilter] = useState<ProductState>({
+    price: { isCustom: false, range: [minPrice, maxPrice] },
+    size: ["L", "M", "S", "XL", "XXL"],
+    category: "All",
+    sort: "none",
+  });
+
   console.log(filter);
-  const { products, minPrice, maxPrice, refetch } = useGetProducts(filter);
+  const { products, refetch } = useGetFilteredProducts(filter);
   const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 
   const minPriceRange = Math.min(filter.price.range[0], filter.price.range[1]);
@@ -120,7 +121,7 @@ function page() {
         </div>
       </div>
 
-      <section>
+      <section className=" flex flex-col items-center justify-center">
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-4">
           {/* Filters */}
 
@@ -302,14 +303,18 @@ function page() {
                 .fill(null)
                 .map((_, index) => <ProductSkeleton key={index} />)
             )}
+
+            {products && products.length > ITEMS_PERPAGE && (
+              <div className=" col-span-full mt-6 flex items-center justify-center">
+                <ProductPagination
+                  totalItems={products?.length}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
+            )}
           </ul>
         </div>
-
-        <ProductPagination
-          totalItems={products?.length}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
       </section>
     </main>
   );

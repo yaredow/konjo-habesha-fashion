@@ -1,6 +1,4 @@
-import useGetProducts from "@/app/shop/useGetProducts";
-
-export const ITEMS_PERPAGE = 8;
+export const ITEMS_PERPAGE = 9;
 
 export const NAV_LINKS = [
   { path: "/", name: "Home" },
@@ -82,14 +80,14 @@ export const PRICE_FILTERS = {
   id: "price",
   name: "Price",
   options: [
-    { value: [0, 100], label: "Any price" },
+    { value: [0, 600], label: "Any price" },
     {
-      value: [0, 20],
-      label: "Under 20€",
+      value: [0, 400],
+      label: "Under $400",
     },
     {
-      value: [0, 40],
-      label: "Under 40€",
+      value: [0, 200],
+      label: "Under $200",
     },
     // custom option defined in JSX
   ],
