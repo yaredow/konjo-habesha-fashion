@@ -27,8 +27,6 @@ class Filter {
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  console.log(body.filter);
-
   try {
     const { sort, price, size, category } = ProductFilterValidator.parse(
       body.filter,

@@ -1,26 +1,18 @@
 "use client";
 
-import Image from "next/image";
-import { Button } from "../ui/button";
-import { FaCartPlus } from "react-icons/fa";
 import { formatCurrency } from "@/lib/utils/helpers";
-import { Card, CardContent, CardFooter } from "../ui/card";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
-import { FaHeart } from "react-icons/fa";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import { TooltipProvider } from "../ui/tooltip";
-import { toast } from "../ui/use-toast";
-import useAddToCart from "@/hook/useAddToCart";
+
 import { Product } from "../../../type";
 import { useRouter } from "next/navigation";
 
 function ProductItem({ product }: { product: Product }) {
+  const router = useRouter();
+  function handleClick() {
+    router.replace(`/product/${product._id}`);
+  }
+
   return (
-    <div className="group relative">
+    <div onClick={handleClick} className="group relative hover:cursor-pointer">
       <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-80">
         <img
           src={product.images[0].url}

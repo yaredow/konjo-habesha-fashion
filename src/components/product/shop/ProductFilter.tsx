@@ -210,6 +210,7 @@ function ProductFilter({
                         range: [newMin, newMax],
                       },
                     }));
+                    _debouncedSubmit();
                   }}
                   value={
                     filter.price.isCustom

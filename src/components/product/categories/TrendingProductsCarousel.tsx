@@ -15,6 +15,7 @@ import React from "react";
 import { Product } from "../../../../type";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import useGetTrendingProducts from "./useGetProductsWithCatagory";
+import { formatCurrency } from "@/lib/utils/helpers";
 
 function TrendingProductCarousel() {
   const { data } = useGetTrendingProducts("trending");
@@ -41,18 +42,7 @@ function TrendingProductCarousel() {
                 <CarouselItem key={product._id} className="md:basis-1/4">
                   <div className="p-1">
                     <Card>
-                      <CardContent className="justify-cente flex aspect-square items-center p-2">
-                        <div className=" relative  w-full bg-cover">
-                          <AspectRatio ratio={1 / 1}>
-                            <Image
-                              src={product.images[0].url}
-                              alt="images of habesha traditional clothes"
-                              fill
-                              className="rounded-md object-cover "
-                            />
-                          </AspectRatio>
-                        </div>
-                      </CardContent>
+                      <CardContent className="justify-cente flex aspect-square flex-col items-center p-2"></CardContent>
                     </Card>
                   </div>
                 </CarouselItem>

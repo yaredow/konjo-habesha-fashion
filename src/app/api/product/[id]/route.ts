@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   console.log(id);
   await connectMongoDB();
   const product = await Product.findById({ _id: id });
+  console.log(product);
 
   if (!product) {
     return NextResponse.json({ message: "Product not found" }, { status: 404 });
