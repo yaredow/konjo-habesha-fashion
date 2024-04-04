@@ -31,7 +31,6 @@ import {
 import { Slider } from "@/components/ui/slider";
 import debounce from "lodash.debounce";
 import useGetFilteredProducts from "./useGetFilteredProducts";
-import useGetProducts from "./useGetProducts";
 
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,7 +137,12 @@ function page() {
                         category: option.value,
                       }));
                     }}
-                    className="disabled:cursor-not-allowed disabled:opacity-60"
+                    className={cn(
+                      "opacity-60 hover:cursor-pointer  hover:opacity-100",
+                      {
+                        "opacity-100": filter.category === option.value,
+                      },
+                    )}
                   >
                     {option.value}
                   </button>

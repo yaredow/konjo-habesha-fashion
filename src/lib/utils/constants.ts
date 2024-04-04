@@ -59,8 +59,8 @@ export const SORT_OPTIONS = [
 
 export const FILTER_OPTIONS = [
   { value: "All", selected: true, label: "All" },
-  { value: "Men", selected: false, label: "Men" },
-  { value: "Women", selected: false, label: "Women" },
+  { value: "Male", selected: false, label: "Men" },
+  { value: "Female", selected: false, label: "Women" },
   { value: "Kids", selected: false, label: "Kids" },
 ] as const;
 

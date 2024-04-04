@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
     }
 
     let sortOption = {};
-    if (sort === "price-asc") sortOption = { price: 1 };
-    else if (sort === "price-desc") sortOption = { price: -1 };
+    if (sort === "price-asc" || "name-asc") sortOption = { price: 1 };
+    else if (sort === "price-desc" || "name-desc") sortOption = { price: -1 };
 
     console.log(filter.get());
 
