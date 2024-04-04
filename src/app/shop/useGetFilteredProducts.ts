@@ -18,7 +18,7 @@ export default function useGetFilteredProducts(filter: any) {
     },
   });
 
-  const products = responseData?.products;
+  const products = responseData?.sortedProducts;
 
   return { products, refetch };
 }

@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       body.filter,
     );
 
+    // Filtering
     const filter = new Filter();
 
     if (size.length > 0) filter.add("sizes", { $in: size });
@@ -46,20 +47,30 @@ export async function POST(request: NextRequest) {
       filter.add("category", category);
     }
 
-    let sortOption = {};
-    if (sort === "price-asc" || "name-asc") sortOption = { price: 1 };
-    else if (sort === "price-desc" || "name-desc") sortOption = { price: -1 };
-
-    console.log(filter.get());
-
     await connectMongoDB();
 
-    const products = await Product.find(
-      filter.hasFilter() ? filter.get() : {},
-    ).sort(sortOption);
+    const products = await Product.find(filter.hasFilter() ? filter.get() : {});
+
+    // Sorting
+    const [field, direction] = sort.split("-");
+    const sortedProducts = [...products].sort((a, b) => {
+      if (field === "name") {
+        const nameA = a[field].toUpperCase();
+        const nameB = b[field].toUpperCase();
+
+        if (direction === "asc") {
+          return nameA.localeCompare(nameB);
+        } else if (direction === "desc") {
+          return nameB.localeCompare(nameA);
+        }
+      } else {
+        const modifier = direction === "asc" ? 1 : -1;
+        return (a[field] - b[field]) * modifier;
+      }
+    });
 
     if (products) {
-      return NextResponse.json({ products }, { status: 200 });
+      return NextResponse.json({ sortedProducts }, { status: 200 });
     }
   } catch (err) {
     console.error(err);
