@@ -72,7 +72,7 @@ function page() {
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  className={cn("block w-full px-4 py-2 text-left text-base", {
+                  className={cn("block w-full px-4 py-2 text-left text-sm", {
                     "bg-gray-200 text-gray-900": option.value === filter.sort,
                     " text-secondary-foreground": option.value !== filter.sort,
                   })}
@@ -92,7 +92,7 @@ function page() {
           </DropdownMenu>
 
           {/* Mobile navigation  */}
-          <div className="block md:hidden">
+          <div className="sm block md:hidden">
             <Sheet>
               <SheetTrigger>
                 <IoFilter className=" mt-2 text-xl" />
