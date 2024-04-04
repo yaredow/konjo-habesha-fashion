@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import useAddToCart from "@/hook/useAddToCart";
+import useAddToCart from "@/lib/hook/useAddToCart";
 import Image from "next/image";
-import useGetProduct from "./useGetProduct";
+import useGetProduct from "@/lib/hook/useGetProduct";
 
 function ProductDetail({ params }: { params: string }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);

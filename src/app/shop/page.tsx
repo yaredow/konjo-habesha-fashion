@@ -22,7 +22,7 @@ import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { ProductState } from "@/lib/utils/validators/product-validators";
 
 import debounce from "lodash.debounce";
-import useGetFilteredProducts from "./useGetFilteredProducts";
+import useGetFilteredProducts from "../../lib/hook/useGetFilteredProducts";
 import ProductFilter from "@/components/product/shop/ProductFilter";
 import {
   Sheet,

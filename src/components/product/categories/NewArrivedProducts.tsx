@@ -2,7 +2,7 @@
 
 import { Product } from "../../../../type";
 import ProductItem from "../ProductItem";
-import useGetProductsWithCatagory from "./useGetProductsWithCatagory";
+import useGetProductsWithCatagory from "../../../lib/hook/useGetProductsWithCatagory";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 function NewArrivedProducts() {

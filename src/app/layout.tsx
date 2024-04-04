@@ -4,10 +4,10 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import { AuthProvider } from "@/components/providers/AuthProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import StoreProvider from "@/components/providers/StoreProvider";
-import QueryProviders from "@/components/providers/QueryProvider";
+import StoreProvider from "@/lib/providers/StoreProvider";
+import { ThemeProvider } from "@/lib/providers/ThemeProvider";
+import { AuthProvider } from "@/lib/providers/AuthProvider";
+import QueryProviders from "@/lib/providers/QueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],

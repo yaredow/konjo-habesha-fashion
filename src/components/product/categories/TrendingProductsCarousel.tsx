@@ -14,7 +14,7 @@ import Image from "next/image";
 import React from "react";
 import { Product } from "../../../../type";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
-import useGetTrendingProducts from "./useGetProductsWithCatagory";
+import useGetTrendingProducts from "../../../lib/hook/useGetProductsWithCatagory";
 import { formatCurrency } from "@/lib/utils/helpers";
 
 function TrendingProductCarousel() {
