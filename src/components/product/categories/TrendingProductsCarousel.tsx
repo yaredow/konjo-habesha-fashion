@@ -42,7 +42,16 @@ function TrendingProductCarousel() {
                 <CarouselItem key={product._id} className="md:basis-1/4">
                   <div className="p-1">
                     <Card>
-                      <CardContent className="justify-cente flex aspect-square flex-col items-center p-2"></CardContent>
+                      <CardContent className="justify-cente flex aspect-square flex-col items-center p-2">
+                        <AspectRatio ratio={1 / 1}>
+                          <Image
+                            fill
+                            alt={product.images[0].public_id}
+                            src={product.images[0].url}
+                            className=" object-cover"
+                          />
+                        </AspectRatio>
+                      </CardContent>
                     </Card>
                   </div>
                 </CarouselItem>

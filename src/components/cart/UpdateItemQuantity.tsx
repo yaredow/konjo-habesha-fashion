@@ -15,16 +15,33 @@ function UpdateItemQuantity({
 }) {
   const dispatch = useAppDispatch();
   return (
-    <div className="flex items-center gap-[4px] border-gray-100">
-      <Button onClick={() => dispatch(decreaseItemQuantity(id))}>-</Button>
-      <Input
-        className="h-10 w-16 items-center"
-        type="number"
-        value={currentQuantity}
-        min="1"
-        readOnly
-      />
-      <Button onClick={() => dispatch(increaseItemQuantity(id))}>+</Button>
+    <div>
+      <label className="sr-only"> Quantity </label>
+
+      <div className="flex items-center rounded border border-gray-200">
+        <button
+          onClick={() => dispatch(decreaseItemQuantity(id))}
+          type="button"
+          className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+        >
+          &minus;
+        </button>
+
+        <input
+          type="number"
+          id="Quantity"
+          value={currentQuantity}
+          className="h-10 w-16 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+        />
+
+        <button
+          onClick={() => dispatch(increaseItemQuantity(id))}
+          type="button"
+          className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+        >
+          &plus;
+        </button>
+      </div>
     </div>
   );
 }
