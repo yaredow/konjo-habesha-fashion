@@ -1,6 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
+import { CartItem, Product } from "../../../type";
 export default function useAddToCart(product: Product) {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(getCart);

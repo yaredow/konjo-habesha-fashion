@@ -22,8 +22,9 @@ import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { useAppSelector } from "@/store/hooks";
-import { getTotalCartQuantity } from "@/store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getCart, getTotalCartQuantity } from "@/store/slices/cartSlice";
+import { useCart } from "@/lib/context/CartContext";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -32,6 +33,7 @@ function Header() {
   const handleToggleSearchForm = () => {
     setSearchFormOpem((searchFormOpen) => !searchFormOpen);
   };
+  const { cartPopupOpen } = useCart();
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">

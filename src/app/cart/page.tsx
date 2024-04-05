@@ -13,6 +13,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const Cart = () => {
   const cart = useAppSelector(getCart);
+  console.log(cart);
   const totalPrice = useAppSelector(getTotalCartPrice);
   const totalCartQuantity = useAppSelector(getTotalCartQuantity);
 

@@ -6,15 +6,15 @@ import Image from "next/image";
 import useGetProduct from "@/lib/hook/useGetProduct";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/lib/context/CartContext";
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
-  const [selectedSize, setSelectedSize] = useState(null);
   const { id } = params;
   const { product = {}, isPending } = useGetProduct(id);
   let url, altTextx;
 
-  const { handleAddToCart } = useAddToCart({});
+  const { handleAddToCart } = useAddToCart(product);
 
   function handleAddToCartClick() {
     if (!product?.inStock) {

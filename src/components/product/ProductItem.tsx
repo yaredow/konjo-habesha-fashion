@@ -8,10 +8,12 @@ import { Button } from "../ui/button";
 import { IoCartOutline } from "react-icons/io5";
 import useAddToCart from "@/lib/hook/useAddToCart";
 import { toast } from "../ui/use-toast";
+import { useCart } from "@/lib/context/CartContext";
 
 function ProductItem({ product }: { product: Product }) {
   const router = useRouter();
   const { handleAddToCart } = useAddToCart(product);
+  const { handleCartPopupOpen } = useCart();
 
   const handleClick = () => {
     router.replace(`/product/${product._id}`);
@@ -25,6 +27,7 @@ function ProductItem({ product }: { product: Product }) {
       e.stopPropagation();
       return;
     }
+    handleCartPopupOpen();
     handleAddToCart();
     e.stopPropagation();
   };
