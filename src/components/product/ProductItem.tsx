@@ -50,11 +50,12 @@ function ProductItem({ product }: { product: Product }) {
         </div>
 
         <Button
+          variant="outline"
           onClick={handleAddToCartClick}
           size="icon"
           className=" h-10 w-10 rounded-full"
         >
-          <IoCartOutline className=" text-2xl" />
+          <IoCartOutline className=" text-2xl text-blue-600" />
         </Button>
       </div>
     </div>

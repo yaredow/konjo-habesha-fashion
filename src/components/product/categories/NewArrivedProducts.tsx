@@ -6,12 +6,15 @@ import useGetProductsWithCatagory from "../../../lib/hook/useGetProductsWithCata
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 function NewArrivedProducts() {
-  const { data } = useGetProductsWithCatagory("new-arrival");
+  const { data } = useGetProductsWithCatagory("trending");
   return (
     <div className="mt-[5rem]">
+      <h1 className=" items-center text-2xl font-semibold md:items-start">
+        Trending Products
+      </h1>
       <div className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data
-          ? data.newArrivalProducts.map((product: Product) => (
+          ? data.trendingProducts.map((product: Product) => (
               <ProductItem key={product._id} product={product} />
             ))
           : Array.from({ length: 8 }).map((_, index) => (
