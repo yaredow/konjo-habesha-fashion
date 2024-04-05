@@ -6,12 +6,28 @@ import { Product } from "../../../type";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { IoCartOutline } from "react-icons/io5";
+import useAddToCart from "@/lib/hook/useAddToCart";
+import { toast } from "../ui/use-toast";
 
 function ProductItem({ product }: { product: Product }) {
   const router = useRouter();
-  function handleClick() {
+  const { handleAddToCart } = useAddToCart(product);
+
+  const handleClick = () => {
     router.replace(`/product/${product._id}`);
-  }
+  };
+
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    if (!product.inStock) {
+      toast({
+        description: "This item is out of stock",
+      });
+      e.stopPropagation();
+      return;
+    }
+    handleAddToCart();
+    e.stopPropagation();
+  };
 
   return (
     <div onClick={handleClick} className="group relative hover:cursor-pointer">
@@ -30,7 +46,11 @@ function ProductItem({ product }: { product: Product }) {
           </p>
         </div>
 
-        <Button size="icon" className=" h-10 w-10 rounded-full">
+        <Button
+          onClick={handleAddToCartClick}
+          size="icon"
+          className=" h-10 w-10 rounded-full"
+        >
           <IoCartOutline className=" text-2xl" />
         </Button>
       </div>
