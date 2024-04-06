@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, League_Spartan, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Inter as FontSans,
+  League_Spartan,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
@@ -9,12 +13,7 @@ import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import { CartProvider } from "@/lib/context/CartContext";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+import { cn } from "@/lib/utils";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
@@ -34,6 +33,11 @@ export const metadata: Metadata = {
   description: "The best habesha attire shop in Addis",
 };
 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,9 +46,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${league_spartan.variable} ${plus_jakarta_sans.variable}`}
+      className={`${league_spartan.variable} ${plus_jakarta_sans.variable}`}
     >
-      <body className=" min-h-screen">
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
