@@ -73,10 +73,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  const router = useRouter();
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">

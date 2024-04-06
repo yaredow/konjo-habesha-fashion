@@ -8,11 +8,12 @@ import {
 } from "@/lib/utils/constants";
 import { useCallback, useState } from "react";
 import ProductItem from "@/components/product/ProductItem";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, SortAscIcon } from "lucide-react";
 import { IoFilter } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { FaSortAlphaDown } from "react-icons/fa";
 
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,11 +67,16 @@ function page() {
 
         <div className=" flex flex-row items-center gap-6">
           <DropdownMenu>
-            <DropdownMenuTrigger className="group inline-flex justify-center text-sm font-medium">
-              Sort
-              <ChevronDown className="m -mr-1 ml-1 h-5 w-5 flex-shrink-0 group-hover:text-blue-500" />
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-4">
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Sort
+                </span>
+                <FaSortAlphaDown className="h-3.5 w-3.5" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value}
