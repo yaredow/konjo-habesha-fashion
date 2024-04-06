@@ -1,5 +1,8 @@
 "use client";
 
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Home,
@@ -16,11 +19,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
-import { ComponentProps, FunctionComponent } from "react";
-import { usePathname } from "next/navigation";
-import dynamicIconImports from "lucide-react/dynamicIconImports";
 
 export default function SideBar() {
   return (
