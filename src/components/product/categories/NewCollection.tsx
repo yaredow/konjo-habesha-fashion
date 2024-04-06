@@ -5,7 +5,7 @@ import Link from "next/link";
 function NewCollection() {
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl py-8 pb-4 sm:px-6 sm:pb-12 lg:px-4">
+      <div className="mx-auto max-w-screen-xl py-8 pb-4 sm:px-6 sm:pb-12">
         <ul className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
           <li>
             <a href="#" className="group relative block">
@@ -16,9 +16,7 @@ function NewCollection() {
               />
 
               <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
-                <h3 className="text-xl font-medium text-white">
-                  Casual Trainers
-                </h3>
+                <h3 className="text-xl font-medium text-white">Male</h3>
 
                 <span className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white">
                   Shop Now
@@ -36,9 +34,7 @@ function NewCollection() {
               />
 
               <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
-                <h3 className="text-xl font-medium text-white">
-                  Winter Jumpers
-                </h3>
+                <h3 className="text-xl font-medium text-white">Kids</h3>
 
                 <span className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white">
                   Shop Now

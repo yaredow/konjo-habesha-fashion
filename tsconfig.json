@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "jest.config.js",
-    "jest.setup.js"
+    "jest.setup.js",
+    "src/app/dashboard/products"
   ],
   "exclude": ["node_modules"]
 }
