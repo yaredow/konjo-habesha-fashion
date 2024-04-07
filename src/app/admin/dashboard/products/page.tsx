@@ -32,8 +32,10 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
+import useGetProduct from "@/lib/hook/useGetProduct";
 
 export default function page() {
+  const products = ;
   const router = useRouter();
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
