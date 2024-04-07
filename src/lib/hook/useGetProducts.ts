@@ -8,14 +8,14 @@ async function fetchProduct() {
 }
 
 function useGetProduct() {
-  const { data: responseData } = useQuery({
+  const { data: responseData, isPending } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProduct,
   });
 
   const products = responseData?.products;
 
-  return { products };
+  return { products, isPending };
 }
 
 export default useGetProduct;

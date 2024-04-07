@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ChevronLeft, PlusCircle, Upload } from "lucide-react";
 
@@ -32,23 +34,39 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import useGetProduct from "@/lib/hook/useGetProduct";
+import { useRouter } from "next/navigation";
+import { Product } from "../../../../../../type";
+import Spinner from "@/components/Spinner";
 
 export default function page({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const { product, isPending }: { product: Product; isPending: boolean } =
+    useGetProduct(id);
+  const router = useRouter();
+
+  if (isPending) return <Spinner />;
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="h-7 w-7">
+              <Button
+                onClick={() => router.back()}
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+              >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Back</span>
               </Button>
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Pro Controller
+                {product.name}
               </h1>
               <Badge variant="outline" className="ml-auto sm:ml-0">
-                In stock
+                {product.inStock ? "In Stock" : "Sold"}
               </Badge>
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button variant="outline" size="sm">
@@ -74,6 +92,7 @@ export default function page({ params }: { params: { id: string } }) {
                           id="name"
                           type="text"
                           className="w-full"
+                          value={product.name}
                           defaultValue="Gamer Gear Pro Controller"
                         />
                       </div>
@@ -81,6 +100,7 @@ export default function page({ params }: { params: { id: string } }) {
                         <Label htmlFor="description">Description</Label>
                         <Textarea
                           id="description"
+                          value={product.description}
                           defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
                           className="min-h-32"
                         />
@@ -117,7 +137,7 @@ export default function page({ params }: { params: { id: string } }) {
                             <Input
                               id="stock-1"
                               type="number"
-                              defaultValue="100"
+                              defaultValue={product.stockQuantity}
                             />
                           </TableCell>
                           <TableCell>
@@ -127,7 +147,7 @@ export default function page({ params }: { params: { id: string } }) {
                             <Input
                               id="price-1"
                               type="number"
-                              defaultValue="99.99"
+                              defaultValue={product.price}
                             />
                           </TableCell>
                           <TableCell>
@@ -136,81 +156,11 @@ export default function page({ params }: { params: { id: string } }) {
                               defaultValue="s"
                               variant="outline"
                             >
-                              <ToggleGroupItem value="s">S</ToggleGroupItem>
-                              <ToggleGroupItem value="m">M</ToggleGroupItem>
-                              <ToggleGroupItem value="l">L</ToggleGroupItem>
-                            </ToggleGroup>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-semibold">
-                            GGPC-002
-                          </TableCell>
-                          <TableCell>
-                            <Label htmlFor="stock-2" className="sr-only">
-                              Stock
-                            </Label>
-                            <Input
-                              id="stock-2"
-                              type="number"
-                              defaultValue="143"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Label htmlFor="price-2" className="sr-only">
-                              Price
-                            </Label>
-                            <Input
-                              id="price-2"
-                              type="number"
-                              defaultValue="99.99"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <ToggleGroup
-                              type="single"
-                              defaultValue="m"
-                              variant="outline"
-                            >
-                              <ToggleGroupItem value="s">S</ToggleGroupItem>
-                              <ToggleGroupItem value="m">M</ToggleGroupItem>
-                              <ToggleGroupItem value="l">L</ToggleGroupItem>
-                            </ToggleGroup>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-semibold">
-                            GGPC-003
-                          </TableCell>
-                          <TableCell>
-                            <Label htmlFor="stock-3" className="sr-only">
-                              Stock
-                            </Label>
-                            <Input
-                              id="stock-3"
-                              type="number"
-                              defaultValue="32"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Label htmlFor="price-3" className="sr-only">
-                              Stock
-                            </Label>
-                            <Input
-                              id="price-3"
-                              type="number"
-                              defaultValue="99.99"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <ToggleGroup
-                              type="single"
-                              defaultValue="s"
-                              variant="outline"
-                            >
-                              <ToggleGroupItem value="s">S</ToggleGroupItem>
-                              <ToggleGroupItem value="m">M</ToggleGroupItem>
-                              <ToggleGroupItem value="l">L</ToggleGroupItem>
+                              {product.sizes.map((size, index) => (
+                                <ToggleGroupItem key={index} value="s">
+                                  {size}
+                                </ToggleGroupItem>
+                              ))}
                             </ToggleGroup>
                           </TableCell>
                         </TableRow>
@@ -304,7 +254,7 @@ export default function page({ params }: { params: { id: string } }) {
                   <CardHeader>
                     <CardTitle>Product Images</CardTitle>
                     <CardDescription>
-                      Lipsum dolor sit amet, consectetur adipiscing elit
+                      {product && `Images available for ${product.name}`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -313,28 +263,22 @@ export default function page({ params }: { params: { id: string } }) {
                         alt="Product image"
                         className="aspect-square w-full rounded-md object-cover"
                         height="300"
-                        src="/placeholder.svg"
+                        src={product.images[0].url}
                         width="300"
                       />
                       <div className="grid grid-cols-3 gap-2">
-                        <button>
-                          <Image
-                            alt="Product image"
-                            className="aspect-square w-full rounded-md object-cover"
-                            height="84"
-                            src="/placeholder.svg"
-                            width="84"
-                          />
-                        </button>
-                        <button>
-                          <Image
-                            alt="Product image"
-                            className="aspect-square w-full rounded-md object-cover"
-                            height="84"
-                            src="/placeholder.svg"
-                            width="84"
-                          />
-                        </button>
+                        {product.images.map((image, index) => (
+                          <button>
+                            <Image
+                              alt="Product image"
+                              className="aspect-square w-full rounded-md object-cover"
+                              height="84"
+                              src={image.url}
+                              width="84"
+                            />
+                          </button>
+                        ))}
+
                         <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
                           <Upload className="h-4 w-4 text-muted-foreground" />
                           <span className="sr-only">Upload</span>

@@ -32,13 +32,12 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import { getProducts } from "@/server/actions/product/getProducts";
 import useGetProducts from "@/lib/hook/useGetProducts";
 import { Product } from "../../../../../type";
 import { formatCurrency, formatDate } from "@/lib/utils/helpers";
 
 export default function page() {
-  const { products = [] } = useGetProducts();
+  const { products = [], isPending } = useGetProducts();
   console.log(products);
   const router = useRouter();
 
@@ -121,8 +120,11 @@ export default function page() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {products &&
-                      products.length > 0 &&
+                    {isPending ? (
+                      <h1 className=" mt-4 flex items-center justify-center text-lg">
+                        Loading...
+                      </h1>
+                    ) : (
                       products.map((product: Product) => (
                         <TableRow key={product._id}>
                           <TableCell className="hidden sm:table-cell">
@@ -166,7 +168,7 @@ export default function page() {
                                 <DropdownMenuItem
                                   onClick={() =>
                                     router.replace(
-                                      "/admin/dashboard/products/edit-product",
+                                      ` /admin/dashboard/products/${product._id}`,
                                     )
                                   }
                                 >
@@ -177,7 +179,8 @@ export default function page() {
                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
