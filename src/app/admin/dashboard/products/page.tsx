@@ -40,10 +40,12 @@ import useGetProducts from "@/lib/hook/useGetProducts";
 import Spinner from "@/components/Spinner";
 
 export default function page() {
-  const { products, isPending } = useGetProducts();
+  const { products, isPending, isError } = useGetProducts();
   const router = useRouter();
 
   if (isPending) return <Spinner />;
+
+  if (isError) return <h1>Error</h1>;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
