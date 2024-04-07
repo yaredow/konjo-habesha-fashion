@@ -23,17 +23,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ImageUploadButton from "@/components/UploadButton";
-
-const formSchema = z.object({
-  name: z.string(),
-  price: z.coerce.number(),
-  category: z.string(),
-  size: z.string(),
-  stockQuantity: z.coerce.number(),
-  description: z.string(),
-});
+import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
+import { useFormState, useFormStatus } from "react-dom";
+import { createProductAction } from "@/server/actions/product/createProducts";
+import SpinnerMini from "../ui/SpinnerMini";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -44,13 +39,24 @@ const options = [
   { value: "XXL", label: "Double Extra Large" },
 ];
 
+const initialState = {
+  message: "",
+};
+
+export function CreateProductButton() {
+  const { pending } = useFormStatus();
+
+  return <Button>{pending ? <SpinnerMini /> : "Create Product"}</Button>;
+}
+
 function CreateProduct() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [images, setImages] = useState([]);
   console.log(images);
 
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof CreateProductFormSchema>>({
+    resolver: zodResolver(CreateProductFormSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -61,34 +67,28 @@ function CreateProduct() {
     },
   });
 
-  const onSubmit = async () => {
-    const formData = form.getValues();
+  const [state, formAction] = useFormState(createProductAction, initialState);
 
-    const res = await fetch("api/products/create-product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...formData, images }),
-    });
-
-    const data = await res.json();
-
-    if (res?.ok) {
-      toast({
-        description: data.message,
-      });
-    } else {
-      console.log(data.message);
-    }
+  const handleSubmitRegistration = async (
+    evt: React.MouseEvent<HTMLFormElement>,
+  ) => {
+    evt.preventDefault();
+    form.handleSubmit(() => {
+      formAction(new FormData(formRef.current!));
+    })(evt);
   };
 
   return (
     <div className="my-auto flex flex-col items-center justify-center">
       <h2 className="mb-8 text-start text-xl font-bold">Add a new product</h2>
       <Form {...form}>
+        {state?.message !== "" && state?.message !== "success" && (
+          <div className=" text-red-500">{state.message}</div>
+        )}
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          ref={formRef}
+          onSubmit={handleSubmitRegistration}
+          action={formAction}
           className=" w-full max-w-2xl items-center justify-center gap-8"
         >
           <div className=" flex flex-col space-y-8">
@@ -204,9 +204,7 @@ function CreateProduct() {
 
             <ImageUploadButton setImages={setImages} />
 
-            <Button type="submit" className="w-full">
-              Submit
-            </Button>
+            <CreateProductButton />
           </div>
         </form>
       </Form>

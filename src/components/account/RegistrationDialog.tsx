@@ -26,7 +26,6 @@ import { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SpinnerMini from "../ui/SpinnerMini";
-import { redirect, useRouter } from "next/navigation";
 
 function RegistrationButton() {
   const { pending } = useFormStatus();
@@ -40,7 +39,6 @@ const initialState = {
 };
 
 export function RegistrationDialog() {
-  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(register, initialState);
 

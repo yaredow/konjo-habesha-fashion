@@ -56,3 +56,12 @@ export const registrationFormSchema = z
       path: ["passwordConfirm"],
     },
   );
+
+export const CreateProductFormSchema = z.object({
+  name: z.string(),
+  price: z.coerce.number(),
+  category: z.string(),
+  size: z.string(),
+  stockQuantity: z.coerce.number(),
+  description: z.string(),
+});
