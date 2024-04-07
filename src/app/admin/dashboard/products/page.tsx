@@ -32,11 +32,14 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import useGetProduct from "@/lib/hook/useGetProduct";
+import { getProducts } from "@/server/actions/product/getProducts";
+import useGetProducts from "@/lib/hook/useGetProducts";
 
 export default function page() {
-  const products = ;
+  const { products = [] } = useGetProducts();
+  console.log(products);
   const router = useRouter();
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
