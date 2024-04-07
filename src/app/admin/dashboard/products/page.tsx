@@ -32,17 +32,18 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import useGetProducts from "@/lib/hook/useGetProducts";
-import { Product } from "../../../../../type";
 import { formatCurrency, formatDate } from "@/lib/utils/helpers";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateProduct from "@/components/dashboard/CreateProduct";
+import { Product } from "../../../../../type";
+import useGetProducts from "@/lib/hook/useGetProducts";
+import Spinner from "@/components/Spinner";
 
 export default function page() {
-  const { products = [], isPending } = useGetProducts();
-  console.log(products);
+  const { products, isPending } = useGetProducts();
   const router = useRouter();
+
+  if (isPending) return <Spinner />;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">

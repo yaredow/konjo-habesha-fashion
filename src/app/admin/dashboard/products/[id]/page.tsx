@@ -38,11 +38,13 @@ import useGetProduct from "@/lib/hook/useGetProduct";
 import { useRouter } from "next/navigation";
 import { Product } from "../../../../../../type";
 import Spinner from "@/components/Spinner";
+import useGetProducts from "@/lib/hook/useGetProducts";
 
 export default function page({ params }: { params: { id: string } }) {
   const { id } = params;
   const { product, isPending }: { product: Product; isPending: boolean } =
     useGetProduct(id);
+
   const router = useRouter();
 
   if (isPending) return <Spinner />;
