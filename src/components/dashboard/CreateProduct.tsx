@@ -44,7 +44,7 @@ const options = [
   { value: "XXL", label: "Double Extra Large" },
 ];
 
-function page() {
+function CreateProduct() {
   const [images, setImages] = useState([]);
   console.log(images);
 
@@ -84,7 +84,7 @@ function page() {
   };
 
   return (
-    <main className="my-auto flex flex-col items-center justify-center">
+    <div className="my-auto flex flex-col items-center justify-center">
       <h2 className="mb-8 text-start text-xl font-bold">Add a new product</h2>
       <Form {...form}>
         <form
@@ -210,8 +210,8 @@ function page() {
           </div>
         </form>
       </Form>
-    </main>
+    </div>
   );
 }
 
-export default page;
+export default CreateProduct;

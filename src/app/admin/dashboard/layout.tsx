@@ -8,9 +8,7 @@ function Dashboardlayout({
   return (
     <div className="ml-8 min-h-screen w-full">
       <SideBar />
-      <div className="flex w-full items-center justify-center p-6">
-        {children}
-      </div>
+      <div className="flex items-center justify-center p-6">{children}</div>
     </div>
   );
 }

@@ -35,6 +35,9 @@ import { useRouter } from "next/navigation";
 import useGetProducts from "@/lib/hook/useGetProducts";
 import { Product } from "../../../../../type";
 import { formatCurrency, formatDate } from "@/lib/utils/helpers";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import CreateProduct from "@/components/dashboard/CreateProduct";
 
 export default function page() {
   const { products = [], isPending } = useGetProducts();
@@ -80,12 +83,19 @@ export default function page() {
                   Export
                 </span>
               </Button>
-              <Button size="sm" className="h-8 gap-1">
-                <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Product
-                </span>
-              </Button>
+              <Dialog>
+                <DialogTrigger>
+                  <Button size="sm" className="h-8 gap-1">
+                    <PlusCircle className="h-3.5 w-3.5" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                      Add Product
+                    </span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <CreateProduct />
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
           <TabsContent value="all">
