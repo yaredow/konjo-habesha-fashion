@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import ImageUploadButton from "@/components/UploadButton";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
@@ -37,6 +36,7 @@ import {
 } from "../ui/dialog";
 import { PlusCircle } from "lucide-react";
 import SpinnerMini from "../ui/SpinnerMini";
+import { AvatarUpload } from "../ImageUploader";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -108,10 +108,10 @@ export default function CreateProduct() {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogHeader>
-        <DialogTitle>Create a product</DialogTitle>
-      </DialogHeader>
       <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create a product</DialogTitle>
+        </DialogHeader>
         <div className="my-auto flex flex-col items-center justify-center">
           <Form {...form}>
             {state?.message !== "" && state?.message !== "success" && (
@@ -238,7 +238,7 @@ export default function CreateProduct() {
                   )}
                 />
 
-                <ImageUploadButton setImages={setImages} />
+                <AvatarUpload />
 
                 <CreateProductButton />
               </div>
