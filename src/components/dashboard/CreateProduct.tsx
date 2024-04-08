@@ -70,6 +70,12 @@ export default function CreateProduct() {
 
   const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    const formData = new FormData();
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
     form.handleSubmit(() => {
       formAction(new FormData(formRef.current!));
     })(evt);
@@ -99,9 +105,6 @@ export default function CreateProduct() {
       </DialogHeader>
       <DialogContent>
         <div className="my-auto flex flex-col items-center justify-center">
-          <h2 className="mb-8 text-start text-xl font-bold">
-            Add a new product
-          </h2>
           <Form {...form}>
             {state?.message !== "" && state?.message !== "success" && (
               <div className=" text-red-500">{state.message}</div>

@@ -26,6 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SpinnerMini from "../ui/SpinnerMini";
+import { PlusCircle } from "lucide-react";
 
 function RegistrationButton() {
   const { pending } = useFormStatus();
@@ -70,8 +71,13 @@ export function RegistrationDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="link">Register</Button>
+      <DialogTrigger>
+        <Button size="sm" className="h-8 gap-1">
+          <PlusCircle className="h-3.5 w-3.5" />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Add Product
+          </span>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

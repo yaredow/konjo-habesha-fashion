@@ -1,7 +1,7 @@
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import connectMongoDB from "@/lib/utils/mongo/db";
-import Product from "@/models/productModel";
 import { FormState } from "@/types/product";
+import Product from "@/models/productModel";
 
 export async function createProductAction(
   prevState: FormState,
