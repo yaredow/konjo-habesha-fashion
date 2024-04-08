@@ -21,10 +21,11 @@ import { NAV_LINKS } from "@/lib/utils/constants";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getCart, getTotalCartQuantity } from "@/store/slices/cartSlice";
+import { useSession } from "next-auth/react";
+import { useAppSelector } from "@/store/hooks";
+import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 import { useCart } from "@/lib/context/CartContext";
+import Search from "../Search";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -33,7 +34,6 @@ function Header() {
   const handleToggleSearchForm = () => {
     setSearchFormOpem((searchFormOpen) => !searchFormOpen);
   };
-  const { cartPopupOpen } = useCart();
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
@@ -60,10 +60,7 @@ function Header() {
 
         <div className="hidden gap-8 md:flex md:justify-end">
           <div className=" mt-[6px] flex flex-row gap-[1.3rem]">
-            <AiOutlineSearch
-              onClick={handleToggleSearchForm}
-              className=" text-xl font-semibold hover:text-blue-500"
-            />
+            <Search />
             <div className=" flex flex-row gap-2">
               <Link
                 href={
