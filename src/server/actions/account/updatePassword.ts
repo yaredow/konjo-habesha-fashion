@@ -5,10 +5,7 @@ import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
-
-export type FormState = {
-  message: string;
-};
+import { FormState } from "@/types/product";
 
 export async function updatePasswordAction(
   email: string,

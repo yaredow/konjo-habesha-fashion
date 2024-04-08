@@ -12,7 +12,7 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React from "react";
-import { Product } from "../../../../type";
+import { Product } from "../../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import useGetTrendingProducts from "../../../lib/hook/useGetProductsWithCatagory";
 import { formatCurrency } from "@/lib/utils/helpers";

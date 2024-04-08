@@ -33,9 +33,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { formatCurrency, formatDate } from "@/lib/utils/helpers";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateProduct from "@/components/dashboard/CreateProduct";
-import { Product } from "../../../../../type";
+import { Product } from "../../../../types/product";
 import useGetProducts from "@/lib/hook/useGetProducts";
 import Spinner from "@/components/Spinner";
 
@@ -86,19 +85,7 @@ export default function page() {
                   Export
                 </span>
               </Button>
-              <Dialog>
-                <DialogTrigger>
-                  <Button size="sm" className="h-8 gap-1">
-                    <PlusCircle className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Add Product
-                    </span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <CreateProduct />
-                </DialogContent>
-              </Dialog>
+              <CreateProduct />
             </div>
           </div>
           <TabsContent value="all">

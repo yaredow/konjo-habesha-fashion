@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import EmptyState from "@/components/product/EmptyState";
-import { Product } from "../../../type";
+import { Product } from "../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { ProductState } from "@/lib/utils/validators/product-validators";
 

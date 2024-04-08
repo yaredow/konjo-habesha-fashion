@@ -36,7 +36,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import useGetProduct from "@/lib/hook/useGetProduct";
 import { useRouter } from "next/navigation";
-import { Product } from "../../../../../../type";
+import { Product } from "../../../../../types/product";
 import Spinner from "@/components/Spinner";
 import useGetProducts from "@/lib/hook/useGetProducts";
 

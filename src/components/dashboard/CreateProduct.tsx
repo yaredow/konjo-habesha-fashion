@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   Form,
   FormControl,
@@ -23,12 +24,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { useRef, useState } from "react";
 import ImageUploadButton from "@/components/UploadButton";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
-import SpinnerMini from "../ui/SpinnerMini";
+import {
+  Dialog,
+  DialogHeader,
+  DialogTrigger,
+  DialogTitle,
+  DialogContent,
+} from "../ui/dialog";
+import { PlusCircle } from "lucide-react";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -43,18 +50,12 @@ const initialState = {
   message: "",
 };
 
-export function CreateProductButton() {
-  const { pending } = useFormStatus();
-
-  return <Button>{pending ? <SpinnerMini /> : "Create Product"}</Button>;
-}
-
-function CreateProduct() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [images, setImages] = useState([]);
-  console.log(images);
-
+export default function CreateProduct() {
+  const [state, formAction] = useFormState(createProductAction, initialState);
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const [images, setImages] = React.useState([]);
   const { toast } = useToast();
+
   const form = useForm<z.infer<typeof CreateProductFormSchema>>({
     resolver: zodResolver(CreateProductFormSchema),
     defaultValues: {
@@ -67,149 +68,173 @@ function CreateProduct() {
     },
   });
 
-  const [state, formAction] = useFormState(createProductAction, initialState);
-
-  const handleSubmitRegistration = async (
-    evt: React.MouseEvent<HTMLFormElement>,
-  ) => {
+  const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
     form.handleSubmit(() => {
       formAction(new FormData(formRef.current!));
     })(evt);
   };
 
+  React.useEffect(() => {
+    if (state?.message !== "" && state?.message === "success") {
+      toast({
+        description: "You have registered successfully",
+      });
+    }
+    form.reset();
+  }, [state?.message]);
+
   return (
-    <div className="my-auto flex flex-col items-center justify-center">
-      <h2 className="mb-8 text-start text-xl font-bold">Add a new product</h2>
-      <Form {...form}>
-        {state?.message !== "" && state?.message !== "success" && (
-          <div className=" text-red-500">{state.message}</div>
-        )}
-        <form
-          ref={formRef}
-          onSubmit={handleSubmitRegistration}
-          action={formAction}
-          className=" w-full max-w-2xl items-center justify-center gap-8"
-        >
-          <div className=" flex flex-col space-y-8">
-            <div className=" w-full ">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => {
-                  return (
+    <Dialog>
+      <DialogTrigger>
+        <Button size="sm" className="h-8 gap-1">
+          <PlusCircle className="h-3.5 w-3.5" />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Add Product
+          </span>
+        </Button>
+      </DialogTrigger>
+      <DialogHeader>
+        <DialogTitle>Create a product</DialogTitle>
+      </DialogHeader>
+      <DialogContent>
+        <div className="my-auto flex flex-col items-center justify-center">
+          <h2 className="mb-8 text-start text-xl font-bold">
+            Add a new product
+          </h2>
+          <Form {...form}>
+            {state?.message !== "" && state?.message !== "success" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
+            <form
+              ref={formRef}
+              onSubmit={handleSubmitRegistration}
+              action={formAction}
+              className=" w-full max-w-2xl items-center justify-center gap-8"
+            >
+              <div className=" flex flex-col space-y-8">
+                <div className=" w-full ">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Product Name"
+                              type="text"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <div className=" w-full md:w-1/2">
+                    <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Price"
+                                type="number"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  </div>
+
+                  <div className=" w-full md:w-1/2">
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <SingleSelect
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Female">Female</SelectItem>
+                              <SelectItem value="Male">Male</SelectItem>
+                              <SelectItem value="Kids">Kids</SelectItem>
+                            </SelectContent>
+                          </SingleSelect>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <div className=" w-full md:w-1/2">
+                    <MultipleSelector
+                      defaultOptions={options}
+                      placeholder="Select Size"
+                    />
+                  </div>
+
+                  <div className=" w-full md:w-1/2">
+                    <FormField
+                      control={form.control}
+                      name="stockQuantity"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Stock Quantity"
+                                type="number"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
+                        <Textarea
+                          placeholder="Write product description"
+                          className="resize-none"
                           {...field}
-                          placeholder="Product Name"
-                          type="text"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  );
-                }}
-              />
-            </div>
-            <div className="flex flex-col gap-4 md:flex-row">
-              <div className=" w-full md:w-1/2">
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormControl>
-                          <Input {...field} placeholder="Price" type="number" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
-
-              <div className=" w-full md:w-1/2">
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <SingleSelect
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Female">Female</SelectItem>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Kids">Kids</SelectItem>
-                        </SelectContent>
-                      </SingleSelect>
-                    </FormItem>
                   )}
                 />
+
+                <ImageUploadButton setImages={setImages} />
+
+                <Button>Create product</Button>
               </div>
-            </div>
-
-            <div className="flex flex-col gap-4 md:flex-row">
-              <div className=" w-full md:w-1/2">
-                <MultipleSelector
-                  defaultOptions={options}
-                  placeholder="Select Size"
-                />
-              </div>
-
-              <div className=" w-full md:w-1/2">
-                <FormField
-                  control={form.control}
-                  name="stockQuantity"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Stock Quantity"
-                            type="number"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
-            </div>
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Write product description"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <ImageUploadButton setImages={setImages} />
-
-            <CreateProductButton />
-          </div>
-        </form>
-      </Form>
-    </div>
+            </form>
+          </Form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
-
-export default CreateProduct;

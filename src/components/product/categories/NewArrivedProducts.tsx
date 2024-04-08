@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "../../../../type";
+import { Product } from "../../../types/product";
 import ProductItem from "../ProductItem";
 import useGetProductsWithCatagory from "../../../lib/hook/useGetProductsWithCatagory";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";

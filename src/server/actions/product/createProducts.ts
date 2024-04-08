@@ -1,7 +1,7 @@
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
-import { FormState } from "../account/updatePassword";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import Product from "@/models/productModel";
+import { FormState } from "@/types/product";
 
 export async function createProductAction(
   prevState: FormState,
@@ -32,6 +32,8 @@ export async function createProductAction(
         message: "Product created successfully",
       };
     }
+
+    return { message: "success" };
   } catch (err) {
     return {
       message: "Something went wrong while creating product",

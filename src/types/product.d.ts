@@ -39,16 +39,10 @@ type CartState = {
   cart: CartItem[];
 };
 
-type FormState = {
-  message: string;
-  errors: string[] | undefined;
-  fieldValues: {
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-  };
-};
-
 interface SessionUserWithID extends SessionUser {
   id: string;
 }
+
+export type FormState = {
+  message: string;
+};

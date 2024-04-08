@@ -2,7 +2,7 @@
 
 import { formatCurrency } from "@/lib/utils/helpers";
 
-import { Product } from "../../../type";
+import { Product } from "../../types/product";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { IoCartOutline } from "react-icons/io5";

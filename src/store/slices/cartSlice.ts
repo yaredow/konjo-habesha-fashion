@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CartItem, CartState } from "../../../type";
+import { CartItem, CartState } from "../../types/product";
 
 // Retrieve cart items from local storage or use an empty array if none exists
 let cartItems;
