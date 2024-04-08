@@ -2,7 +2,6 @@ import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators"
 import connectMongoDB from "@/lib/utils/mongo/db";
 import { FormState } from "@/types/product";
 import Product from "@/models/productModel";
-
 export async function createProductAction(
   prevState: FormState,
   formData: FormData,
@@ -14,6 +13,7 @@ export async function createProductAction(
     size: formData.get("size"),
     stockQuantity: formData.get("stockQuantity"),
     description: formData.get("description"),
+    images: formData.get("images"),
   });
 
   if (!validatedFields.success) {
@@ -27,9 +27,9 @@ export async function createProductAction(
 
     const newProduct = await Product.create(validatedFields.data);
 
-    if (newProduct) {
+    if (!newProduct) {
       return {
-        message: "Product created successfully",
+        message: "New product creation failed",
       };
     }
 

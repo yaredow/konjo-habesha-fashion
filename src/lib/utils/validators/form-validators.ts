@@ -64,4 +64,10 @@ export const CreateProductFormSchema = z.object({
   size: z.string(),
   stockQuantity: z.coerce.number(),
   description: z.string(),
+  images: z.array(
+    z.object({
+      public_id: z.string(),
+      url: z.string(),
+    }),
+  ),
 });

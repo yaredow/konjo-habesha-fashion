@@ -1,6 +1,20 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const prodcutScheme = new mongoose.Schema({
+interface IProduct {
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  images: Array<{ key: string; url: string }>;
+  stockQuantity: number;
+  unitsSold?: number;
+  productAddedDate: Date;
+  isFeatured?: boolean;
+  inStock?: boolean;
+  sizes: Array<string>;
+}
+
+const productSchema = new Schema<IProduct>({
   name: {
     type: String,
     required: [true, "A product needs a name"],
@@ -61,7 +75,12 @@ const prodcutScheme = new mongoose.Schema({
   },
 });
 
+productSchema.pre("save", function (next) {
+  this.productAddedDate = new Date();
+  next();
+});
+
 const Product =
-  mongoose.models.Product || mongoose.model("Product", prodcutScheme);
+  mongoose.models.Product || mongoose.model("Product", productSchema);
 
 export default Product;

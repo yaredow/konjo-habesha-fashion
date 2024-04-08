@@ -22,11 +22,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "../ui/use-toast";
 import { registrationFormSchema } from "@/lib/utils/validators/form-validators";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SpinnerMini from "../ui/SpinnerMini";
-import { PlusCircle } from "lucide-react";
 
 function RegistrationButton() {
   const { pending } = useFormStatus();
@@ -40,7 +39,7 @@ const initialState = {
 };
 
 export function RegistrationDialog() {
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(register, initialState);
 
   const form = useForm<z.infer<typeof registrationFormSchema>>({
@@ -72,8 +71,7 @@ export function RegistrationDialog() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button size="sm" className="h-8 gap-1">
-          <PlusCircle className="h-3.5 w-3.5" />
+        <Button variant="link">
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
             Add Product
           </span>

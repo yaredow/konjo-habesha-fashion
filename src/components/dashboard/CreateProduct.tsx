@@ -26,7 +26,7 @@ import {
 import MultipleSelector from "@/components/ui/multiple-selector";
 import ImageUploadButton from "@/components/UploadButton";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
 import {
   Dialog,
@@ -36,6 +36,7 @@ import {
   DialogContent,
 } from "../ui/dialog";
 import { PlusCircle } from "lucide-react";
+import SpinnerMini from "../ui/SpinnerMini";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -49,6 +50,13 @@ const options = [
 const initialState = {
   message: "",
 };
+
+function CreateProductButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit">{pending ? <SpinnerMini /> : "Register"}</Button>
+  );
+}
 
 export default function CreateProduct() {
   const [state, formAction] = useFormState(createProductAction, initialState);
@@ -77,7 +85,7 @@ export default function CreateProduct() {
     });
 
     form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
+      formAction(formData);
     })(evt);
   };
 
@@ -232,7 +240,7 @@ export default function CreateProduct() {
 
                 <ImageUploadButton setImages={setImages} />
 
-                <Button>Create product</Button>
+                <CreateProductButton />
               </div>
             </form>
           </Form>
