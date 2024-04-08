@@ -1,3 +1,5 @@
+"use server";
+
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import connectMongoDB from "@/lib/utils/mongo/db";
 import { FormState } from "@/types/product";
