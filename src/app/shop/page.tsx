@@ -49,7 +49,6 @@ function page() {
     sort: "none",
   });
 
-  console.log(filter);
   const { products, refetch } = useGetFilteredProducts(filter);
   const currentitems = products?.slice(firstItemIndex, lastItemIndex);
 

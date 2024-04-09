@@ -11,7 +11,7 @@ export async function createProductAction(
   formData: FormData,
 ): Promise<FormState> {
   console.log("images: ", formData.get("images"));
-  console.log("description: ", formData.get("sizes"));
+  console.log("category: ", formData.get("category"));
   const validatedFields = CreateProductFormSchema.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),

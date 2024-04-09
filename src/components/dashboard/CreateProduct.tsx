@@ -18,14 +18,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  Select as SingleSelect,
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Select,
 } from "@/components/ui/select";
-import MultipleSelector from "@/components/ui/multiple-selector";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
@@ -41,6 +39,8 @@ import SpinnerMini from "../ui/SpinnerMini";
 import { Label } from "../ui/label";
 import ImageUploader from "../ImageUploader";
 import { MultiSelect } from "../ui/MultiSelect";
+import { Controller } from "react-hook-form";
+import axios from "axios";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -67,9 +67,6 @@ function CreateProductButton() {
 export default function CreateProduct() {
   const [files, setFiles] = React.useState<File[] | null>(null);
 
-  const [state, formAction] = useFormState(createProductAction, initialState);
-  const formRef = React.useRef<HTMLFormElement>(null);
-
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof CreateProductFormSchema>>({
@@ -85,27 +82,14 @@ export default function CreateProduct() {
     },
   });
 
-  const handleCreateProduct = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  const onSumbit = async () => {
+    const formData = form.getValues();
 
-    if (files) {
-      console.log(files);
-      form.setValue("images", files);
-    }
-
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
+    const res = await axios.post(
+      "http://localhost:3000/api/product/create-product",
+      {},
+    );
   };
-
-  React.useEffect(() => {
-    if (state?.message !== "" && state?.message === "success") {
-      toast({
-        description: "You have registered successfully",
-      });
-    }
-    form.reset();
-  }, [state?.message]);
 
   return (
     <Dialog>
@@ -123,13 +107,8 @@ export default function CreateProduct() {
         </DialogHeader>
         <div className="my-auto flex flex-col items-center justify-center">
           <Form {...form}>
-            {state?.message !== "" && state?.message !== "success" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
             <form
-              ref={formRef}
-              onSubmit={handleCreateProduct}
-              action={formAction}
+              onSubmit={form.handleSubmit(onSumbit)}
               className=" w-full max-w-2xl items-center justify-center gap-4"
             >
               <div className=" flex flex-col space-y-8">
@@ -185,19 +164,30 @@ export default function CreateProduct() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Category</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Female">Female</SelectItem>
-                              <SelectItem value="Male">Male</SelectItem>
-                              <SelectItem value="Kids">Kids</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormControl>
+                            <Controller
+                              control={form.control}
+                              name="category"
+                              render={({ field }) => (
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select Category" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Female">
+                                      Female
+                                    </SelectItem>
+                                    <SelectItem value="Male">Male</SelectItem>
+                                    <SelectItem value="Kids">Kids</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              )}
+                            />
+                          </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -209,21 +199,25 @@ export default function CreateProduct() {
                     <FormField
                       control={form.control}
                       name="sizes"
-                      render={({ field }) => {
-                        return (
-                          <FormItem>
-                            <FormLabel>Sizes</FormLabel>
-                            <FormControl>
-                              <MultiSelect
-                                selected={field.value}
-                                options={options}
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        );
-                      }}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Sizes</FormLabel>
+                          <FormControl>
+                            <Controller
+                              control={form.control}
+                              name="sizes"
+                              render={({ field }) => (
+                                <MultiSelect
+                                  selected={field.value}
+                                  options={options}
+                                  onChange={field.onChange}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
 

@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
 import { useState } from "react";
-import ImageUploadButton from "@/components/ImageUploader";
 
 const formSchema = z.object({
   name: z.string(),
