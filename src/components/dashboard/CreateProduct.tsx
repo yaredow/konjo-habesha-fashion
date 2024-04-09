@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import { useFormState, useFormStatus } from "react-dom";
-import { createProductAction } from "@/server/actions/product/createProducts";
+
 import {
   Dialog,
   DialogHeader,
