@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { Paperclip } from "lucide-react";
 import {
   FileInput,
@@ -11,9 +11,9 @@ import {
 
 const FileSvgDraw = () => {
   return (
-    <>
+    <div className=" flex w-full flex-col items-center justify-center border p-2">
       <svg
-        className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
+        className="h-8 w-8 text-gray-500 dark:text-gray-400"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -34,13 +34,17 @@ const FileSvgDraw = () => {
       <p className="text-xs text-gray-500 dark:text-gray-400">
         SVG, PNG, JPG or GIF
       </p>
-    </>
+    </div>
   );
 };
 
-export default function ImageUploader() {
-  const [files, setFiles] = useState<File[] | null>(null);
-
+export default function ImageUploader({
+  files,
+  setFiles,
+}: {
+  files: File[] | null;
+  setFiles: React.Dispatch<SetStateAction<File[] | null>>;
+}) {
   const dropZoneConfig = {
     maxFiles: 5,
     maxSize: 1024 * 1024 * 4,

@@ -23,6 +23,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Select,
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
@@ -39,6 +40,7 @@ import { PlusCircle } from "lucide-react";
 import SpinnerMini from "../ui/SpinnerMini";
 import { Label } from "../ui/label";
 import ImageUploader from "../ImageUploader";
+import { MultiSelect } from "../ui/MultiSelect";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -63,8 +65,11 @@ function CreateProductButton() {
 }
 
 export default function CreateProduct() {
+  const [files, setFiles] = React.useState<File[] | null>(null);
+
   const [state, formAction] = useFormState(createProductAction, initialState);
   const formRef = React.useRef<HTMLFormElement>(null);
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof CreateProductFormSchema>>({
@@ -73,14 +78,20 @@ export default function CreateProduct() {
       name: "",
       price: 0,
       category: "",
-      size: "",
+      sizes: [],
       stockQuantity: 0,
       description: "",
+      images: [],
     },
   });
 
-  const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
+  const handleCreateProduct = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (files) {
+      console.log(files);
+      form.setValue("images", files);
+    }
 
     form.handleSubmit(() => {
       formAction(new FormData(formRef.current!));
@@ -106,7 +117,7 @@ export default function CreateProduct() {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className=" overflow-auto">
         <DialogHeader>
           <DialogTitle>Create a product</DialogTitle>
         </DialogHeader>
@@ -117,9 +128,9 @@ export default function CreateProduct() {
             )}
             <form
               ref={formRef}
-              onSubmit={handleSubmitRegistration}
+              onSubmit={handleCreateProduct}
               action={formAction}
-              className=" w-full max-w-2xl items-center justify-center gap-8"
+              className=" w-full max-w-2xl items-center justify-center gap-4"
             >
               <div className=" flex flex-col space-y-8">
                 <div className=" w-full ">
@@ -143,6 +154,7 @@ export default function CreateProduct() {
                     }}
                   />
                 </div>
+
                 <div className="flex flex-col gap-4 md:flex-row">
                   <div className=" w-full md:w-1/2">
                     <FormField
@@ -173,7 +185,7 @@ export default function CreateProduct() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Category</FormLabel>
-                          <SingleSelect
+                          <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
@@ -185,7 +197,7 @@ export default function CreateProduct() {
                               <SelectItem value="Male">Male</SelectItem>
                               <SelectItem value="Kids">Kids</SelectItem>
                             </SelectContent>
-                          </SingleSelect>
+                          </Select>
                         </FormItem>
                       )}
                     />
@@ -193,11 +205,25 @@ export default function CreateProduct() {
                 </div>
 
                 <div className="flex flex-col gap-4 md:flex-row">
-                  <div className=" mt-2 w-full md:w-1/2">
-                    <Label>Sizes</Label>
-                    <MultipleSelector
-                      defaultOptions={options}
-                      placeholder="Select Size"
+                  <div className=" w-full md:w-1/2">
+                    <FormField
+                      control={form.control}
+                      name="sizes"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormLabel>Sizes</FormLabel>
+                            <FormControl>
+                              <MultiSelect
+                                selected={field.value}
+                                options={options}
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
                     />
                   </div>
 
@@ -242,7 +268,7 @@ export default function CreateProduct() {
                   )}
                 />
 
-                <ImageUploader />
+                <ImageUploader files={files} setFiles={setFiles} />
 
                 <CreateProductButton />
               </div>

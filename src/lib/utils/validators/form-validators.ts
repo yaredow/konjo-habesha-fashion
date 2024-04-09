@@ -58,16 +58,11 @@ export const registrationFormSchema = z
   );
 
 export const CreateProductFormSchema = z.object({
-  name: z.string(),
+  name: z.string().max(400),
   price: z.coerce.number(),
   category: z.string(),
-  size: z.string(),
+  sizes: z.array(z.string()),
   stockQuantity: z.coerce.number(),
   description: z.string(),
-  images: z.array(
-    z.object({
-      public_id: z.string(),
-      url: z.string(),
-    }),
-  ),
+  images: z.array(z.instanceof(File)),
 });

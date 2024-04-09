@@ -202,8 +202,6 @@ function page() {
               )}
             />
 
-            <ImageUploadButton setImages={setImages} />
-
             <Button type="submit" className="w-full">
               Submit
             </Button>

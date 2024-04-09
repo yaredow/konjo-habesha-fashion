@@ -1,48 +1,46 @@
 "use server";
 
-import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import connectMongoDB from "@/lib/utils/mongo/db";
+import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
+import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import Product from "@/models/productModel";
+
 export async function createProductAction(
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  console.log("images: ", formData.get("images"));
+  console.log("description: ", formData.get("sizes"));
   const validatedFields = CreateProductFormSchema.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
     category: formData.get("category"),
-    size: formData.get("size"),
+    sizes: formData.get("sizes"),
     stockQuantity: formData.get("stockQuantity"),
     description: formData.get("description"),
-    images: formData.get("image"),
+    images: formData.get("images"),
   });
 
-  console.log("from server:", "Connected for no reason");
+  console.log(validatedFields.success);
 
   if (!validatedFields.success) {
     return {
-      message: "Invalid form data",
+      message: "invalid form data",
     };
   }
 
-  console.log(validatedFields.data);
-
   try {
     await connectMongoDB();
-
     const newProduct = await Product.create(validatedFields.data);
 
     if (!newProduct) {
-      return {
-        message: "New product creation failed",
-      };
+      return { message: "New product creation failed" };
     }
 
+    revalidatePath("/");
     return { message: "success" };
   } catch (err) {
-    return {
-      message: "Something went wrong while creating product",
-    };
+    throw err;
   }
 }
