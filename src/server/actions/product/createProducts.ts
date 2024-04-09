@@ -15,14 +15,18 @@ export async function createProductAction(
     size: formData.get("size"),
     stockQuantity: formData.get("stockQuantity"),
     description: formData.get("description"),
-    images: formData.get("images"),
+    images: formData.get("image"),
   });
+
+  console.log("from server:", "Connected for no reason");
 
   if (!validatedFields.success) {
     return {
       message: "Invalid form data",
     };
   }
+
+  console.log(validatedFields.data);
 
   try {
     await connectMongoDB();

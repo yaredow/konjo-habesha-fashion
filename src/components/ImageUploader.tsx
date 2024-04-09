@@ -1,53 +1,74 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toBase64 } from "@/lib/utils/toBase64";
-import { PencilIcon, User2Icon } from "lucide-react";
-import React from "react";
+import { useState } from "react";
+import { Paperclip } from "lucide-react";
+import {
+  FileInput,
+  FileUploader,
+  FileUploaderContent,
+  FileUploaderItem,
+} from "./ui/file-upload";
 
-type AvatarUploadProps = {
-  value?: string;
-  onChange?: (value?: string) => void;
+const FileSvgDraw = () => {
+  return (
+    <>
+      <svg
+        className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 20 16"
+      >
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+        />
+      </svg>
+      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+        <span className="font-semibold">Click to upload</span>
+        &nbsp; or drag and drop
+      </p>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        SVG, PNG, JPG or GIF
+      </p>
+    </>
+  );
 };
 
-export function AvatarUpload({ value, onChange }: AvatarUploadProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const base64 = (await toBase64(file)) as string;
-      onChange?.(base64);
-    }
+export default function ImageUploader() {
+  const [files, setFiles] = useState<File[] | null>(null);
+
+  const dropZoneConfig = {
+    maxFiles: 5,
+    maxSize: 1024 * 1024 * 4,
+    multiple: true,
   };
 
   return (
-    <div className="relative h-40 w-40">
-      <Avatar className="h-full w-full">
-        <AvatarImage src={value} className="object-cover" />
-        <AvatarFallback className="bg-secondary">
-          <User2Icon className="h-16 w-16" />
-        </AvatarFallback>
-      </Avatar>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute bottom-0 right-0 rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
-        onClick={(e) => {
-          e.preventDefault();
-          inputRef.current?.click();
-        }}
-      >
-        <PencilIcon className="h-4 w-4 text-black" />
-      </Button>
-      <Input
-        ref={inputRef}
-        type="file"
-        className="hidden"
-        onChange={handleChange}
-        accept="image/*"
-      />
-    </div>
+    <FileUploader
+      value={files}
+      onValueChange={setFiles}
+      dropzoneOptions={dropZoneConfig}
+      className="relative rounded-lg bg-background"
+    >
+      <FileInput className="outline-dashed outline-1 outline-white">
+        <div className="flex w-full flex-col items-center justify-center pb-4 pt-3 ">
+          <FileSvgDraw />
+        </div>
+      </FileInput>
+      <FileUploaderContent>
+        {files &&
+          files.length > 0 &&
+          files.map((file, i) => (
+            <FileUploaderItem key={i} index={i}>
+              <Paperclip className="h-4 w-4 stroke-current" />
+              <span>{file.name}</span>
+            </FileUploaderItem>
+          ))}
+      </FileUploaderContent>
+    </FileUploader>
   );
 }

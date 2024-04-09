@@ -6,6 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -36,7 +37,8 @@ import {
 } from "../ui/dialog";
 import { PlusCircle } from "lucide-react";
 import SpinnerMini from "../ui/SpinnerMini";
-import { AvatarUpload } from "../ImageUploader";
+import { Label } from "../ui/label";
+import ImageUploader from "../ImageUploader";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -54,14 +56,15 @@ const initialState = {
 function CreateProductButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit">{pending ? <SpinnerMini /> : "Register"}</Button>
+    <Button type="submit">
+      {pending ? <SpinnerMini /> : "Create Product"}
+    </Button>
   );
 }
 
 export default function CreateProduct() {
   const [state, formAction] = useFormState(createProductAction, initialState);
   const formRef = React.useRef<HTMLFormElement>(null);
-  const [images, setImages] = React.useState([]);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof CreateProductFormSchema>>({
@@ -78,14 +81,9 @@ export default function CreateProduct() {
 
   const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const formData = new FormData();
-
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
 
     form.handleSubmit(() => {
-      formAction(formData);
+      formAction(new FormData(formRef.current!));
     })(evt);
   };
 
@@ -131,6 +129,7 @@ export default function CreateProduct() {
                     render={({ field }) => {
                       return (
                         <FormItem>
+                          <FormLabel>Name</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -152,6 +151,7 @@ export default function CreateProduct() {
                       render={({ field }) => {
                         return (
                           <FormItem>
+                            <FormLabel>Price</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -172,6 +172,7 @@ export default function CreateProduct() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
+                          <FormLabel>Category</FormLabel>
                           <SingleSelect
                             onValueChange={field.onChange}
                             defaultValue={field.value}
@@ -192,7 +193,8 @@ export default function CreateProduct() {
                 </div>
 
                 <div className="flex flex-col gap-4 md:flex-row">
-                  <div className=" w-full md:w-1/2">
+                  <div className=" mt-2 w-full md:w-1/2">
+                    <Label>Sizes</Label>
                     <MultipleSelector
                       defaultOptions={options}
                       placeholder="Select Size"
@@ -206,6 +208,7 @@ export default function CreateProduct() {
                       render={({ field }) => {
                         return (
                           <FormItem>
+                            <FormLabel>Quantity</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -226,6 +229,7 @@ export default function CreateProduct() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Write product description"
@@ -238,7 +242,7 @@ export default function CreateProduct() {
                   )}
                 />
 
-                <AvatarUpload />
+                <ImageUploader />
 
                 <CreateProductButton />
               </div>
