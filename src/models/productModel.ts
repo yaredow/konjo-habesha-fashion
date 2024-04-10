@@ -37,7 +37,7 @@ const productSchema = new Schema<IProduct>({
   },
   images: [
     {
-      key: {
+      public_id: {
         type: String,
         required: true,
       },

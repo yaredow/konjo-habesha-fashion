@@ -4,53 +4,60 @@ import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators"
 import Product from "@/models/productModel";
 import { NextResponse } from "next/server";
 
-type UploadeImage = {
-  public_id: string;
-  url: string;
-};
 export async function POST(request: Request) {
   const data = await request.formData();
-  console.log(data.get("sizes"));
-  const uploadedImages: UploadeImage[] = [];
+  const images = data.getAll("images") as File[];
+  const uploadedImages = [];
+
+  console.log(images);
 
   try {
-    // const { images }: { images: File[] } = data;
+    for (const image of images) {
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = new Uint8Array(arrayBuffer);
 
-    // for (const image of images) {
-    //   const arrayBuffer = await image.arrayBuffer();
-    //   const buffer = new Uint8Array(arrayBuffer);
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              tags: ["nextjs-konjo-habesha-test-uploads"],
+              upload_preset: "konjo-habesha",
+            },
+            function (error, result) {
+              if (error) {
+                reject(error);
+                return;
+              }
+              resolve(result);
+            },
+          )
+          .end(buffer);
+      });
 
-    //   const uploadResult = await new Promise((resolve, reject) => {
-    //     cloudinary.uploader
-    //       .upload_stream(
-    //         {
-    //           tags: ["nextjs-konjo-habesha-test-uploads"],
-    //           upload_preset: "konjo-habesha",
-    //         },
-    //         function (error, result) {
-    //           if (error) {
-    //             reject(error);
-    //             return;
-    //           }
-    //           resolve(result);
-    //         },
-    //       )
-    //       .end(buffer);
-    //   });
+      uploadedImages.push({
+        public_id: uploadResult.public_id,
+        url: uploadResult.url,
+      });
+    }
 
-    //   console.log(uploadResult);
-    // }
+    let sizes: string[] = [];
+    const sizesData = data.get("sizes");
+
+    if (typeof sizesData === "string") {
+      // Parse the string into an array
+      sizes = sizesData.split(",").map((size) => size.trim());
+    } else if (Array.isArray(sizesData)) {
+      sizes = sizesData;
+    }
 
     const validatedData = CreateProductFormSchema.safeParse({
       name: data.get("name"),
       price: data.get("price"),
       category: data.get("category"),
-      sizes: data.get("sizes"),
+      sizes: sizes,
       stockQuantity: data.get("stockQuantity"),
       description: data.get("description"),
     });
-
-    console.log(validatedData.success);
 
     if (!validatedData.success) {
       return NextResponse.json(
@@ -59,8 +66,13 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log(validatedData.data);
+
     await connectMongoDB();
-    const newProduct = await Product.create(validatedData.data);
+    const newProduct = await Product.create({
+      ...validatedData.data,
+      images: uploadedImages,
+    });
 
     if (!newProduct) {
       return NextResponse.json(

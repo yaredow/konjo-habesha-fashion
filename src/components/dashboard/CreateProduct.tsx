@@ -69,27 +69,14 @@ export default function CreateProduct() {
     const anotherformData = form.getValues();
 
     Object.keys(anotherformData).forEach((key) => {
-      const value = anotherformData[key];
-      if (Array.isArray(value)) {
-        // If the value is an array, append each item individually
-        value.forEach((item, index) => {
-          formData.append(`${key}[${index}]`, item);
-        });
-      } else {
-        // For other types, append as is
-        formData.append(key, value);
+      if (key in anotherformData) {
+        formData.append(key, anotherformData[key]);
       }
     });
 
     if (files) {
-      files.forEach((file, index) => {
-        formData.append(`images[${index}]`, file);
-      });
-    }
-
-    if (files) {
-      files.forEach((file, index) => {
-        formData.append(`images[${index}]`, file);
+      files.forEach((file) => {
+        formData.append("images", file);
       });
     }
 
