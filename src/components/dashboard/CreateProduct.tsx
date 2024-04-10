@@ -37,6 +37,9 @@ import { PlusCircle } from "lucide-react";
 import ImageUploader from "../ImageUploader";
 import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
+import { useFormState, useFormStatus } from "react-dom";
+import { createProductAction } from "@/server/actions/product/createProducts";
+import Spinner from "../Spinner";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -47,8 +50,21 @@ const options = [
   { value: "XXL", label: "Double Extra Large" },
 ];
 
+const initialState = {
+  message: "",
+};
+
+const CreateProductButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit">{pending ? <Spinner /> : "Create Product"}</Button>
+  );
+};
+
 export default function CreateProduct() {
   const [files, setFiles] = React.useState<File[] | null>(null);
+  const [state, formAction] = useFormState(createProductAction, initialState);
 
   const { toast } = useToast();
 
@@ -64,7 +80,11 @@ export default function CreateProduct() {
     },
   });
 
-  const onSumbit = async () => {
+  const handleProductCreate = async (
+    evt: React.MouseEvent<HTMLFormElement>,
+  ) => {
+    evt.preventDefault();
+
     const formData = new FormData();
     const anotherformData = form.getValues();
 
@@ -80,25 +100,19 @@ export default function CreateProduct() {
       });
     }
 
-    const res = await fetch(
-      "http://localhost:3000/api/product/create-product",
-      {
-        method: "POST",
-
-        body: formData,
-      },
-    );
-
-    const data = await res.json();
-
-    if (res?.ok) {
-      toast({
-        description: data.message,
-      });
-    } else {
-      console.log(data.message);
-    }
+    form.handleSubmit(() => {
+      formAction(formData);
+    })(evt);
   };
+
+  React.useEffect(() => {
+    if (state?.message !== "" && state?.message === "success") {
+      toast({
+        description: "You have registered successfully",
+      });
+    }
+    form.reset();
+  }, [state?.message]);
 
   return (
     <Dialog>
@@ -116,8 +130,12 @@ export default function CreateProduct() {
         </DialogHeader>
         <div className="my-auto flex flex-col items-center justify-center">
           <Form {...form}>
+            {state?.message !== "" && state?.message !== "success" && (
+              <div className=" text-red-500">{state.message}</div>
+            )}
             <form
-              onSubmit={form.handleSubmit(onSumbit)}
+              onSubmit={handleProductCreate}
+              action={formAction}
               className=" w-full max-w-2xl items-center justify-center gap-4"
             >
               <div className=" flex flex-col space-y-8">
@@ -273,7 +291,7 @@ export default function CreateProduct() {
 
                 <ImageUploader files={files} setFiles={setFiles} />
 
-                <Button type="submit">Create Product</Button>
+                <CreateProductButton />
               </div>
             </form>
           </Form>

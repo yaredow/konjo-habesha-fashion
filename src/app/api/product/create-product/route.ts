@@ -66,8 +66,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log(validatedData.data);
-
     await connectMongoDB();
     const newProduct = await Product.create({
       ...validatedData.data,
@@ -81,7 +79,10 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ mesage: "Product creation was successful" });
+    return NextResponse.json(
+      { mesage: "Product creation was successful" },
+      { status: 201 },
+    );
   } catch (err) {
     console.error(err);
     return NextResponse.json(
