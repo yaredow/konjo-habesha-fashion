@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
-import { useFormState, useFormStatus } from "react-dom";
 
 import {
   Dialog,
@@ -35,12 +34,9 @@ import {
   DialogContent,
 } from "../ui/dialog";
 import { PlusCircle } from "lucide-react";
-import SpinnerMini from "../ui/SpinnerMini";
-import { Label } from "../ui/label";
 import ImageUploader from "../ImageUploader";
 import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
-import axios from "axios";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -50,19 +46,6 @@ const options = [
   { value: "XL", label: "Extra Large" },
   { value: "XXL", label: "Double Extra Large" },
 ];
-
-const initialState = {
-  message: "",
-};
-
-function CreateProductButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit">
-      {pending ? <SpinnerMini /> : "Create Product"}
-    </Button>
-  );
-}
 
 export default function CreateProduct() {
   const [files, setFiles] = React.useState<File[] | null>(null);
@@ -78,17 +61,56 @@ export default function CreateProduct() {
       sizes: [],
       stockQuantity: 0,
       description: "",
-      images: [],
     },
   });
 
   const onSumbit = async () => {
-    const formData = form.getValues();
+    const formData = new FormData();
+    const anotherformData = form.getValues();
 
-    const res = await axios.post(
+    Object.keys(anotherformData).forEach((key) => {
+      const value = anotherformData[key];
+      if (Array.isArray(value)) {
+        // If the value is an array, append each item individually
+        value.forEach((item, index) => {
+          formData.append(`${key}[${index}]`, item);
+        });
+      } else {
+        // For other types, append as is
+        formData.append(key, value);
+      }
+    });
+
+    if (files) {
+      files.forEach((file, index) => {
+        formData.append(`images[${index}]`, file);
+      });
+    }
+
+    if (files) {
+      files.forEach((file, index) => {
+        formData.append(`images[${index}]`, file);
+      });
+    }
+
+    const res = await fetch(
       "http://localhost:3000/api/product/create-product",
-      {},
+      {
+        method: "POST",
+
+        body: formData,
+      },
     );
+
+    const data = await res.json();
+
+    if (res?.ok) {
+      toast({
+        description: data.message,
+      });
+    } else {
+      console.log(data.message);
+    }
   };
 
   return (
@@ -264,7 +286,7 @@ export default function CreateProduct() {
 
                 <ImageUploader files={files} setFiles={setFiles} />
 
-                <CreateProductButton />
+                <Button type="submit">Create Product</Button>
               </div>
             </form>
           </Form>
