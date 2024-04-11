@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ITEMS_PERPAGE } from "@/lib/utils/constants";
+import { ITEMS_PERPAGE } from "@/utils/constants";
 
 function ProductPagination({
   totalItems,

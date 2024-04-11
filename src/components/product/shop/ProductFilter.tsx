@@ -6,15 +6,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+import { SetStateAction } from "react";
+import { QueryObserverResult } from "@tanstack/react-query";
+import { ProductState } from "@/utils/validators/product-validators";
 import {
   DEFAULT_CUSTOM_PRICE,
   FILTER_OPTIONS,
   PRICE_FILTERS,
   SIZE_FILTERS,
-} from "@/lib/utils/constants";
-import { ProductState } from "@/lib/utils/validators/product-validators";
-import { SetStateAction } from "react";
-import { QueryObserverResult } from "@tanstack/react-query";
+} from "@/utils/constants";
 
 interface ProductFilterProps {
   filter: ProductState;

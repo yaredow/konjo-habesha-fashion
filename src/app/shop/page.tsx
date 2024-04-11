@@ -1,11 +1,7 @@
 "use client";
 
 import ProductPagination from "@/components/ProductPagination";
-import {
-  DEFAULT_CUSTOM_PRICE,
-  ITEMS_PERPAGE,
-  SORT_OPTIONS,
-} from "@/lib/utils/constants";
+
 import { useCallback, useState } from "react";
 import ProductItem from "@/components/product/ProductItem";
 import { ChevronDown, SortAscIcon } from "lucide-react";
@@ -20,10 +16,8 @@ import { cn } from "@/utils/cn";
 import EmptyState from "@/components/product/EmptyState";
 import { Product } from "../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
-import { ProductState } from "@/lib/utils/validators/product-validators";
 
 import debounce from "lodash.debounce";
-import useGetFilteredProducts from "../../lib/utils/hook/useGetFilteredProducts";
 import ProductFilter from "@/components/product/shop/ProductFilter";
 import {
   Sheet,
@@ -34,6 +28,13 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FaSortAlphaDown } from "react-icons/fa";
+import { ProductState } from "@/utils/validators/product-validators";
+import useGetFilteredProducts from "@/utils/hook/useGetFilteredProducts";
+import {
+  DEFAULT_CUSTOM_PRICE,
+  ITEMS_PERPAGE,
+  SORT_OPTIONS,
+} from "@/utils/constants";
 
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
