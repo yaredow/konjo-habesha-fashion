@@ -4,7 +4,7 @@ import ProductPagination from "@/components/ProductPagination";
 
 import { useCallback, useState } from "react";
 import ProductItem from "@/components/product/ProductItem";
-import { ChevronDown, SortAscIcon } from "lucide-react";
+
 import { IoFilter } from "react-icons/io5";
 import {
   DropdownMenu,

@@ -12,6 +12,7 @@ interface IProduct {
   isFeatured?: boolean;
   inStock?: boolean;
   sizes: Array<string>;
+  status: String;
 }
 
 const productSchema = new Schema<IProduct>({
@@ -72,6 +73,11 @@ const productSchema = new Schema<IProduct>({
     type: [String],
     required: true,
     enum: ["XS", "S", "M", "L", "XL", "XXL"],
+  },
+  status: {
+    type: String,
+    enum: ["draft", "active", "Archived"],
+    default: "draft",
   },
 });
 

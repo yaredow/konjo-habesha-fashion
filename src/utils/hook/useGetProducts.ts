@@ -10,7 +10,7 @@ async function fetchProduct() {
 export default function useGetProducts() {
   const {
     data: responseData,
-    isFetching,
+    isFetched,
     isError,
   } = useQuery({
     queryKey: ["products"],
@@ -19,5 +19,5 @@ export default function useGetProducts() {
 
   const products = responseData?.products;
 
-  return { products, isFetching, isError };
+  return { products, isFetched, isError };
 }

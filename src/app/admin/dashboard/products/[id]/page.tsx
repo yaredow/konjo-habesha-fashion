@@ -38,15 +38,31 @@ import { useRouter } from "next/navigation";
 import { Product } from "../../../../../types/product";
 import Spinner from "@/components/Spinner";
 import useGetProduct from "@/utils/hook/useGetProduct";
+import React from "react";
 
 export default function page({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const { id } = params;
-  const { product, isPending }: { product: Product; isPending: boolean } =
+  const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
 
-  const router = useRouter();
+  const [productDetails, setProductDetails] = React.useState<Product | null>(
+    null,
+  );
 
-  if (isPending) return <Spinner />;
+  React.useEffect(() => {
+    if (isFetched && product) {
+      setProductDetails({
+        ...product,
+      });
+    }
+  }, [!isFetched, product]);
+
+  console.log(productDetails);
+
+  if (!isFetched) return <Spinner />;
+
+  const handleEditProduct = async (id: string) => {};
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -90,18 +106,30 @@ export default function page({ params }: { params: { id: string } }) {
                       <div className="grid gap-3">
                         <Label htmlFor="name">Name</Label>
                         <Input
+                          onChange={(e) => {
+                            setProductDetails((prev) => ({
+                              ...(prev as Product),
+                              name: e.target.value,
+                            }));
+                          }}
                           id="name"
                           type="text"
                           className="w-full"
-                          value={product.name}
+                          value={productDetails?.name}
                           defaultValue="Gamer Gear Pro Controller"
                         />
                       </div>
                       <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
                         <Textarea
+                          onChange={(e) => {
+                            setProductDetails((prev) => ({
+                              ...(prev as Product),
+                              description: e.target.value,
+                            }));
+                          }}
                           id="description"
-                          value={product.description}
+                          value={productDetails?.description}
                           defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
                           className="min-h-32"
                         />

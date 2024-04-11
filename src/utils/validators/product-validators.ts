@@ -4,6 +4,7 @@ import {
   AVAILABLE_SIZES,
   AVAILABLE_SORT,
 } from "../constants";
+import Product from "@/types/product";
 
 export const ProductFilterValidator = z.object({
   size: z.array(z.enum(AVAILABLE_SIZES)),

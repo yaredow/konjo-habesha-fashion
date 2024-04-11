@@ -52,7 +52,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 
 export default function page() {
-  const { products = [], isFetching, isError } = useGetProducts();
+  const { products = [], isFetched, isError } = useGetProducts();
   const router = useRouter();
 
   const handleProductDelete = async (id: string) => {
@@ -116,7 +116,7 @@ export default function page() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table className={`${isFetching && "overflow-hidden"}`}>
+                <Table className={`${!isFetched && "overflow-hidden"}`}>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="hidden w-[100px] sm:table-cell">
@@ -139,10 +139,8 @@ export default function page() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {isFetching ? (
-                      <div className=" flex h-[80vh] items-center justify-center">
-                        <Spinner />
-                      </div>
+                    {!isFetched ? (
+                      <Spinner className=" flex items-center justify-center" />
                     ) : (
                       products.map((product: Product) => (
                         <TableRow key={product._id}>
@@ -238,7 +236,7 @@ export default function page() {
                   </TableBody>
                 </Table>
               </CardContent>
-              <CardFooter className={`${isFetching && "hidden"}`}>
+              <CardFooter className={`${!isFetched && "hidden"}`}>
                 <div className="text-xs text-muted-foreground">
                   Showing <strong>1-10</strong> of{" "}
                   <strong>{products.length > 0 && products.length}</strong>{" "}
