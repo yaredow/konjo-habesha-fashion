@@ -40,6 +40,7 @@ import { Controller } from "react-hook-form";
 import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
 import Spinner from "../Spinner";
+import SubmitButton from "../SubmitButton";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -52,14 +53,6 @@ const options = [
 
 const initialState = {
   message: "",
-};
-
-const CreateProductButton = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit">{pending ? <Spinner /> : "Create Product"}</Button>
-  );
 };
 
 export default function CreateProduct() {
@@ -291,7 +284,7 @@ export default function CreateProduct() {
 
                 <ImageUploader files={files} setFiles={setFiles} />
 
-                <CreateProductButton />
+                <SubmitButton />
               </div>
             </form>
           </Form>

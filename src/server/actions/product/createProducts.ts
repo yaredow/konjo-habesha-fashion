@@ -33,8 +33,6 @@ export async function createProductAction(
     description: formData.get("description"),
   });
 
-  console.log(validatedFields.success);
-
   if (!validatedFields.success) {
     return {
       message: "Invalid data",
@@ -49,14 +47,20 @@ export async function createProductAction(
       const uploadResult = await new Promise<UploadApiResponse | undefined>(
         (resolve, reject) => {
           cloudinary.uploader
-            .upload_stream({}, function (err, result) {
-              if (err) {
-                reject(err);
-                return;
-              } else {
-                resolve(result);
-              }
-            })
+            .upload_stream(
+              {
+                tags: ["konjo-habesha-next-js"],
+                upload_preset: "konjo-habesha",
+              },
+              function (err, result) {
+                if (err) {
+                  reject(err);
+                  return;
+                } else {
+                  resolve(result);
+                }
+              },
+            )
             .end(buffer);
         },
       );

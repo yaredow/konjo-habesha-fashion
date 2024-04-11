@@ -77,7 +77,7 @@ export function RegistrationDialog() {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-h-[80vh] max-w-[600px] overflow-y-auto sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create an account</DialogTitle>
           <DialogDescription>

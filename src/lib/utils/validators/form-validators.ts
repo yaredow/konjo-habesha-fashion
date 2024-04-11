@@ -58,10 +58,22 @@ export const registrationFormSchema = z
   );
 
 export const CreateProductFormSchema = z.object({
-  name: z.string().max(400),
-  price: z.coerce.number(),
-  category: z.string(),
-  sizes: z.array(z.string()),
-  stockQuantity: z.coerce.number(),
-  description: z.string(),
+  name: z
+    .string()
+    .max(400, { message: "Product name cannot exceed 400 characters" })
+    .min(1, { message: "Name is required" }),
+  price: z.coerce
+    .number()
+    .min(1, { message: "Price must be a positive number" }),
+  category: z.string().min(1, { message: "Category is required" }),
+  sizes: z
+    .array(z.string())
+    .min(1, { message: "At least one size is required" }),
+  stockQuantity: z.coerce
+    .number()
+    .min(1, { message: "Stock quantity must be a positive number" }),
+  description: z
+    .string()
+    .min(1, { message: "Description is required" })
+    .max(2000, { message: "Description cannot exceed 2000 characters" }),
 });
