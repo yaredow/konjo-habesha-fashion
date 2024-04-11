@@ -25,7 +25,6 @@ import { registrationFormSchema } from "@/lib/utils/validators/form-validators";
 import React, { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
-import SpinnerMini from "../ui/SpinnerMini";
 import SubmitButton from "../SubmitButton";
 
 const initialState = {
