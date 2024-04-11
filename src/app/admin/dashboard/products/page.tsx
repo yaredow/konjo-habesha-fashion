@@ -35,7 +35,7 @@ import { useRouter } from "next/navigation";
 import { formatCurrency, formatDate } from "@/lib/utils/helpers";
 import CreateProduct from "@/components/dashboard/CreateProduct";
 import { Product } from "../../../../types/product";
-import useGetProducts from "@/lib/hook/useGetProducts";
+import useGetProducts from "@/lib/utils/hook/useGetProducts";
 import Spinner from "@/components/Spinner";
 import { RegistrationDialog } from "@/components/account/RegistrationDialog";
 

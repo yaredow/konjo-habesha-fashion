@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import useAddToCart from "@/lib/hook/useAddToCart";
+import useAddToCart from "@/lib/utils/hook/useAddToCart";
 import Image from "next/image";
-import useGetProduct from "@/lib/hook/useGetProduct";
+import useGetProduct from "@/lib/utils/hook/useGetProduct";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/context/CartContext";

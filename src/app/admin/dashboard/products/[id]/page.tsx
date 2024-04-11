@@ -34,11 +34,11 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import useGetProduct from "@/lib/hook/useGetProduct";
+import useGetProduct from "@/lib/utils/hook/useGetProduct";
 import { useRouter } from "next/navigation";
 import { Product } from "../../../../../types/product";
 import Spinner from "@/components/Spinner";
-import useGetProducts from "@/lib/hook/useGetProducts";
+import useGetProducts from "@/lib/utils/hook/useGetProducts";
 
 export default function page({ params }: { params: { id: string } }) {
   const { id } = params;

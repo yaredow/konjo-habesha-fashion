@@ -1,7 +1,7 @@
 "use client";
 
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {

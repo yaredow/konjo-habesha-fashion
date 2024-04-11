@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Product } from "../../../types/product";
 import ProductItem from "../ProductItem";
 import axios from "axios";
-import useGetProductsWithCatagory from "../../../lib/hook/useGetProductsWithCatagory";
+import useGetProductsWithCatagory from "../../../lib/utils/hook/useGetProductsWithCatagory";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 function FeaturedProducts() {

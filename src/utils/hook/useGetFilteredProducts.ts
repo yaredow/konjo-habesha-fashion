@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { ProductState } from "../utils/validators/product-validators";
+import { ProductState } from "../validators/product-validators";
 
 async function fetchFilteredProducts(filter: ProductState) {
   const { data } = await axios.post("http://localhost:3000/api/product", {

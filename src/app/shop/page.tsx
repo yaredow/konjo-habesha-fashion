@@ -16,14 +16,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import EmptyState from "@/components/product/EmptyState";
 import { Product } from "../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { ProductState } from "@/lib/utils/validators/product-validators";
 
 import debounce from "lodash.debounce";
-import useGetFilteredProducts from "../../lib/hook/useGetFilteredProducts";
+import useGetFilteredProducts from "../../lib/utils/hook/useGetFilteredProducts";
 import ProductFilter from "@/components/product/shop/ProductFilter";
 import {
   Sheet,

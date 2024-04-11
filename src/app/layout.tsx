@@ -13,7 +13,7 @@ import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import { CartProvider } from "@/lib/context/CartContext";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],

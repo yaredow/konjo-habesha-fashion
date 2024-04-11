@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { SORT_OPTIONS } from "@/lib/utils/constants";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 function SortBy() {
   const [filter, setFilter] = useState({
