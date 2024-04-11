@@ -14,6 +14,7 @@ type Product = {
   isFeatured: boolean;
   inStock: boolean;
   sizes: [string];
+  status: string;
 };
 
 type Data = {

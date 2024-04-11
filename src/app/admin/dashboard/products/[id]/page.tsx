@@ -39,6 +39,11 @@ import { Product } from "../../../../../types/product";
 import Spinner from "@/components/Spinner";
 import useGetProduct from "@/utils/hook/useGetProduct";
 import React from "react";
+import {
+  AVAILABLE_CATEGORIRES,
+  PRODUCT_STATUS_OPTIONS,
+} from "@/utils/constants";
+import { Switch } from "@/components/ui/switch";
 
 export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -164,9 +169,15 @@ export default function page({ params }: { params: { id: string } }) {
                               Stock
                             </Label>
                             <Input
+                              onChange={(e) => {
+                                setProductDetails((prev) => ({
+                                  ...(prev as Product),
+                                  stockQuantity: Number(e.target.value),
+                                }));
+                              }}
                               id="stock-1"
                               type="number"
-                              defaultValue={product.stockQuantity}
+                              defaultValue={productDetails?.stockQuantity}
                             />
                           </TableCell>
                           <TableCell>
@@ -174,9 +185,15 @@ export default function page({ params }: { params: { id: string } }) {
                               Price
                             </Label>
                             <Input
+                              onChange={(e) => {
+                                setProductDetails((prev) => ({
+                                  ...(prev as Product),
+                                  price: Number(e.target.value),
+                                }));
+                              }}
                               id="price-1"
                               type="number"
-                              defaultValue={product.price}
+                              defaultValue={productDetails?.price}
                             />
                           </TableCell>
                           <TableCell>
@@ -208,10 +225,17 @@ export default function page({ params }: { params: { id: string } }) {
                     <CardTitle>Product Category</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-6 sm:grid-cols-3">
+                    <div className="mx-4 flex flex-row justify-between">
                       <div className="grid gap-3">
                         <Label htmlFor="category">Category</Label>
-                        <Select>
+                        <Select
+                          onValueChange={(value) => {
+                            setProductDetails((prev) => ({
+                              ...(prev as Product),
+                              category: value,
+                            }));
+                          }}
+                        >
                           <SelectTrigger
                             id="category"
                             aria-label="Select category"
@@ -219,35 +243,25 @@ export default function page({ params }: { params: { id: string } }) {
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="clothing">Clothing</SelectItem>
-                            <SelectItem value="electronics">
-                              Electronics
-                            </SelectItem>
-                            <SelectItem value="accessories">
-                              Accessories
-                            </SelectItem>
+                            {AVAILABLE_CATEGORIRES.map((category, index) => (
+                              <SelectItem key={index} value={category}>
+                                {category}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="grid gap-3">
-                        <Label htmlFor="subcategory">
-                          Subcategory (optional)
-                        </Label>
-                        <Select>
-                          <SelectTrigger
-                            id="subcategory"
-                            aria-label="Select subcategory"
-                          >
-                            <SelectValue placeholder="Select subcategory" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                            <SelectItem value="hoodies">Hoodies</SelectItem>
-                            <SelectItem value="sweatshirts">
-                              Sweatshirts
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Label htmlFor="subcategory">Featured</Label>
+                        <Switch
+                          checked={productDetails?.isFeatured || false}
+                          onCheckedChange={() => {
+                            setProductDetails((prev) => ({
+                              ...(prev as Product),
+                              isFeatured: !prev?.isFeatured,
+                            }));
+                          }}
+                        />
                       </div>
                     </div>
                   </CardContent>
@@ -262,14 +276,23 @@ export default function page({ params }: { params: { id: string } }) {
                     <div className="grid gap-6">
                       <div className="grid gap-3">
                         <Label htmlFor="status">Status</Label>
-                        <Select>
+                        <Select
+                          onValueChange={(value) => {
+                            setProductDetails((prev) => ({
+                              ...(prev as Product),
+                              status: value,
+                            }));
+                          }}
+                        >
                           <SelectTrigger id="status" aria-label="Select status">
                             <SelectValue placeholder="Select status" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="draft">Draft</SelectItem>
-                            <SelectItem value="published">Active</SelectItem>
-                            <SelectItem value="archived">Archived</SelectItem>
+                            {PRODUCT_STATUS_OPTIONS.map((option, index) => (
+                              <SelectItem key={index} value={option.value}>
+                                {option.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
