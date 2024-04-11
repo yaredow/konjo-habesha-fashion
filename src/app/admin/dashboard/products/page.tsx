@@ -34,17 +34,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import CreateProduct from "@/components/dashboard/CreateProduct";
 import { Product } from "../../../../types/product";
-import Spinner from "@/components/Spinner";
 import useGetProducts from "@/utils/hook/useGetProducts";
 import { formatCurrency, formatDate } from "@/utils/helpers";
+import { deleteProductAction } from "@/server/actions/product/deleteProductAction";
+import Spinner from "@/components/Spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/components/ui/use-toast";
 
 export default function page() {
-  const { products, isPending, isError } = useGetProducts();
+  const { products = [], isFetching, isError } = useGetProducts();
   const router = useRouter();
 
-  if (isPending) return <Spinner />;
+  const handleProductDelete = async (id: string) => {
+    const responsse = await deleteProductAction(id);
 
-  if (isError) return <h1>Error</h1>;
+    if (responsse.message === "success") {
+      toast({
+        description: "Product deleted successfully",
+      });
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -97,7 +116,7 @@ export default function page() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
+                <Table className={`${isFetching && "overflow-hidden"}`}>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="hidden w-[100px] sm:table-cell">
@@ -120,10 +139,10 @@ export default function page() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {isPending ? (
-                      <h1 className=" mt-4 flex items-center justify-center text-lg">
-                        Loading...
-                      </h1>
+                    {isFetching ? (
+                      <div className=" flex h-[80vh] items-center justify-center">
+                        <Spinner />
+                      </div>
                     ) : (
                       products.map((product: Product) => (
                         <TableRow key={product._id}>
@@ -168,13 +187,48 @@ export default function page() {
                                 <DropdownMenuItem
                                   onClick={() =>
                                     router.replace(
-                                      ` /admin/dashboard/products/${product._id}`,
+                                      `/admin/dashboard/products/${product._id}`,
                                     )
                                   }
                                 >
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+
+                                <DropdownMenuItem>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
+                                    >
+                                      Delete
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                          Are you absolutely sure?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          This action cannot be undone. This
+                                          will permanently delete the product.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                          Cancel
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleProductDelete(product._id);
+                                          }}
+                                        >
+                                          Continue
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
@@ -184,7 +238,7 @@ export default function page() {
                   </TableBody>
                 </Table>
               </CardContent>
-              <CardFooter>
+              <CardFooter className={`${isFetching && "hidden"}`}>
                 <div className="text-xs text-muted-foreground">
                   Showing <strong>1-10</strong> of{" "}
                   <strong>{products.length > 0 && products.length}</strong>{" "}
