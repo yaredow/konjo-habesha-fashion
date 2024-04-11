@@ -3,9 +3,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
-import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import { login } from "@/server/actions/account/login";
+import connectMongoDB from "@/utils/db/db";
 
 const authOptions: AuthOptions = {
   session: {

@@ -1,7 +1,7 @@
 "use server";
 
-import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
+import connectMongoDB from "@/utils/db/db";
 import bcrypt from "bcryptjs";
 
 export async function login(credentials: { email: string; password: string }) {

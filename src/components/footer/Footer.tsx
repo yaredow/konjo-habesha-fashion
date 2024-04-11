@@ -1,4 +1,3 @@
-import { QUICK_ACCESS_LINKS } from "@/lib/utils/constants";
 import NavLink from "../header/NavLink";
 import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
@@ -6,6 +5,7 @@ import { CiInstagram } from "react-icons/ci";
 import NewsLetter from "./NewsLetter";
 import paymentIcons from "@/assets/payment-icons.png";
 import Image from "next/image";
+import { QUICK_ACCESS_LINKS } from "@/utils/constants";
 
 function Footer() {
   return (

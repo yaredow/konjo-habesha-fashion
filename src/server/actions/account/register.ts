@@ -1,8 +1,8 @@
 "use server";
 
-import { registrationFormSchema } from "@/lib/utils/validators/form-validators";
-import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
+import connectMongoDB from "@/utils/db/db";
+import { registrationFormSchema } from "@/utils/validators/form-validators";
 
 type FormState = {
   message: string;

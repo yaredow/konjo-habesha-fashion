@@ -1,12 +1,12 @@
 "use server";
 
-import connectMongoDB from "@/lib/utils/mongo/db";
 import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
-import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 import Product from "@/models/productModel";
-import cloudinary from "@/lib/utils/cloudinary";
 import { UploadApiResponse } from "cloudinary";
+import cloudinary from "@/utils/cloudinary";
+import connectMongoDB from "@/utils/db/db";
+import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 
 export async function createProductAction(
   prevState: FormState,

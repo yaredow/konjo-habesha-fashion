@@ -17,7 +17,6 @@ import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
-import { NAV_LINKS } from "@/lib/utils/constants";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
@@ -26,6 +25,7 @@ import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 import { useCart } from "@/lib/context/CartContext";
 import Search from "../Search";
+import { NAV_LINKS } from "@/utils/constants";
 
 function Header() {
   const { data: session, status } = useSession();

@@ -32,12 +32,11 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import { formatCurrency, formatDate } from "@/lib/utils/helpers";
 import CreateProduct from "@/components/dashboard/CreateProduct";
 import { Product } from "../../../../types/product";
-import useGetProducts from "@/lib/utils/hook/useGetProducts";
 import Spinner from "@/components/Spinner";
-import { RegistrationDialog } from "@/components/account/RegistrationDialog";
+import useGetProducts from "@/utils/hook/useGetProducts";
+import { formatCurrency, formatDate } from "@/utils/helpers";
 
 export default function page() {
   const { products, isPending, isError } = useGetProducts();

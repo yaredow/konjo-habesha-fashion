@@ -1,7 +1,8 @@
 "use server";
-import { UpdateAccountFormSchema } from "@/lib/utils/validators/form-validators";
-import connectMongoDB from "@/lib/utils/mongo/db";
+
 import User from "@/models/authModel";
+import connectMongoDB from "@/utils/db/db";
+import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 
 export type FormState = {
   message: string;

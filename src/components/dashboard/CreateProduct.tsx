@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateProductFormSchema } from "@/lib/utils/validators/form-validators";
 
 import {
   Dialog,
@@ -39,7 +38,7 @@ import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
 import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
-import Spinner from "../Spinner";
+import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import SubmitButton from "../SubmitButton";
 
 const options = [

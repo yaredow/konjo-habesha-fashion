@@ -1,11 +1,11 @@
 "use server";
 
-import { UpdatePasswordFormSchema } from "@/lib/utils/validators/form-validators";
-import connectMongoDB from "@/lib/utils/mongo/db";
 import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
+import connectMongoDB from "@/utils/db/db";
+import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 
 export async function updatePasswordAction(
   email: string,

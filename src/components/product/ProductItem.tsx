@@ -1,14 +1,13 @@
 "use client";
 
-import { formatCurrency } from "@/lib/utils/helpers";
-
 import { Product } from "../../types/product";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { IoCartOutline } from "react-icons/io5";
-import useAddToCart from "@/lib/utils/hook/useAddToCart";
 import { toast } from "../ui/use-toast";
 import { useCart } from "@/lib/context/CartContext";
+import { formatCurrency } from "@/utils/helpers";
+import useAddToCart from "@/utils/hook/useAddToCart";
 
 function ProductItem({ product }: { product: Product }) {
   const router = useRouter();

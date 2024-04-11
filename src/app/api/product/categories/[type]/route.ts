@@ -1,6 +1,6 @@
-import { GROUP_OBJECTS } from "@/lib/utils/constants";
-import connectMongoDB from "@/lib/utils/mongo/db";
 import Product from "@/models/productModel";
+import { GROUP_OBJECTS } from "@/utils/constants";
+import connectMongoDB from "@/utils/db/db";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
