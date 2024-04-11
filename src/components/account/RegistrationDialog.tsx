@@ -26,13 +26,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SpinnerMini from "../ui/SpinnerMini";
-
-function RegistrationButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit">{pending ? <SpinnerMini /> : "Register"}</Button>
-  );
-}
+import SubmitButton from "../SubmitButton";
 
 const initialState = {
   message: "",
@@ -162,7 +156,8 @@ export function RegistrationDialog() {
                   );
                 }}
               />
-              <RegistrationButton />
+
+              <SubmitButton />
             </form>
           </Form>
         </div>
