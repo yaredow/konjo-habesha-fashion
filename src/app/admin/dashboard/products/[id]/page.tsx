@@ -63,9 +63,12 @@ export default function page({ params }: { params: { id: string } }) {
   const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
 
+  const [selectedSizes, setSelectedSizes] = React.useState<string[]>();
   const [productDetails, setProductDetails] = React.useState<Product | null>(
     null,
   );
+
+  console.log(productDetails);
 
   React.useEffect(() => {
     if (isFetched && product) {
@@ -75,9 +78,24 @@ export default function page({ params }: { params: { id: string } }) {
     }
   }, [!isFetched, product]);
 
-  if (!isFetched) return <Spinner />;
-
   const handleEditProduct = async (id: string) => {};
+
+  const handleSizeToggle = (size: string, isSelected: boolean) => {
+    setSelectedSizes((prevSizes) => {
+      if (isSelected) {
+        return [...(prevSizes as string[]), size];
+      }
+    });
+
+    setProductDetails((prev) => {
+      if (!prev) return null;
+
+      return {
+        ...prev,
+        sizes: selectedSizes,
+      };
+    });
+  };
 
   const handleDeleteProductImage = async (
     public_id: string,
@@ -100,6 +118,8 @@ export default function page({ params }: { params: { id: string } }) {
       console.error(err);
     }
   };
+
+  if (!isFetched) return <Spinner />;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -231,11 +251,20 @@ export default function page({ params }: { params: { id: string } }) {
                           <TableCell>
                             <ToggleGroup
                               type="single"
-                              defaultValue="s"
+                              defaultValue={productDetails?.sizes[0]}
                               variant="outline"
+                              onValueChange={(value) => {
+                                handleSizeToggle(value, true);
+                              }}
                             >
                               {product.sizes.map((size, index) => (
-                                <ToggleGroupItem key={index} value="s">
+                                <ToggleGroupItem
+                                  key={index}
+                                  value={size}
+                                  onValueChange={(value) =>
+                                    handleSizeToggle(size, value)
+                                  }
+                                >
                                   {size}
                                 </ToggleGroupItem>
                               ))}
@@ -360,7 +389,7 @@ export default function page({ params }: { params: { id: string } }) {
                               >
                                 <Image
                                   alt="Product image"
-                                  className="aspect-square w-full rounded-md object-cover"
+                                  className="aspect-square w-full rounded-md object-cover hover:opacity-75"
                                   height="84"
                                   src={image.url}
                                   width="84"
