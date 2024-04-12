@@ -21,11 +21,11 @@ import {
 } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "../ui/use-toast";
-import { registrationFormSchema } from "@/lib/utils/validators/form-validators";
 import React, { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
 import SubmitButton from "../SubmitButton";
+import { registrationFormSchema } from "@/utils/validators/form-validators";
 
 const initialState = {
   message: "",

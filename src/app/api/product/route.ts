@@ -1,6 +1,6 @@
-import connectMongoDB from "@/lib/utils/mongo/db";
-import { ProductFilterValidator } from "@/lib/utils/validators/product-validators";
 import Product from "@/models/productModel";
+import connectMongoDB from "@/utils/db/db";
+import { ProductFilterValidator } from "@/utils/validators/product-validators";
 import { NextRequest, NextResponse } from "next/server";
 
 class Filter {

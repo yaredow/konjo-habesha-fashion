@@ -1,7 +1,7 @@
 import FeaturedProducts from "@/components/product/categories/FeaturedProducts";
 import NewArrivedProducts from "@/components/product/categories/NewArrivedProducts";
 import NewCollection from "@/components/product/categories/NewCollection";
-import TrendingProductCarousel from "@/components/product/categories/TrendingProductsCarousel";
+
 import { Button } from "@/components/ui/button";
 
 function page() {

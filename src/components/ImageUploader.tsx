@@ -11,7 +11,7 @@ import {
 
 const FileSvgDraw = () => {
   return (
-    <div className=" flex w-full flex-col items-center justify-center border p-2">
+    <div className=" flex w-full flex-col items-center justify-center ">
       <svg
         className="h-8 w-8 text-gray-500 dark:text-gray-400"
         aria-hidden="true"

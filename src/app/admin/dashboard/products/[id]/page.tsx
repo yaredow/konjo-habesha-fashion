@@ -44,6 +44,18 @@ import {
   PRODUCT_STATUS_OPTIONS,
 } from "@/utils/constants";
 import { Switch } from "@/components/ui/switch";
+import { AlertDialog, AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
+import {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { deleteProductImageAction } from "@/server/actions/product/deleteProductImageAction";
+import { toast } from "@/components/ui/use-toast";
 
 export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -63,11 +75,31 @@ export default function page({ params }: { params: { id: string } }) {
     }
   }, [!isFetched, product]);
 
-  console.log(productDetails);
-
   if (!isFetched) return <Spinner />;
 
   const handleEditProduct = async (id: string) => {};
+
+  const handleDeleteProductImage = async (
+    public_id: string,
+    product_id: string,
+  ) => {
+    try {
+      const result = await deleteProductImageAction(public_id, product_id);
+
+      if (result.success === true) {
+        toast({
+          description: "Image deleted successfully",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          description: "Failed to delete product image",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -320,15 +352,47 @@ export default function page({ params }: { params: { id: string } }) {
                       />
                       <div className="grid grid-cols-3 gap-2">
                         {product.images.map((image, index) => (
-                          <button>
-                            <Image
-                              alt="Product image"
-                              className="aspect-square w-full rounded-md object-cover"
-                              height="84"
-                              src={image.url}
-                              width="84"
-                            />
-                          </button>
+                          <AlertDialog>
+                            <AlertDialogTrigger>
+                              <button
+                                key={index}
+                                className=" hover:cursor-pointer"
+                              >
+                                <Image
+                                  alt="Product image"
+                                  className="aspect-square w-full rounded-md object-cover"
+                                  height="84"
+                                  src={image.url}
+                                  width="84"
+                                />
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Permanently delete this image?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete your account and remove
+                                  your data from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() =>
+                                    handleDeleteProductImage(
+                                      image.public_id,
+                                      product._id,
+                                    )
+                                  }
+                                >
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         ))}
 
                         <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">

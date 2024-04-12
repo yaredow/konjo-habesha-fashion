@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItem, CartState } from "../../types/product";
+import { RootState } from "../store";
 
 // Retrieve cart items from local storage or use an empty array if none exists
 let cartItems;
 if (typeof window !== "undefined") {
   cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+} else {
+  cartItems = [];
 }
 
 const initialState: CartState = {
@@ -70,13 +73,12 @@ export const {
   clearCart,
 } = cartSlice.actions;
 
-export const getCart = (state: { cart: CartState }) => state.cart.cart;
-export const getTotalCartQuantity = (state: { cart: CartState }) =>
-  state.cart.cart.reduce((sum, item) => sum + item.quantity, 0);
-export const getTotalCartPrice = (state: { cart: CartState }) =>
+export const getCart = (state: RootState) => state.cart.cart;
+export const getTotalCartQuantity = (state: RootState) =>
+  state.cart.cart.reduce((sum, item) => sum + item.quantity, 0) || 0;
+export const getTotalCartPrice = (state: RootState) =>
   state.cart.cart.reduce((sum, item) => sum + item.totalPrice!, 0);
-export const getCurrentQuantityById =
-  (id: string) => (state: { cart: CartState }) =>
-    state.cart.cart.find((item) => item._id === id)?.quantity ?? 0;
+export const getCurrentQuantityById = (id: string) => (state: RootState) =>
+  state.cart.cart.find((item) => item._id === id)?.quantity ?? 0;
 
 export default cartSlice.reducer;

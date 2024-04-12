@@ -11,7 +11,7 @@ import useAddToCart from "@/utils/hook/useAddToCart";
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const { id } = params;
-  const { product = {}, isPending } = useGetProduct(id);
+  const { product = {}, isFetched } = useGetProduct(id);
   let url, altTextx;
 
   const { handleAddToCart } = useAddToCart(product);
@@ -28,7 +28,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
     setSelectedPhotoIndex(index);
   };
 
-  if (isPending) return <Spinner />;
+  if (!isFetched) return <Spinner />;
 
   return (
     <section className=" mx-12 ">

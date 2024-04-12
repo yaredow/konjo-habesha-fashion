@@ -19,7 +19,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
@@ -28,12 +28,19 @@ import Search from "../Search";
 import { NAV_LINKS } from "@/utils/constants";
 
 function Header() {
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const { data: session, status } = useSession();
   const [searchFormOpen, setSearchFormOpem] = useState(false);
   const cartQuantity = useAppSelector(getTotalCartQuantity);
   const handleToggleSearchForm = () => {
     setSearchFormOpem((searchFormOpen) => !searchFormOpen);
   };
+
+  React.useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) return null;
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
