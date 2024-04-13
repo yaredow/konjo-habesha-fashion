@@ -7,6 +7,7 @@ import { UploadApiResponse } from "cloudinary";
 import cloudinary from "@/utils/cloudinary";
 import connectMongoDB from "@/utils/db/db";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
+import { uploadProductImagesAction } from "./uploadProductImages";
 
 export async function createProductAction(
   prevState: FormState,
@@ -14,7 +15,6 @@ export async function createProductAction(
 ): Promise<FormState> {
   let sizes: string[] = [];
   const sizesData = formData.get("sizes");
-  const uploadedImages = [];
   const images = formData.getAll("images") as File[];
 
   if (typeof sizesData === "string") {
@@ -40,36 +40,8 @@ export async function createProductAction(
   }
 
   try {
-    for (const image of images) {
-      const arrayBuffer = await image.arrayBuffer();
-      const buffer = new Uint8Array(arrayBuffer);
-
-      const uploadResult = await new Promise<UploadApiResponse | undefined>(
-        (resolve, reject) => {
-          cloudinary.uploader
-            .upload_stream(
-              {
-                tags: ["konjo-habesha-next-js"],
-                upload_preset: "konjo-habesha",
-              },
-              function (err, result) {
-                if (err) {
-                  reject(err);
-                  return;
-                } else {
-                  resolve(result);
-                }
-              },
-            )
-            .end(buffer);
-        },
-      );
-
-      uploadedImages.push({
-        public_id: uploadResult?.public_id,
-        url: uploadResult?.url,
-      });
-    }
+    const uploadedImages = await uploadProductImagesAction(images);
+    console.log(uploadedImages);
 
     await connectMongoDB();
     const newProduct = await Product.create({
