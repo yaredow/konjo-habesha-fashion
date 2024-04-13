@@ -41,6 +41,7 @@ import useGetProduct from "@/utils/hook/useGetProduct";
 import React from "react";
 import {
   AVAILABLE_CATEGORIRES,
+  AVAILABLE_SIZES,
   PRODUCT_STATUS_OPTIONS,
 } from "@/utils/constants";
 import { Switch } from "@/components/ui/switch";
@@ -257,7 +258,7 @@ export default function page({ params }: { params: { id: string } }) {
                                 handleSizeToggle(value, true);
                               }}
                             >
-                              {product.sizes.map((size, index) => (
+                              {AVAILABLE_SIZES.map((size, index) => (
                                 <ToggleGroupItem
                                   key={index}
                                   value={size}
