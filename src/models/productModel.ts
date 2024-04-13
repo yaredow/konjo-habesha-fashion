@@ -76,7 +76,7 @@ const productSchema = new Schema<IProduct>({
   },
   status: {
     type: String,
-    enum: ["draft", "active", "Archived"],
+    enum: ["draft", "active", "archived"],
     default: "draft",
   },
 });

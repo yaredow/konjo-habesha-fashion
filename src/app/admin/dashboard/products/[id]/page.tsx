@@ -94,6 +94,7 @@ export default function page({ params }: { params: { id: string } }) {
         toast({
           description: "Image deleted successfully",
         });
+        refetch();
       } else {
         toast({
           variant: "destructive",
@@ -429,6 +430,7 @@ export default function page({ params }: { params: { id: string } }) {
                       <div className="grid gap-3">
                         <Label htmlFor="status">Status</Label>
                         <Select
+                          defaultValue={productDetails?.status}
                           onValueChange={(value) => {
                             setProductDetails((prev) => ({
                               ...(prev as Product),

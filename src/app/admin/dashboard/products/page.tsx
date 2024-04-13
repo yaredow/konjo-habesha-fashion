@@ -52,7 +52,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 
 export default function page() {
-  const { products = [], isFetched, isError } = useGetProducts();
+  const { products = [], isFetched, refetch } = useGetProducts();
   const router = useRouter();
 
   const handleProductDelete = async (id: string) => {
@@ -62,6 +62,7 @@ export default function page() {
       toast({
         description: "Product deleted successfully",
       });
+      refetch();
     }
   };
 
