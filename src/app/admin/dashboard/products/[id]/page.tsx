@@ -70,15 +70,15 @@ type EditProductType = {
 };
 
 export default function page({ params }: { params: { id: string } }) {
+  const [files, setFiles] = React.useState<File[] | null>(null);
+  const [productDetails, setProductDetails] = React.useState<Product | null>(
+    null,
+  );
   const router = useRouter();
   const { id } = params;
   const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
 
-  const [productDetails, setProductDetails] = React.useState<Product | null>(
-    null,
-  );
-
-  console.log(productDetails);
+  console.log(files);
 
   React.useEffect(() => {
     if (isFetched && product) {
@@ -87,26 +87,6 @@ export default function page({ params }: { params: { id: string } }) {
       });
     }
   }, [!isFetched, product]);
-
-  const handleEditProduct = async (id: string, productDetails: Product) => {
-    try {
-      const result = await editProductAction(id, productDetails);
-
-      if (result.success === true) {
-        toast({
-          description: "Product updated successfully",
-        });
-        refetch();
-      } else {
-        toast({
-          description: "Product update failed",
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
 
   const handleDeleteProductImage = async (
     public_id: string,
@@ -127,6 +107,30 @@ export default function page({ params }: { params: { id: string } }) {
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleUploadProductImages = (files: File[]) => {
+    console.log(files);
+  };
+
+  const handleEditProduct = async (id: string, productDetails: Product) => {
+    try {
+      const result = await editProductAction(id, productDetails);
+
+      if (result.success === true) {
+        toast({
+          description: "Product updated successfully",
+        });
+        refetch();
+      } else {
+        toast({
+          description: "Product update failed",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
   };
 
@@ -473,8 +477,17 @@ export default function page({ params }: { params: { id: string } }) {
                             </AlertDialogContent>
                           </AlertDialog>
                         ))}
-
-                        <ImageUploader />
+                      </div>
+                      <div className="flex flex-col gap-4">
+                        <ImageUploader files={files} setFiles={setFiles} />
+                        {files && files.length > 0 ? (
+                          <Button
+                            variant="outline"
+                            onClick={() => handleUploadProductImages(files)}
+                          >
+                            Upload
+                          </Button>
+                        ) : null}
                       </div>
                     </div>
                   </CardContent>
