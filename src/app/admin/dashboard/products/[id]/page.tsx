@@ -57,6 +57,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { deleteProductImageAction } from "@/server/actions/product/deleteProductImageAction";
 import { toast } from "@/components/ui/use-toast";
+import { editProductAction } from "@/server/actions/product/editProductAction";
 
 export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -79,23 +80,8 @@ export default function page({ params }: { params: { id: string } }) {
     }
   }, [!isFetched, product]);
 
-  const handleEditProduct = async (id: string) => {};
-
-  const handleSizeToggle = (size: string, isSelected: boolean) => {
-    setSelectedSizes((prevSizes) => {
-      if (isSelected) {
-        return [...(prevSizes as string[]), size];
-      }
-    });
-
-    setProductDetails((prev) => {
-      if (!prev) return null;
-
-      return {
-        ...prev,
-        sizes: selectedSizes,
-      };
-    });
+  const handleEditProduct = async (id: string, productDetails: Product) => {
+    const editedProduct = await editProductAction(id, productDetails);
   };
 
   const handleDeleteProductImage = async (
@@ -251,20 +237,23 @@ export default function page({ params }: { params: { id: string } }) {
                           </TableCell>
                           <TableCell>
                             <ToggleGroup
-                              type="single"
-                              defaultValue={productDetails?.sizes[0]}
+                              type="multiple"
                               variant="outline"
+                              value={productDetails?.sizes}
                               onValueChange={(value) => {
-                                handleSizeToggle(value, true);
+                                setProductDetails((prev) => ({
+                                  ...(prev as Product),
+                                  sizes: [...value],
+                                }));
                               }}
                             >
                               {AVAILABLE_SIZES.map((size, index) => (
                                 <ToggleGroupItem
                                   key={index}
                                   value={size}
-                                  onValueChange={(value) =>
-                                    handleSizeToggle(size, value)
-                                  }
+                                  defaultChecked={productDetails?.sizes.includes(
+                                    size,
+                                  )}
                                 >
                                   {size}
                                 </ToggleGroupItem>
@@ -442,15 +431,33 @@ export default function page({ params }: { params: { id: string } }) {
                   </CardHeader>
                   <CardContent>
                     <div></div>
-                    <Button size="sm" variant="secondary">
-                      Archive Product
+                    <Button
+                      onClick={() => {
+                        setProductDetails((prev) => ({
+                          ...(prev as Product),
+                          status: "Archived",
+                        }));
+                      }}
+                      size="sm"
+                      variant="secondary"
+                    >
+                      {productDetails?.status === "Archived"
+                        ? "Archived"
+                        : "Archive Product"}
                     </Button>
                   </CardContent>
                 </Card>
               </div>
             </div>
             <div className="flex items-center justify-center gap-2 md:hidden">
-              <Button variant="outline" size="sm">
+              <Button
+                onClick={() => {
+                  console.log("discard button clicked");
+                  setProductDetails({ ...product });
+                }}
+                variant="outline"
+                size="sm"
+              >
                 Discard
               </Button>
               <Button size="sm">Save Product</Button>

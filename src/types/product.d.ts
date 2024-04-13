@@ -13,7 +13,7 @@ type Product = {
   productAddedDate: Date;
   isFeatured: boolean;
   inStock: boolean;
-  sizes: [string];
+  sizes: string[];
   status: string;
 };
 

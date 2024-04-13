@@ -66,9 +66,9 @@ function Header() {
         </div>
 
         <div className="hidden gap-8 md:flex md:justify-end">
-          <div className=" mt-[6px] flex flex-row gap-[1.3rem]">
+          <div className=" flex flex-row gap-[1.3rem]">
             <Search />
-            <div className=" flex flex-row gap-2">
+            <div className=" flex flex-row items-center gap-2">
               <Link
                 href={
                   status === "authenticated"
@@ -86,7 +86,7 @@ function Header() {
               </p>
             </div>
 
-            <div className=" relative">
+            <div className=" relative flex items-center">
               <Link href="/cart">
                 <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
               </Link>
