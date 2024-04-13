@@ -106,7 +106,7 @@ export const AVAILABLE_SORT = [
 export const DEFAULT_CUSTOM_PRICE = [0, 600] as [number, number];
 
 export const PRODUCT_STATUS_OPTIONS = [
-  { name: "Active", value: "Acrive" },
+  { name: "Active", value: "Active" },
   { name: "Draft", value: "Draft" },
   { name: "Archived", value: "Archived" },
 ];

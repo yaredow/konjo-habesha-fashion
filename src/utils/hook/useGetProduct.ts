@@ -8,14 +8,18 @@ async function fetchProduct(id: string) {
 }
 
 function useGetProduct(id: string) {
-  const { data: responseData, isFetched } = useQuery({
+  const {
+    data: responseData,
+    isFetched,
+    refetch,
+  } = useQuery({
     queryKey: ["product"],
     queryFn: () => fetchProduct(id),
   });
 
   const product = responseData?.product;
 
-  return { product, isFetched };
+  return { product, isFetched, refetch };
 }
 
 export default useGetProduct;

@@ -58,14 +58,22 @@ import {
 import { deleteProductImageAction } from "@/server/actions/product/deleteProductImageAction";
 import { toast } from "@/components/ui/use-toast";
 import { editProductAction } from "@/server/actions/product/editProductAction";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import ImageUploader from "@/components/ImageUploader";
+
+type EditProductType = {
+  product: Product;
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
 
 export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { id } = params;
-  const { product, isFetched }: { product: Product; isFetched: boolean } =
-    useGetProduct(id);
+  const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
 
-  const [selectedSizes, setSelectedSizes] = React.useState<string[]>();
   const [productDetails, setProductDetails] = React.useState<Product | null>(
     null,
   );
@@ -81,7 +89,23 @@ export default function page({ params }: { params: { id: string } }) {
   }, [!isFetched, product]);
 
   const handleEditProduct = async (id: string, productDetails: Product) => {
-    const editedProduct = await editProductAction(id, productDetails);
+    try {
+      const result = await editProductAction(id, productDetails);
+
+      if (result.success === true) {
+        toast({
+          description: "Product updated successfully",
+        });
+        refetch();
+      } else {
+        toast({
+          description: "Product update failed",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   const handleDeleteProductImage = async (
@@ -130,10 +154,46 @@ export default function page({ params }: { params: { id: string } }) {
                 {product.inStock ? "In Stock" : "Sold"}
               </Badge>
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                <Button variant="outline" size="sm">
+                <Button
+                  onClick={() => {
+                    setProductDetails({ ...product });
+                  }}
+                  variant="outline"
+                  size="sm"
+                >
                   Discard
                 </Button>
-                <Button size="sm">Save Product</Button>
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button variant="outline" size="sm">
+                      Save Product
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        alter the product.
+                      </AlertDialogDescription>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() =>
+                            handleEditProduct(
+                              product._id,
+                              productDetails as Product,
+                            )
+                          }
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogHeader>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -414,10 +474,7 @@ export default function page({ params }: { params: { id: string } }) {
                           </AlertDialog>
                         ))}
 
-                        <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                          <Upload className="h-4 w-4 text-muted-foreground" />
-                          <span className="sr-only">Upload</span>
-                        </button>
+                        <ImageUploader />
                       </div>
                     </div>
                   </CardContent>
@@ -430,7 +487,6 @@ export default function page({ params }: { params: { id: string } }) {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div></div>
                     <Button
                       onClick={() => {
                         setProductDetails((prev) => ({
@@ -460,7 +516,15 @@ export default function page({ params }: { params: { id: string } }) {
               >
                 Discard
               </Button>
-              <Button size="sm">Save Product</Button>
+              <Button
+                onClick={() => {
+                  console.log("update button clicked");
+                  handleEditProduct(product._id, productDetails as Product);
+                }}
+                size="sm"
+              >
+                Save Product
+              </Button>
             </div>
           </div>
         </div>
