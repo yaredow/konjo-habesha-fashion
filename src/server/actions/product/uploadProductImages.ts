@@ -1,10 +1,25 @@
 "use server";
 
+import Product from "@/models/productModel";
 import cloudinary from "@/utils/cloudinary";
+import connectMongoDB from "@/utils/db/db";
 import { UploadApiResponse } from "cloudinary";
 
-export async function uploadProductImagesAction(images: File[]) {
+type ReturnType = {
+  message: string;
+  success: boolean;
+  uploadedImages?: {
+    public_id: string | undefined;
+    url: string | undefined;
+  }[];
+};
+
+export async function uploadProductImagesAction(
+  formData: FormData,
+  productId?: string,
+): Promise<ReturnType> {
   const uploadedImages = [];
+  const images = formData.getAll("images") as File[];
 
   try {
     for (const image of images) {
@@ -37,7 +52,21 @@ export async function uploadProductImagesAction(images: File[]) {
       });
     }
 
-    return uploadedImages;
+    if (productId) {
+      await connectMongoDB();
+      const product = await Product.findById({ _id: productId });
+      product.images = [...product.images, ...uploadedImages];
+
+      await product.save();
+
+      return { success: true, message: "Images are updated successfully" };
+    }
+
+    return {
+      success: true,
+      uploadedImages,
+      message: "Images are uploaded successfully",
+    };
   } catch (err) {
     console.error(err);
     throw err;

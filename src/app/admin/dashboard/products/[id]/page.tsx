@@ -60,6 +60,7 @@ import { toast } from "@/components/ui/use-toast";
 import { editProductAction } from "@/server/actions/product/editProductAction";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
+import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
 
 type EditProductType = {
   product: Product;
@@ -110,8 +111,31 @@ export default function page({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleUploadProductImages = (files: File[]) => {
-    console.log(files);
+  const handleUploadProductImages = async (
+    files: File[],
+    productId: string,
+  ) => {
+    const formData = new FormData();
+
+    if (files) {
+      for (const file of files) {
+        formData.append("images", file);
+      }
+    }
+
+    const result = await uploadProductImagesAction(formData, productId);
+
+    if (result.success === true) {
+      toast({
+        description: result.message,
+      });
+      refetch();
+    } else {
+      toast({
+        variant: "destructive",
+        description: "Uploading new images failed",
+      });
+    }
   };
 
   const handleEditProduct = async (id: string, productDetails: Product) => {
@@ -483,7 +507,9 @@ export default function page({ params }: { params: { id: string } }) {
                         {files && files.length > 0 ? (
                           <Button
                             variant="outline"
-                            onClick={() => handleUploadProductImages(files)}
+                            onClick={() =>
+                              handleUploadProductImages(files, product._id)
+                            }
                           >
                             Upload
                           </Button>
