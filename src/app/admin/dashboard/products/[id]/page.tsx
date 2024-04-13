@@ -62,6 +62,7 @@ import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
 import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
 import compareObject from "@/utils/compareObjects";
+import { cn } from "@/utils/cn";
 
 type EditProductType = {
   product: Product;
@@ -190,12 +191,22 @@ export default function page({ params }: { params: { id: string } }) {
                   variant="outline"
                   size="sm"
                   disabled={hasNoChanges}
+                  className={cn({
+                    "disabled:cursor-not-allowed disabled:opacity-60":
+                      hasNoChanges,
+                  })}
                 >
                   Discard
                 </Button>
                 <AlertDialog>
-                  <AlertDialogTrigger>
-                    <Button disabled={hasNoChanges} variant="outline" size="sm">
+                  <AlertDialogTrigger
+                    className={cn({
+                      "disabled:cursor-not-allowed disabled:opacity-60":
+                        hasNoChanges,
+                    })}
+                    disabled={hasNoChanges}
+                  >
+                    <Button variant="outline" size="sm">
                       Save Product
                     </Button>
                   </AlertDialogTrigger>

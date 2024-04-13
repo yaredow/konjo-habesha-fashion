@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
 import Product from "@/models/productModel";
-import { UploadApiResponse } from "cloudinary";
-import cloudinary from "@/utils/cloudinary";
+
 import connectMongoDB from "@/utils/db/db";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import { uploadProductImagesAction } from "./uploadProductImages";
