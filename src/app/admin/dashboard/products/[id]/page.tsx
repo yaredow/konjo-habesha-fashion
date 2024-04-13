@@ -61,6 +61,7 @@ import { editProductAction } from "@/server/actions/product/editProductAction";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
 import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
+import compareObject from "@/utils/compareObjects";
 
 type EditProductType = {
   product: Product;
@@ -79,15 +80,7 @@ export default function page({ params }: { params: { id: string } }) {
   const { id } = params;
   const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
 
-  console.log(files);
-
-  React.useEffect(() => {
-    if (isFetched && product) {
-      setProductDetails({
-        ...product,
-      });
-    }
-  }, [!isFetched, product]);
+  const hasNoChanges = compareObject(productDetails as Product, product);
 
   const handleDeleteProductImage = async (
     public_id: string,
@@ -158,6 +151,14 @@ export default function page({ params }: { params: { id: string } }) {
     }
   };
 
+  React.useEffect(() => {
+    if (isFetched && product) {
+      setProductDetails({
+        ...product,
+      });
+    }
+  }, [!isFetched, product]);
+
   if (!isFetched) return <Spinner />;
 
   return (
@@ -188,12 +189,13 @@ export default function page({ params }: { params: { id: string } }) {
                   }}
                   variant="outline"
                   size="sm"
+                  disabled={hasNoChanges}
                 >
                   Discard
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger>
-                    <Button variant="outline" size="sm">
+                    <Button disabled={hasNoChanges} variant="outline" size="sm">
                       Save Product
                     </Button>
                   </AlertDialogTrigger>
