@@ -6,7 +6,7 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "stripe:listen": "stripe listen ---forward-to localhost:3000/api/order/webhook",
+    "stripe:listen": "stripe listen ---forward-to localhost:3000/api/checkout/webhook",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watchAll"
