@@ -50,8 +50,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
+import React from "react";
 
 export default function page() {
+  const [isClient, setIsClient] = React.useState(false);
   const { products = [], isFetched, refetch } = useGetProducts();
   const router = useRouter();
 
@@ -65,6 +67,12 @@ export default function page() {
       refetch();
     }
   };
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
