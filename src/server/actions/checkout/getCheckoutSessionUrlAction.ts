@@ -1,9 +1,11 @@
+"use server";
+
 import { CartItem } from "@/types/product";
 import { stripe } from "@/utils/stripe";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  const { cartItems, user } = await request.json();
+export async function getCheckoutSessionUrlAction(formData: FormData) {
+  const cartItems = JSON.parse(formData.get("cartItems") as string);
+  const user = JSON.parse(formData.get("user") as string);
 
   const cartData = cartItems.map((item: CartItem) => ({
     productId: item._id,
@@ -90,5 +92,9 @@ export async function POST(request: NextRequest) {
     cancel_url: `${process.env.HOST}/cart`,
   });
 
-  return NextResponse.json({ session }, { status: 200 });
+  const { url } = session;
+
+  if (session) {
+    return { success: true, url };
+  }
 }

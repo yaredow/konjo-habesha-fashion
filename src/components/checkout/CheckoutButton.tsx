@@ -1,14 +1,24 @@
+"use client";
+
 import { useSession } from "next-auth/react";
-import Spinner from "../Spinner";
-import useGetCheckoutSession from "@/utils/hook/useGetCheckoutSession";
 import { Button } from "../ui/button";
+import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/getCheckoutSessionUrlAction";
 
 const CheckoutButton = () => {
-  const { data: session, status } = useSession();
-  const { isPending, fetchUrl } = useGetCheckoutSession();
+  const { data: session } = useSession();
+  const cartItems = JSON.parse(localStorage.getItem("cartItems")!);
+  const user = session?.user;
 
   const handleCheckout = async () => {
-    fetchUrl();
+    const formData = new FormData();
+    formData.append("cartItems", JSON.stringify(cartItems));
+    formData.append("user", JSON.stringify(user));
+
+    const result = await getCheckoutSessionUrlAction(formData);
+
+    if (result?.url) {
+      window.location.href = result.url;
+    }
   };
 
   return (
@@ -17,14 +27,9 @@ const CheckoutButton = () => {
       disabled={session?.user ? false : true}
       onClick={() => handleCheckout()}
     >
-      {isPending ? (
-        <Spinner />
-      ) : session?.user ? (
-        "Check out"
-      ) : (
-        "Login to checkout"
-      )}
+      {session?.user ? "Check out" : "Login to checkout"}
     </Button>
   );
 };
+
 export default CheckoutButton;
