@@ -2,6 +2,7 @@
 
 import CartItem from "@/components/cart/CartItem";
 import EmptyCart from "@/components/cart/EmptyCart";
+import CheckoutButton from "@/components/checkout/CheckoutButton";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/store/hooks";
 import {
@@ -13,7 +14,6 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const Cart = () => {
   const cart = useAppSelector(getCart);
-  console.log(cart);
   const totalPrice = useAppSelector(getTotalCartPrice);
   const totalCartQuantity = useAppSelector(getTotalCartQuantity);
 
@@ -46,7 +46,7 @@ const Cart = () => {
               <p className="text-sm">includin g VAT</p>
             </div>
           </div>
-          <Button>Checkout</Button>
+          <CheckoutButton />
           <Button
             variant="link"
             className="my-2 flex items-center gap-2 text-center  text-sm hover:underline"

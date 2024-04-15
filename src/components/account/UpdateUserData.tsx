@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { UpdateAccountFormSchema } from "@/lib/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
@@ -28,6 +27,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 
 const initialState: FormState = {
   message: "",

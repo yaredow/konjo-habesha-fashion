@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { UpdatePasswordFormSchema } from "@/lib/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
@@ -26,6 +25,7 @@ import {
 } from "../ui/form";
 import { toast } from "../ui/use-toast";
 import { signOut } from "next-auth/react";
+import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 
 function SubmitPassword() {
   const { pending } = useFormStatus();
