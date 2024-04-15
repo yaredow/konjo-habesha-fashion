@@ -1,10 +1,10 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import {
   Inter as FontSans,
   League_Spartan,
   Plus_Jakarta_Sans,
 } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
