@@ -1,8 +1,10 @@
 import Order from "@/models/orderModel";
 
 export async function createOrder(formData: FormData) {
-  const customer = formData.get("customer");
-  const data = formData.get("data");
+  const customer = JSON.parse(formData.get("customer") as string);
+  const data = JSON.parse(formData.get("data") as string);
+
+  console.log(customer);
 
   const items = JSON.parse(customer?.metadata.cart);
 
