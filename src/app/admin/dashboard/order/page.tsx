@@ -48,7 +48,7 @@ import { Badge } from "@/components/ui/badge";
 import useGetOrders from "@/utils/hook/useGetOrders";
 import Spinner from "@/components/Spinner";
 import React from "react";
-import { formatDate } from "@/utils/helpers";
+import { formatCurrency, formatDate } from "@/utils/helpers";
 
 function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
@@ -170,14 +170,14 @@ function page() {
                     {!isFetched ? (
                       <Spinner className=" flex items-center justify-center" />
                     ) : (
-                      orders.map((order: any) => {
+                      orders.map((order: Order) => (
                         <TableRow className="bg-accent">
                           <TableCell>
                             <div className="font-medium">
                               {order.shipping.name}
                             </div>
                             <div className="hidden text-sm text-muted-foreground md:inline">
-                              {order.shipping.name}
+                              {order.shipping.email}
                             </div>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
@@ -192,10 +192,10 @@ function page() {
                             {formatDate(order.createdAt)}
                           </TableCell>
                           <TableCell className="text-right">
-                            {order.subtotal}
+                            {formatCurrency(order.subtotal)}
                           </TableCell>
-                        </TableRow>;
-                      })
+                        </TableRow>
+                      ))
                     )}
                   </TableBody>
                 </Table>
