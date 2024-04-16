@@ -11,7 +11,7 @@ declare module "next-auth" {
     _id: ObjectId;
     fullName: String;
     email: String;
-    password: String;
+    password?: String;
     role: String;
     active: Boolean;
     verified: Boolean;

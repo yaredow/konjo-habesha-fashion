@@ -4,8 +4,10 @@ import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/getCheckoutSessionUrlAction";
 import { CartItem } from "@/types/product";
+import React from "react";
 
 const CheckoutButton = () => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { data: session } = useSession();
   const cartItems = JSON.parse(localStorage.getItem("cartItems")!);
   const user = session?.user;
@@ -14,10 +16,11 @@ const CheckoutButton = () => {
     const formData = new FormData();
     formData.append("cartItems", JSON.stringify(cartItems));
     formData.append("user", JSON.stringify(user));
-
+    setIsLoading(true);
     const result = await getCheckoutSessionUrlAction(formData);
 
     if (result?.url) {
+      setIsLoading(false);
       window.location.href = result.url;
     }
   };
@@ -28,7 +31,11 @@ const CheckoutButton = () => {
       disabled={session?.user ? false : true}
       onClick={() => handleCheckout(cartItems, user)}
     >
-      {session?.user ? "Check out" : "Login to checkout"}
+      {isLoading
+        ? "Loading..."
+        : session?.user
+          ? "Check out"
+          : "Login to checkout"}
     </Button>
   );
 };

@@ -6,6 +6,7 @@ import { stripe } from "@/utils/stripe";
 export async function getCheckoutSessionUrlAction(formData: FormData) {
   const cartItems = JSON.parse(formData.get("cartItems") as string);
   const user = JSON.parse(formData.get("user") as string);
+  console.log("User coming from the checkout session server action:", user);
 
   const cartData = cartItems.map((item: CartItem) => ({
     productId: item._id,
@@ -17,7 +18,7 @@ export async function getCheckoutSessionUrlAction(formData: FormData) {
   const customer = await stripe.customers.create({
     email: user.email,
     metadata: {
-      userId: user.id,
+      userId: user._id,
       cart: JSON.stringify(cartData),
     },
   });

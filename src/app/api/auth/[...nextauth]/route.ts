@@ -76,16 +76,16 @@ const authOptions: AuthOptions = {
             return newUser;
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
       return user;
     },
-    async jwt({ token, user, session }) {
+    async jwt({ token, user }) {
       if (user) {
         return {
           ...token,
-          _id: user._id,
+          id: user._id,
           fullName: user.fullName,
           role: user.role,
         };
@@ -93,15 +93,12 @@ const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      if (session) {
-        return {
-          ...session,
-          user: {
-            ...session.user,
-            id: token._id,
-            name: token.fullName,
-            role: token.role,
-          },
+      if (user) {
+        session.user = {
+          ...session.user,
+          id: token.id,
+          name: token.fullName,
+          role: token.role,
         };
       }
       return session;
