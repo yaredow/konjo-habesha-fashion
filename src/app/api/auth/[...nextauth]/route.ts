@@ -6,6 +6,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import User from "@/models/authModel";
 import { login } from "@/server/actions/account/login";
 import connectMongoDB from "@/utils/db/db";
+import { RollerCoaster } from "lucide-react";
 
 const authOptions: AuthOptions = {
   session: {
@@ -48,14 +49,19 @@ const authOptions: AuthOptions = {
         const user = await login(credentials);
 
         if (user) {
-          return user;
+          return {
+            ...user,
+            _id: user._id,
+            name: user.fullName,
+            email: user.email,
+            role: user.role,
+          };
         }
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log("signin");
       if (account?.provider === "google" || "facebook") {
         const { name, email } = user as {
           name: string;
@@ -68,7 +74,7 @@ const authOptions: AuthOptions = {
 
           if (!userExists) {
             const newUser = await User.create({
-              fullName: name,
+              name,
               email,
               verified: true,
             });
@@ -83,21 +89,21 @@ const authOptions: AuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        return {
+        token = {
           ...token,
-          id: user._id,
-          fullName: user.fullName,
+          _id: user._id,
+          name: user.name,
           role: user.role,
         };
       }
       return token;
     },
     async session({ session, token, user }) {
-      if (user) {
+      if (token) {
         session.user = {
           ...session.user,
-          id: token.id,
-          name: token.fullName,
+          _id: token._id ? token._id : token.sub,
+          name: token.name,
           role: token.role,
         };
       }
