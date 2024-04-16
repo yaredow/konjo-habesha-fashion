@@ -1,4 +1,5 @@
 import { createOrder } from "@/server/actions/checkout/createOrder";
+import { updateProductStats } from "@/server/actions/checkout/updateProductStatsAction";
 import { stripe } from "@/utils/stripe";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -28,6 +29,8 @@ export async function POST(request: NextRequest) {
               formData.append("data", JSON.stringify(data));
 
               await createOrder(formData);
+
+              await updateProductStats(formData);
             } catch (err) {
               console.error(err);
               throw err;
