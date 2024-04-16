@@ -28,14 +28,17 @@ export async function POST(request: NextRequest) {
               formData.append("customer", JSON.stringify(customer));
               formData.append("data", JSON.stringify(data));
 
-              await createOrder(formData);
+              const result = await createOrder(formData);
 
-              await updateProductStats(formData);
+              if (result?.success) {
+                await updateProductStats(formData);
+              }
             } catch (err) {
               console.error(err);
               throw err;
             }
           });
+        break;
     }
 
     return NextResponse.json({ status: "success", event: event.type });

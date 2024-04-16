@@ -4,8 +4,6 @@ export async function createOrder(formData: FormData) {
   const customer = JSON.parse(formData.get("customer") as string);
   const data = JSON.parse(formData.get("data") as string);
 
-  console.log(customer);
-
   const items = JSON.parse(customer?.metadata.cart);
 
   const products = items.map((item: any) => {
@@ -17,7 +15,7 @@ export async function createOrder(formData: FormData) {
     };
   });
 
-  const newOrder = new Order({
+  const newOrder = await Order.create({
     userId: customer?.metadata.userId,
     customerId: data?.customer,
     paymentIntentId: data.payment_intent,
@@ -28,9 +26,16 @@ export async function createOrder(formData: FormData) {
     payment_status: data?.payment_status,
   });
 
+  if (!newOrder) {
+    return { success: false, message: "Unable t crate an order" };
+  }
+
   try {
-    const savedOrder = await newOrder.save();
-    console.log(savedOrder);
+    const result = await newOrder.save();
+
+    if (result) {
+      return { success: true, message: "product created successfully" };
+    }
   } catch (err) {
     console.error(err);
   }
