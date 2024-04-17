@@ -73,7 +73,7 @@ export type FetchOrderType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-type FilterType = {
+export type FilterType = {
   delivery_status: string;
   createdOn: string;
 };
@@ -84,9 +84,12 @@ function page() {
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const [filter, setFilter] = React.useState<FilterType | null>(null);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
-  const { orders = [], isFetched, refetch }: FetchOrderType = useGetOrders();
 
-  console.log(filter);
+  const {
+    orders = [],
+    isFetched,
+    refetch,
+  }: FetchOrderType = useGetOrders(filter);
 
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);
