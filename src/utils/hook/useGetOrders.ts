@@ -3,11 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 async function fetchOrder(filter: FilterType) {
-  const formData = new FormData();
-  formData.append("filter", JSON.stringify(filter));
-
-  const { data } = await axios.get("http://localhost:3000/api/order", {
-    data: formData,
+  const { data } = await axios.post("http://localhost:3000/api/order", {
+    filter: {
+      delivery_status: filter.delivery_status,
+      createdOn: filter.createdOn,
+    },
   });
 
   return data;

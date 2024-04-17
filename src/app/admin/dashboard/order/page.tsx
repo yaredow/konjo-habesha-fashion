@@ -89,7 +89,7 @@ function page() {
     orders = [],
     isFetched,
     refetch,
-  }: FetchOrderType = useGetOrders(filter);
+  }: FetchOrderType = useGetOrders(filter as FilterType);
 
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);

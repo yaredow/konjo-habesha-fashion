@@ -2,8 +2,13 @@ import Order from "@/models/orderModel";
 import connectMongoDB from "@/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(request: Request) {
+  const data = await request.json();
+  console.log(data);
+
   try {
+    const { delivery_status, createdOn } = data.filter;
+
     await connectMongoDB();
 
     const orders = await Order.find();
