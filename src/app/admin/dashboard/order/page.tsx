@@ -166,7 +166,7 @@ function page() {
           </Card>
         </div>
         <Tabs
-          defaultValue={filter?.createdOn}
+          value={filter?.createdOn}
           onValueChange={(value) => {
             setFilter((prev) => ({
               ...(prev as FilterType),
@@ -176,9 +176,11 @@ function page() {
         >
           <div className="flex items-center">
             <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
+              {ORDER_DURATION.map((option, index) => (
+                <TabsTrigger key={index} value={option.value}>
+                  {option.label}
+                </TabsTrigger>
+              ))}
             </TabsList>
             <div className="ml-auto flex items-center gap-2">
               <DropdownMenu>
