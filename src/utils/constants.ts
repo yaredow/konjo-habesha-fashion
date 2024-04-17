@@ -112,3 +112,16 @@ export const PRODUCT_STATUS_OPTIONS = [
 ];
 
 export const AVAILABLE_CATEGORIRES = ["Male", "Female", "Kids"];
+
+export const AVAILABLE_DELIVARY_STATUS = [
+  { label: "All", value: "all" },
+  { label: "Pending", value: "pending" },
+  { label: "Shipped", value: "shipped" },
+  { label: "Delivered", value: "delivered" },
+];
+
+export const ORDER_DURATION = [
+  { label: "Week", value: "week" },
+  { label: "Month", value: "month" },
+  { label: "Year", value: "year" },
+];

@@ -51,6 +51,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
 import React from "react";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+
+export type FetchProductstype = {
+  products: Product[];
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
 
 export default function page() {
   const [isClient, setIsClient] = React.useState(false);
@@ -201,41 +210,41 @@ export default function page() {
                                   Edit
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem>
-                                  <AlertDialog>
-                                    <AlertDialogTrigger
-                                      onClick={(e) => {
-                                        e.stopPropagation();
+                                <AlertDialog>
+                                  <AlertDialogTrigger>
+                                    <DropdownMenuItem
+                                      onSelect={(e) => {
+                                        e.preventDefault();
                                       }}
                                     >
                                       Delete
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                          Are you absolutely sure?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                          This action cannot be undone. This
-                                          will permanently delete the product.
-                                        </AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                          Cancel
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleProductDelete(product._id);
-                                          }}
-                                        >
-                                          Continue
-                                        </AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
-                                </DropdownMenuItem>
+                                    </DropdownMenuItem>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>
+                                        Are you absolutely sure?
+                                      </AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete the product.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>
+                                        Cancel
+                                      </AlertDialogCancel>
+                                      <AlertDialogAction
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleProductDelete(product._id);
+                                        }}
+                                      >
+                                        Continue
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>

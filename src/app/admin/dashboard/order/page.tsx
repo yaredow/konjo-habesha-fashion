@@ -63,9 +63,9 @@ import {
 import { deleteOrderAction } from "@/server/actions/order/deleteOrderAction";
 import { toast } from "@/components/ui/use-toast";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
-import { Dialog } from "@radix-ui/react-dialog";
+import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
 
-type FetchOrderType = {
+export type FetchOrderType = {
   orders: Order[];
   isFetched: boolean;
   refetch: (
@@ -73,12 +73,20 @@ type FetchOrderType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
+type FilterType = {
+  delivery_status: string;
+  createdOn: string;
+};
+
 function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
   const [isSelected, setIsSelected] = React.useState<boolean>(false);
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
+  const [filter, setFilter] = React.useState<FilterType | null>(null);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   const { orders = [], isFetched, refetch }: FetchOrderType = useGetOrders();
+
+  console.log(filter);
 
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);
@@ -106,6 +114,7 @@ function page() {
   React.useEffect(() => {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
+      setFilter({ delivery_status: "all", createdOn: "week" });
     }
     setIsClient(true);
   }, [orders, isSelected]);
@@ -118,10 +127,9 @@ function page() {
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
           <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
             <CardHeader className="pb-3">
-              <CardTitle>Your Orders</CardTitle>
+              <CardTitle>Create an order</CardTitle>
               <CardDescription className="max-w-lg text-balance leading-relaxed">
-                Introducing Our Dynamic Orders Dashboard for Seamless Management
-                and Insightful Analysis.
+                Click the button below to create a new order
               </CardDescription>
             </CardHeader>
             <CardFooter>
@@ -157,7 +165,15 @@ function page() {
             </CardFooter>
           </Card>
         </div>
-        <Tabs defaultValue="week">
+        <Tabs
+          defaultValue={filter?.createdOn}
+          onValueChange={(value) => {
+            setFilter((prev) => ({
+              ...(prev as FilterType),
+              createdOn: value,
+            }));
+          }}
+        >
           <div className="flex items-center">
             <TabsList>
               <TabsTrigger value="week">Week</TabsTrigger>
@@ -179,11 +195,20 @@ function page() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
+                  {AVAILABLE_DELIVARY_STATUS.map((option, index) => (
+                    <DropdownMenuCheckboxItem
+                      onClick={() => {
+                        setFilter((prev) => ({
+                          ...(prev as FilterType),
+                          delivery_status: option.value,
+                        }));
+                      }}
+                      defaultValue={filter?.delivery_status}
+                      checked={filter?.delivery_status === option.value}
+                    >
+                      {option.label}
+                    </DropdownMenuCheckboxItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
               {/* <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
@@ -242,7 +267,7 @@ function page() {
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             <Badge className="text-xs" variant="secondary">
-                              {order.payment_status}
+                              {order.delivery_status}
                             </Badge>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -265,7 +290,7 @@ function page() {
       {/* Order details */}
       <div>
         <Card
-          className="sticky top-16 z-50 overflow-hidden"
+          className="sticky top-16 overflow-hidden"
           x-chunk="dashboard-05-chunk-4"
         >
           <CardHeader className="flex flex-row items-start bg-muted/50">
