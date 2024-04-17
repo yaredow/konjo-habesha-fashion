@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 type Product = {
   productId: string;
   name: string;
@@ -23,6 +25,7 @@ type Shipping = {
 };
 
 type Order = {
+  _id: string;
   userId: string;
   customerId: string;
   paymentIntentId?: string;

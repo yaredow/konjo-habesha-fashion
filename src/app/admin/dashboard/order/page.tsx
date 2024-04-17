@@ -49,15 +49,27 @@ import useGetOrders from "@/utils/hook/useGetOrders";
 import Spinner from "@/components/Spinner";
 import React from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
+import { cn } from "@/utils/cn";
+import compareObject from "@/utils/compareObjects";
+import { Order } from "@/types/order";
 
 function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
+  const [isSelected, setIsSelected] = React.useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   const { orders = [], isFetched } = useGetOrders();
-  console.log(orders);
+
+  const handleOrderClick = (order: Order) => {
+    setSelectedOrder(order);
+    setIsSelected(true);
+  };
 
   React.useEffect(() => {
+    if (orders.length > 0) {
+      setSelectedOrder(orders[0]);
+    }
     setIsClient(true);
-  }, []);
+  }, [orders, isSelected]);
 
   if (!isClient) return null;
 
@@ -171,7 +183,13 @@ function page() {
                       <Spinner className=" flex items-center justify-center" />
                     ) : (
                       orders.map((order: Order) => (
-                        <TableRow className="bg-accent">
+                        <TableRow
+                          onClick={() => handleOrderClick(order)}
+                          className={cn({
+                            "bg-accent":
+                              selectedOrder && selectedOrder._id === order._id,
+                          })}
+                        >
                           <TableCell>
                             <div className="font-medium">
                               {order.shipping.name}
@@ -204,12 +222,14 @@ function page() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Order details */}
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                Order Oe31b70H
+                {`Order ${selectedOrder?._id}`}
                 <Button
                   size="icon"
                   variant="outline"
@@ -219,15 +239,9 @@ function page() {
                   <span className="sr-only">Copy Order ID</span>
                 </Button>
               </CardTitle>
-              <CardDescription>Date: November 23, 2023</CardDescription>
+              <CardDescription>{`Date: ${formatDate(selectedOrder?.createdAt)}`}</CardDescription>
             </div>
             <div className="ml-auto flex items-center gap-1">
-              <Button size="sm" variant="outline" className="h-8 gap-1">
-                <Truck className="h-3.5 w-3.5" />
-                <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                  Track Order
-                </span>
-              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" variant="outline" className="h-8 w-8">
