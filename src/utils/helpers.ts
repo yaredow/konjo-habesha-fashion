@@ -6,6 +6,10 @@ export function formatCurrency(value: any, currency = "USD") {
 }
 
 export function formatDate(dateStr: any) {
+  if (!dateStr || isNaN(new Date(dateStr).getTime())) {
+    console.error("Invalid date string:", dateStr);
+    return "Invalid Date";
+  }
   return new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "short",

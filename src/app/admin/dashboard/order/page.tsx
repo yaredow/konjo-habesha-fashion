@@ -26,10 +26,8 @@ import {
   ChevronRight,
   Copy,
   CreditCard,
-  File,
   ListFilter,
   MoreVertical,
-  Truck,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -50,22 +48,59 @@ import Spinner from "@/components/Spinner";
 import React from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
-import compareObject from "@/utils/compareObjects";
 import { Order } from "@/types/order";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteOrderAction } from "@/server/actions/order/deleteOrderAction";
+import { toast } from "@/components/ui/use-toast";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+
+type FetchOrderType = {
+  orders: Order[];
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
 
 function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
   const [isSelected, setIsSelected] = React.useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
-  const { orders = [], isFetched } = useGetOrders();
+  const { orders = [], isFetched, refetch }: FetchOrderType = useGetOrders();
 
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);
     setIsSelected(true);
   };
 
+  const handleDeleteOrderClick = async (id: string) => {
+    const result = await deleteOrderAction(id);
+
+    if (result?.success === true) {
+      toast({
+        description: result.message,
+      });
+      refetch();
+    } else {
+      toast({
+        variant: "destructive",
+        description: "There was an error deleting the order",
+      });
+    }
+  };
+
   React.useEffect(() => {
-    if (orders.length > 0) {
+    if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
     }
     setIsClient(true);
@@ -147,10 +182,10 @@ function page() {
                   <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+              {/* <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
                 <File className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <TabsContent value="week">
@@ -225,7 +260,10 @@ function page() {
 
       {/* Order details */}
       <div>
-        <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
+        <Card
+          className="sticky top-16 z-50 overflow-hidden"
+          x-chunk="dashboard-05-chunk-4"
+        >
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
@@ -239,7 +277,9 @@ function page() {
                   <span className="sr-only">Copy Order ID</span>
                 </Button>
               </CardTitle>
-              <CardDescription>{`Date: ${formatDate(selectedOrder?.createdAt)}`}</CardDescription>
+              <CardDescription>
+                {`Date: ${formatDate(selectedOrder?.createdAt!)}`}
+              </CardDescription>
             </div>
             <div className="ml-auto flex items-center gap-1">
               <DropdownMenu>
@@ -251,47 +291,74 @@ function page() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Export</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Trash</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <AlertDialog>
+                      <AlertDialogTrigger
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        Trash
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the order details.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteOrderClick(
+                                selectedOrder?._id as string,
+                              );
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </CardHeader>
+
+          {/* Order details  */}
           <CardContent className="p-6 text-sm">
             <div className="grid gap-3">
               <div className="font-semibold">Order Details</div>
               <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Glimmer Lamps x <span>2</span>
-                  </span>
-                  <span>$250.00</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Aqua Filters x <span>1</span>
-                  </span>
-                  <span>$49.00</span>
-                </li>
+                {selectedOrder?.products.map((product, index) => (
+                  <li key={index} className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {` ${product.name} ${product.quantity === 1 ? "" : product.quantity}`}
+                    </span>
+                    <span>$250.00</span>
+                  </li>
+                ))}
               </ul>
               <Separator className="my-2" />
               <ul className="grid gap-3">
                 <li className="flex items-center justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>$299.00</span>
+                  <span>{formatCurrency(selectedOrder?.subtotal)}</span>
                 </li>
                 <li className="flex items-center justify-between">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>$5.00</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Tax</span>
-                  <span>$25.00</span>
+                  <span>free</span>
                 </li>
                 <li className="flex items-center justify-between font-semibold">
                   <span className="text-muted-foreground">Total</span>
-                  <span>$329.00</span>
+                  <span>{formatCurrency(selectedOrder?.subtotal)}</span>
                 </li>
               </ul>
             </div>
@@ -300,9 +367,9 @@ function page() {
               <div className="grid gap-3">
                 <div className="font-semibold">Shipping Information</div>
                 <address className="grid gap-0.5 not-italic text-muted-foreground">
-                  <span>Liam Johnson</span>
-                  <span>1234 Main St.</span>
-                  <span>Anytown, CA 12345</span>
+                  <span>{selectedOrder?.shipping.name}</span>
+                  <span>{`${selectedOrder?.shipping.address.city}`}</span>
+                  <span>{`${selectedOrder?.shipping.address.line1}`}</span>
                 </address>
               </div>
               <div className="grid auto-rows-max gap-3">
@@ -318,18 +385,18 @@ function page() {
               <dl className="grid gap-3">
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Customer</dt>
-                  <dd>Liam Johnson</dd>
+                  <dd>{selectedOrder?.shipping.name}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Email</dt>
                   <dd>
-                    <a href="mailto:">liam@acme.com</a>
+                    <a href="mailto:">{selectedOrder?.shipping.email}</a>
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Phone</dt>
                   <dd>
-                    <a href="tel:">+1 234 567 890</a>
+                    <a href="tel:">{selectedOrder?.shipping.phone}</a>
                   </dd>
                 </div>
               </dl>
@@ -350,7 +417,10 @@ function page() {
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
             <div className="text-xs text-muted-foreground">
-              Updated <time dateTime="2023-11-23">November 23, 2023</time>
+              Updated{" "}
+              <time dateTime="2023-11-23">
+                {formatDate(selectedOrder?.createdAt)}
+              </time>
             </div>
             <Pagination className="ml-auto mr-0 w-auto">
               <PaginationContent>
