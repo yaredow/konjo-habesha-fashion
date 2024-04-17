@@ -63,6 +63,7 @@ import {
 import { deleteOrderAction } from "@/server/actions/order/deleteOrderAction";
 import { toast } from "@/components/ui/use-toast";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import { Dialog } from "@radix-ui/react-dialog";
 
 type FetchOrderType = {
   orders: Order[];
@@ -75,6 +76,7 @@ type FetchOrderType = {
 function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
   const [isSelected, setIsSelected] = React.useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   const { orders = [], isFetched, refetch }: FetchOrderType = useGetOrders();
 
@@ -84,12 +86,14 @@ function page() {
   };
 
   const handleDeleteOrderClick = async (id: string) => {
+    setIsDeleting(true);
     const result = await deleteOrderAction(id);
 
     if (result?.success === true) {
       toast({
         description: result.message,
       });
+      setIsDeleting(false);
       refetch();
     } else {
       toast({
@@ -283,7 +287,7 @@ function page() {
             </div>
             <div className="ml-auto flex items-center gap-1">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger>
                   <Button size="icon" variant="outline" className="h-8 w-8">
                     <MoreVertical className="h-3.5 w-3.5" />
                     <span className="sr-only">More</span>
@@ -292,41 +296,42 @@ function page() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <AlertDialog>
-                      <AlertDialogTrigger
-                        onClick={(e) => {
-                          e.stopPropagation();
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem
+                        onSelect={(e) => {
+                          e.preventDefault();
                         }}
                       >
-                        Trash
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete the order details.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteOrderClick(
-                                selectedOrder?._id as string,
-                              );
-                            }}
-                          >
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </DropdownMenuItem>
+                        Delete
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the order details.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          disabled={isDeleting}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteOrderClick(
+                              selectedOrder?._id as string,
+                            );
+                          }}
+                        >
+                          {isDeleting ? "Deleting..." : "Delete"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
