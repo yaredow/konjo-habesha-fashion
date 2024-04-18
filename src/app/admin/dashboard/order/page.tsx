@@ -45,7 +45,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useGetOrders from "@/utils/hook/useGetOrders";
 import Spinner from "@/components/Spinner";
-import React from "react";
+import React, { useCallback } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
 import { Order } from "@/types/order";
@@ -64,6 +64,7 @@ import { deleteOrderAction } from "@/server/actions/order/deleteOrderAction";
 import { toast } from "@/components/ui/use-toast";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
+import { debounce } from "lodash";
 
 export type FetchOrderType = {
   orders: Order[];
@@ -75,7 +76,7 @@ export type FetchOrderType = {
 
 export type FilterType = {
   delivery_status: string;
-  createdOn: string;
+  time_range: string;
 };
 
 function page() {
@@ -114,10 +115,14 @@ function page() {
     }
   };
 
+  const onSubmit = () => refetch();
+  const debouncedSubmit = debounce(onSubmit, 400);
+  const _debouncedSubmit = useCallback(debouncedSubmit, []);
+
   React.useEffect(() => {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
-      setFilter({ delivery_status: "all", createdOn: "week" });
+      setFilter({ delivery_status: "all", time_range: "week" });
     }
     setIsClient(true);
   }, [orders, isSelected]);
@@ -169,12 +174,13 @@ function page() {
           </Card>
         </div>
         <Tabs
-          value={filter?.createdOn}
+          value={filter?.time_range}
           onValueChange={(value) => {
             setFilter((prev) => ({
               ...(prev as FilterType),
               createdOn: value,
             }));
+            _debouncedSubmit();
           }}
         >
           <div className="flex items-center">
@@ -207,6 +213,8 @@ function page() {
                           ...(prev as FilterType),
                           delivery_status: option.value,
                         }));
+
+                        _debouncedSubmit();
                       }}
                       defaultValue={filter?.delivery_status}
                       checked={filter?.delivery_status === option.value}
