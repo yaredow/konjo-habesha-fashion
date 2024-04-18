@@ -123,16 +123,6 @@ function page() {
     }
   };
 
-  // function to display sells stats
-  const displayTotalSales = async () => {
-    const weeklySales = await calculateTotalSales("week");
-    setWeeklyTotalSales(weeklySales);
-
-    const monthlySales = await calculateTotalSales("monthly");
-    setMonthlyTotalSales(monthlySales);
-  };
-  displayTotalSales();
-
   // Limiting the request that will be send to the server
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
@@ -143,6 +133,16 @@ function page() {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
     }
+
+    const displayTotalSales = async () => {
+      const weeklySales = await calculateTotalSales("week");
+      setWeeklyTotalSales(weeklySales);
+
+      const monthlySales = await calculateTotalSales("monthly");
+      setMonthlyTotalSales(monthlySales);
+    };
+
+    displayTotalSales();
     setIsClient(true);
   }, [orders, isSelected]);
 
