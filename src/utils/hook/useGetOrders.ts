@@ -5,8 +5,8 @@ import axios from "axios";
 async function fetchOrder(filter: FilterType) {
   const { data } = await axios.post("http://localhost:3000/api/order", {
     filter: {
-      delivery_status: filter.delivery_status,
-      createdOn: filter.time_range,
+      delivery_status: filter.delivery_status || null,
+      time_range: filter.time_range,
     },
   });
 

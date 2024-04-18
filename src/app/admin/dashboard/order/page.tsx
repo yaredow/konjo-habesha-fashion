@@ -48,6 +48,7 @@ import React, { useCallback } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
 import { Order } from "@/types/order";
+import _ from "lodash";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,6 +66,7 @@ import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
 import { debounce } from "lodash";
 import Spinner from "@/components/Spinner";
+import { calculateTotalSales } from "@/utils/hook/calculateTotalSales";
 
 export type FetchOrderType = {
   orders: Order[];
@@ -75,7 +77,7 @@ export type FetchOrderType = {
 };
 
 export type FilterType = {
-  delivery_status: string;
+  delivery_status?: string;
   time_range: string;
 };
 
@@ -83,12 +85,14 @@ function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
   const [isSelected, setIsSelected] = React.useState<boolean>(false);
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
+  const [monthlyTotalSales, setMonthlyTotalSales] = React.useState<number>(0);
+  const [weeklyTotalSales, setWeeklyTotalSales] = React.useState<number>(0);
   const [filter, setFilter] = React.useState<FilterType | null>({
     delivery_status: "all",
     time_range: "week",
   });
+
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
-  console.log(filter);
 
   const {
     orders = [],
@@ -119,10 +123,22 @@ function page() {
     }
   };
 
+  // function to display sells stats
+  const displayTotalSales = async () => {
+    const weeklySales = await calculateTotalSales("week");
+    setWeeklyTotalSales(weeklySales);
+
+    const monthlySales = await calculateTotalSales("monthly");
+    setMonthlyTotalSales(monthlySales);
+  };
+  displayTotalSales();
+
+  // Limiting the request that will be send to the server
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
   const _debouncedSubmit = useCallback(debouncedSubmit, []);
 
+  // hydration error handling effetct and more
   React.useEffect(() => {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
@@ -150,7 +166,7 @@ function page() {
           <Card x-chunk="dashboard-05-chunk-1">
             <CardHeader className="pb-2">
               <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
+              <CardTitle className="text-4xl">{`$${weeklyTotalSales}`}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -164,7 +180,7 @@ function page() {
           <Card x-chunk="dashboard-05-chunk-2">
             <CardHeader className="pb-2">
               <CardDescription>This Month</CardDescription>
-              <CardTitle className="text-4xl">$5,329</CardTitle>
+              <CardTitle className="text-4xl">{`$${monthlyTotalSales}`}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
