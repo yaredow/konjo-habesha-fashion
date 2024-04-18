@@ -44,7 +44,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useGetOrders from "@/utils/hook/useGetOrders";
-import Spinner from "@/components/Spinner";
 import React, { useCallback } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
@@ -65,6 +64,7 @@ import { toast } from "@/components/ui/use-toast";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
 import { debounce } from "lodash";
+import Spinner from "@/components/Spinner";
 
 export type FetchOrderType = {
   orders: Order[];
@@ -83,7 +83,10 @@ function page() {
   const [isClient, setIsClient] = React.useState<boolean>(false);
   const [isSelected, setIsSelected] = React.useState<boolean>(false);
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
-  const [filter, setFilter] = React.useState<FilterType | null>(null);
+  const [filter, setFilter] = React.useState<FilterType | null>({
+    delivery_status: "all",
+    time_range: "week",
+  });
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   console.log(filter);
 
@@ -124,7 +127,6 @@ function page() {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
     }
-    setFilter({ delivery_status: "all", time_range: "week" });
     setIsClient(true);
   }, [orders, isSelected]);
 
@@ -264,7 +266,7 @@ function page() {
                   </TableHeader>
                   <TableBody>
                     {!isFetched ? (
-                      <Spinner className=" flex items-center justify-center" />
+                      <Spinner className=" flex min-h-[50vh] items-center justify-center" />
                     ) : (
                       orders.map((order: Order) => (
                         <TableRow
@@ -344,7 +346,7 @@ function page() {
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <DropdownMenuItem
-                        onSelect={(e) => {
+                        onSelect={(e: any) => {
                           e.preventDefault();
                         }}
                       >
@@ -386,6 +388,7 @@ function page() {
           <CardContent className="p-6 text-sm">
             <div className="grid gap-3">
               <div className="font-semibold">Order Details</div>
+
               <ul className="grid gap-3">
                 {selectedOrder?.products.map((product, index) => (
                   <li key={index} className="flex items-center justify-between">
