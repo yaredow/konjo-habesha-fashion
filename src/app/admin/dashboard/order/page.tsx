@@ -85,6 +85,7 @@ function page() {
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const [filter, setFilter] = React.useState<FilterType | null>(null);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
+  console.log(filter);
 
   const {
     orders = [],
@@ -122,8 +123,8 @@ function page() {
   React.useEffect(() => {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
-      setFilter({ delivery_status: "all", time_range: "week" });
     }
+    setFilter({ delivery_status: "all", time_range: "week" });
     setIsClient(true);
   }, [orders, isSelected]);
 
@@ -178,7 +179,7 @@ function page() {
           onValueChange={(value) => {
             setFilter((prev) => ({
               ...(prev as FilterType),
-              createdOn: value,
+              time_range: value,
             }));
             _debouncedSubmit();
           }}
@@ -208,6 +209,7 @@ function page() {
                   <DropdownMenuSeparator />
                   {AVAILABLE_DELIVARY_STATUS.map((option, index) => (
                     <DropdownMenuCheckboxItem
+                      key={index}
                       onClick={() => {
                         setFilter((prev) => ({
                           ...(prev as FilterType),
@@ -230,7 +232,7 @@ function page() {
               </Button> */}
             </div>
           </div>
-          <TabsContent value="week">
+          <TabsContent value={filter?.time_range as string}>
             <Card x-chunk="dashboard-05-chunk-3">
               <CardHeader className="px-7">
                 <CardTitle>Orders</CardTitle>

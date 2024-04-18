@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (startDate && endDate) {
-      filter.add("createdAt", { $gte: startDate, $lte: endDate });
+      filter.add("createdAt", { $gte: startDate, $lt: endDate });
     }
 
     const orders = await Order.find(filter.hasFilter() ? filter.get() : {});
