@@ -66,7 +66,7 @@ export default function RootLayout({
                 <CartProvider>
                   <div className=" flex flex-col">
                     <Header />
-                    <div className="flex items-center justify-center p-6">
+                    <div className="flex min-h-[90vh] items-center justify-center">
                       {children}
                     </div>
                     <Footer />

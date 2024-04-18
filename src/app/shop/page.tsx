@@ -122,7 +122,7 @@ function page() {
         </div>
       </div>
 
-      <section className=" flex flex-col items-center justify-center">
+      <section className=" flex min-w-[100vh] flex-col items-center justify-center">
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-4">
           {/* Desktop Filter */}
           <div className="hidden md:block">
@@ -134,7 +134,7 @@ function page() {
           </div>
 
           {/* Product grid */}
-          <ul className="grid grid-cols-1 gap-8 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3 ">
+          <ul className="grid  grid-cols-1 gap-8 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3 ">
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
