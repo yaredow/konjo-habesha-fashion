@@ -187,7 +187,11 @@ function page() {
           <div className="flex items-center">
             <TabsList>
               {ORDER_DURATION.map((option, index) => (
-                <TabsTrigger key={index} value={option.value}>
+                <TabsTrigger
+                  disabled={!isFetched}
+                  key={index}
+                  value={option.value}
+                >
                   {option.label}
                 </TabsTrigger>
               ))}
@@ -196,6 +200,7 @@ function page() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
+                    disabled={!isFetched}
                     variant="outline"
                     size="sm"
                     className="h-7 gap-1 text-sm"
@@ -241,7 +246,7 @@ function page() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
+                <Table className={`${!isFetched && "overflow-hidden"}`}>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Customer</TableHead>
