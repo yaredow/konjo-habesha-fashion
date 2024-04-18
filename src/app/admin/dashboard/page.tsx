@@ -33,14 +33,47 @@ import useGetOrders from "@/utils/hook/useGetOrders";
 import { FetchOrderType } from "./order/page";
 import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
+import useGetProducts from "@/utils/hook/useGetProducts";
+import { Product } from "@/types/product";
 
 export default function Dashboard() {
-  const { orders = [], isFetched, refetch }: FetchOrderType = useGetOrders();
+  const {
+    orders = [],
+    isFetched: isOrdersFetched,
+    refetch,
+  }: FetchOrderType = useGetOrders({
+    delivery_status: "",
+    time_range: "",
+  });
   const [isClient, setIsClient] = React.useState<boolean>(false);
+  const [totalRevenue, setTotalRevenue] = React.useState<number>(0);
+  const [activeProducts, setActiveProducts] = React.useState<number>(0);
+  const [totalNumberOfSales, setTotalNumberOfSales] = React.useState<number>(0);
+  const {
+    products = [],
+    isFetched: isProductsFetched,
+  }: { products: Product[]; isFetched: boolean } = useGetProducts();
 
   React.useEffect(() => {
+    if (isProductsFetched) {
+      const numberOfProducts = products.length;
+      setActiveProducts(numberOfProducts);
+      const totalSales = products.reduce(
+        (total, product) => total + product.unitsSold,
+        0,
+      );
+      setTotalNumberOfSales(totalSales);
+    }
+
+    if (isOrdersFetched) {
+      const revenue = orders.reduce(
+        (total, order) => total + order.subtotal,
+        0,
+      );
+      setTotalRevenue(revenue);
+    }
     setIsClient(true);
-  }, []);
+  }, [orders, products]);
 
   if (!isClient) return null;
 
@@ -56,23 +89,11 @@ export default function Dashboard() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
+              <div className="text-2xl font-bold">
+                {formatCurrency(totalRevenue)}
+              </div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Subscriptions
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
               </p>
             </CardContent>
           </Card>
@@ -82,7 +103,7 @@ export default function Dashboard() {
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
+              <div className="text-2xl font-bold">{`+${totalNumberOfSales}`}</div>
               <p className="text-xs text-muted-foreground">
                 +19% from last month
               </p>
@@ -94,7 +115,7 @@ export default function Dashboard() {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+573</div>
+              <div className="text-2xl font-bold">{`+${activeProducts}`}</div>
               <p className="text-xs text-muted-foreground">
                 +201 since last hour
               </p>
@@ -118,7 +139,7 @@ export default function Dashboard() {
               </Button>
             </CardHeader>
             <CardContent>
-              <Table>
+              <Table className={`${!isOrdersFetched && "overflow-hidden"}`}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Customer</TableHead>
@@ -135,7 +156,7 @@ export default function Dashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {!isFetched ? (
+                  {!isOrdersFetched ? (
                     <Spinner />
                   ) : (
                     orders.map((order) => (
@@ -174,7 +195,7 @@ export default function Dashboard() {
               <CardTitle>Recent Sales</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-8">
-              {!isFetched ? (
+              {!isOrdersFetched ? (
                 <Spinner />
               ) : (
                 orders.map((order) => (
