@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react";
+import { Shirt } from "lucide-react";
 
 import {
   CommandDialog,
@@ -22,9 +15,13 @@ import {
 } from "@/components/ui/command";
 import { Input } from "./ui/input";
 import { Search as SearchIcon } from "lucide-react";
+import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 
 export default function Search() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [query, setQuery] = React.useState<string>("");
+  const { isSearching, search } = useGetProductSearch(query);
+  console.log(query);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -38,11 +35,16 @@ export default function Search() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
   return (
     <>
       <div className="relative ml-auto hidden flex-1 md:block md:grow-0">
         <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
+          onChange={handleQueryChange}
           onClick={() => setOpen(true)}
           type="search"
           placeholder="Search for products..."
@@ -55,36 +57,19 @@ export default function Search() {
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
             <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
+              <Shirt className="mr-2 h-4 w-4" />
+              <span>Traditional male clothes</span>
             </CommandItem>
             <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
+              <Shirt className="mr-2 h-4 w-4" />
+              <span>Female new habesha dress</span>
             </CommandItem>
             <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
+              <Shirt className="mr-2 h-4 w-4" />
+              <span>Kids birthday outfit</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
         </CommandList>
       </CommandDialog>
     </>
