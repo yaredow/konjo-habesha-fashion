@@ -21,7 +21,6 @@ export default function Search() {
   const [open, setOpen] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>("");
   const { isSearching, search } = useGetProductSearch(query);
-  console.log(query);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
