@@ -23,6 +23,7 @@ export default function Search() {
   const { isSearching, search } = useGetProductSearch(query);
 
   React.useEffect(() => {
+    search();
     const down = (e: KeyboardEvent) => {
       if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
