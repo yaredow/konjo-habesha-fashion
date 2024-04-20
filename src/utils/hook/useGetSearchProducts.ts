@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { Product } from "@/types/product";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import React from "react";
 
 async function fetchSearchProducts(query: string) {
   const { data } = await axios.get(
@@ -10,15 +12,16 @@ async function fetchSearchProducts(query: string) {
 }
 
 export default function useGetProductSearch(query: string) {
-  const {
-    data: searchResults,
-    isFetched,
-    refetch,
-  } = useQuery({
-    queryKey: ["searchResults"],
-    queryFn: () => fetchSearchProducts(query),
-    enabled: query.trim() !== "",
+  const [results, setResults] = React.useState<Product[] | null>(null);
+  const queryClient = useQueryClient();
+
+  const { isPending, mutate: search } = useMutation({
+    mutationFn: () => fetchSearchProducts(query),
+    onSettled: (data, query) => {
+      queryClient.setQueryData(["searchResults", query], data);
+      setResults(data || []);
+    },
   });
 
-  return { searchResults, isFetched, refetch };
+  return { isPending, results, search };
 }
