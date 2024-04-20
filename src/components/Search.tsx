@@ -35,15 +35,14 @@ export default function Search() {
     refetch,
   }: SearchType = useGetProductSearch(query);
 
-  console.log(query);
+  if (isFetched) console.log(searchResults);
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
-  const _debouncedSubmit = React.useCallback(debouncedSubmit, [refetch]);
+  const _debouncedSubmit = React.useCallback(debouncedSubmit, []);
 
   const handleValueChange = (value: string) => {
     setQuery(value);
-    _debouncedSubmit();
   };
 
   React.useEffect(() => {
@@ -56,7 +55,7 @@ export default function Search() {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [query]);
+  }, []);
 
   return (
     <>
@@ -75,16 +74,18 @@ export default function Search() {
           placeholder="Search for products..."
         />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          {isFetched && searchResults && searchResults.length === 0 && (
+            <CommandEmpty>No results found.</CommandEmpty>
+          )}
           <CommandGroup heading="Suggestions">
-            {!isFetched ? (
-              <Spinner />
-            ) : (
+            {isFetched && searchResults.length > 0 ? (
               searchResults.map((result) => (
                 <CommandItem key={result._id}>
                   <span>{result.name}</span>
                 </CommandItem>
               ))
+            ) : (
+              <Spinner />
             )}
           </CommandGroup>
           <CommandSeparator />

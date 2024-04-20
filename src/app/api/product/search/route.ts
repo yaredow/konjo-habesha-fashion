@@ -3,8 +3,14 @@ import connectMongoDB from "@/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const url = new URL(request.url);
-  const text = url.searchParams.get("text");
+  const text = request.nextUrl.searchParams.get("text");
+
+  if (!text || text.trim() === "") {
+    return NextResponse.json(
+      { message: "Query cannot be empty" },
+      { status: 400 },
+    );
+  }
 
   try {
     await connectMongoDB();
