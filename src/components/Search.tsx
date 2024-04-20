@@ -11,7 +11,6 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
 import { Input } from "./ui/input";
 import { Search as SearchIcon } from "lucide-react";
@@ -21,6 +20,7 @@ export default function Search() {
   const [open, setOpen] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>("");
   const { isSearching, search } = useGetProductSearch(query);
+  console.log(query);
 
   React.useEffect(() => {
     search();
@@ -35,15 +35,19 @@ export default function Search() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+  const handleQueryChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(evt.target.value);
   };
+
+  // React.useEffect(() => {
+  //   console.log(query);
+  // }, [query]);
 
   return (
     <>
       <div className="relative ml-auto hidden flex-1 md:block md:grow-0">
         <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
+        <input
           onChange={handleQueryChange}
           onClick={() => setOpen(true)}
           type="search"
