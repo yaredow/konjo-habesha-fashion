@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -11,7 +10,6 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { Input } from "./ui/input";
 import { Search as SearchIcon } from "lucide-react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { UseMutateFunction } from "@tanstack/react-query";
@@ -19,7 +17,6 @@ import Spinner from "./Spinner";
 import { Product } from "@/types/product";
 import Image from "next/image";
 import { debounce } from "lodash";
-import { cn } from "@/utils/cn";
 import { Button } from "./ui/button";
 
 type SearchType = {
@@ -39,12 +36,13 @@ export default function Search() {
 
   const handleValueChange = (value: string) => {
     setQuery(value);
-    _debouncedSearch();
   };
+
+  console.log(isPending);
 
   React.useEffect(() => {
     if (query.trim()) {
-      search();
+      _debouncedSearch();
     }
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -55,7 +53,7 @@ export default function Search() {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [query]);
 
   return (
     <>
@@ -83,21 +81,25 @@ export default function Search() {
           )}
 
           <CommandGroup className="">
-            {results?.map((result) => (
-              <CommandItem
-                className=" flex flex-row gap-4"
-                value={result._id}
-                key={result._id}
-              >
-                <Image
-                  height={40}
-                  width={40}
-                  src={result.images[0].url}
-                  alt={result.images[0].public_id}
-                />
-                <span>{result.name}</span>
-              </CommandItem>
-            ))}
+            {isPending && results?.length === 0 ? (
+              <Spinner />
+            ) : (
+              results?.map((result) => (
+                <CommandItem
+                  className=" flex flex-row gap-4"
+                  value={result._id}
+                  key={result._id}
+                >
+                  <Image
+                    height={40}
+                    width={40}
+                    src={result.images[0].url}
+                    alt={result.images[0].public_id}
+                  />
+                  <span>{result.name}</span>
+                </CommandItem>
+              ))
+            )}
           </CommandGroup>
           <CommandSeparator />
         </CommandList>
