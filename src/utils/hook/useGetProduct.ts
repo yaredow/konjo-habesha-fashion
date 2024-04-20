@@ -7,7 +7,7 @@ async function fetchProduct(id: string) {
   return data;
 }
 
-function useGetProduct(id: string) {
+export default function useGetProduct(id: string) {
   const {
     data: responseData,
     isFetched,
@@ -21,5 +21,3 @@ function useGetProduct(id: string) {
 
   return { product, isFetched, refetch };
 }
-
-export default useGetProduct;

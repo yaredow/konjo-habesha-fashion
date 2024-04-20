@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
-  const query = url.searchParams.get("query");
+  const text = url.searchParams.get("text");
 
   try {
     await connectMongoDB();
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         $search: {
           index: "Search-text",
           text: {
-            query: query,
+            query: text,
             path: {
               wildcard: "*",
             },
