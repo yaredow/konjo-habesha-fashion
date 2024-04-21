@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/lib/context/CartContext";
 import useGetProduct from "@/utils/hook/useGetProduct";
 import useAddToCart from "@/utils/hook/useAddToCart";
 import { Separator } from "@/components/ui/separator";
@@ -17,7 +15,6 @@ import {
   ThumbsUpIcon,
   UserIcon,
 } from "lucide-react";
-import { CornerDownLeft, Mic, Paperclip } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,16 +31,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Product } from "@/types/product";
 import ImageUploader from "@/components/ImageUploader";
+import { cn } from "@/utils/cn";
+
+type CartFilter = {
+  size: string;
+  quantity: number;
+};
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [files, setFiles] = React.useState<File[] | null>(null);
+  const [cartFilter, setCartFilter] = React.useState<CartFilter>({
+    size: "S",
+    quantity: 1,
+  });
+
+  console.log(cartFilter);
+
   const { id } = params;
   const { product = {}, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
-  let url, altTextx;
-
-  console.log(product);
 
   const { handleAddToCart } = useAddToCart(product);
 
@@ -114,7 +121,12 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   <button
                     onClick={() => handleThumbnailClick(index)}
                     key={index}
-                    className="overflow-hidden rounded-lg border transition-colors hover:border-gray-900 dark:hover:border-gray-50"
+                    className={cn(
+                      "overflow-hidden rounded-lg border transition-colors hover:border-gray-900 dark:hover:border-gray-50",
+                      {
+                        "opacity-60": index === selectedPhotoIndex,
+                      },
+                    )}
                   >
                     <img
                       alt={image.public_id}
@@ -187,7 +199,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   </Label>
                   <RadioGroup
                     className="flex items-center gap-2"
-                    defaultValue="m"
+                    defaultValue={cartFilter.size}
                     id="size"
                   >
                     {product.sizes.map((size, index) => (
@@ -196,7 +208,17 @@ function ProductDetail({ params }: { params: { id: string } }) {
                         className="flex cursor-pointer items-center gap-2 rounded-md border p-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
                         htmlFor="size-s"
                       >
-                        <RadioGroupItem id={size} value={size} />
+                        <RadioGroupItem
+                          onClick={() => {
+                            setCartFilter((prev) => ({
+                              ...(prev as CartFilter),
+                              size: size,
+                            }));
+                          }}
+                          checked={size === cartFilter.size}
+                          id={size}
+                          value={size}
+                        />
                         {size.toLocaleUpperCase()}
                       </Label>
                     ))}
@@ -235,7 +257,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
               <div className=" mt-4">{product.description}</div>
             </TabsContent>
             <TabsContent value="Reviews">
-              <div className="mx-auto max-w-2xl px-4 py-8 md:px-6">
+              <div className="max-w-2xl px-4 py-8 md:px-6">
                 <div className="grid gap-6">
                   <div>
                     <h2 className="text-2xl font-bold">Leave a Review</h2>
