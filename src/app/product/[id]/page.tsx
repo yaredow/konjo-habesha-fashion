@@ -66,6 +66,8 @@ function ProductDetail({ params }: { params: { id: string } }) {
     setSelectedPhotoIndex(index);
   };
 
+  console.log(cartFilter);
+
   React.useEffect(() => {
     if (isFetched && product) {
       setCartFilter({
@@ -238,16 +240,24 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   <Label className="text-base" htmlFor="quantity">
                     Quantity
                   </Label>
-                  <Select defaultValue="1">
+                  <Select
+                    onValueChange={(value) => {
+                      setCartFilter((prev) => ({
+                        ...(prev as CartItem),
+                        quantity: Number(value),
+                      }));
+                    }}
+                    defaultValue={cartFilter?.quantity.toString()}
+                  >
                     <SelectTrigger className="w-24">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                      <SelectItem value="4">4</SelectItem>
-                      <SelectItem value="5">5</SelectItem>
+                      {Array.from({ length: 8 }).map((_, index) => (
+                        <SelectItem value={(index + 1).toString()}>
+                          {index + 1}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -289,13 +299,21 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid gap-2">
                         <Label htmlFor="rating">Rating</Label>
-                        <Select defaultValue="3" id="rating">
+                        <Select
+                          onValueChange={(value) => {
+                            setCartFilter((prev) => ({
+                              ...(prev as CartItem),
+                              quantity: Number(value),
+                            }));
+                          }}
+                          defaultValue={cartFilter?.quantity.toString()}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select rating" />
                           </SelectTrigger>
                           <SelectContent>
                             {Array.from({ length: 8 }).map((_, index) => (
-                              <SelectItem value={index + 1}>
+                              <SelectItem value={(index + 1).toString()}>
                                 {index + 1}
                               </SelectItem>
                             ))}
