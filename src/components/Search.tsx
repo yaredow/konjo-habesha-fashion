@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { Search as SearchIcon } from "lucide-react";
+import { ArrowRight, Search as SearchIcon } from "lucide-react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { UseMutateFunction } from "@tanstack/react-query";
 import Spinner from "./Spinner";
@@ -18,6 +18,7 @@ import { Product } from "@/types/product";
 import Image from "next/image";
 import { debounce } from "lodash";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 type SearchType = {
   results: Product[] | null;
@@ -28,6 +29,7 @@ type SearchType = {
 export default function Search() {
   const [open, setOpen] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>("");
+  const router = useRouter();
 
   const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
@@ -36,6 +38,13 @@ export default function Search() {
 
   const handleValueChange = (value: string) => {
     setQuery(value);
+    setOpen(!!value);
+    _debouncedSearch();
+  };
+
+  const handleSearchItemSelect = (id: string) => {
+    router.replace(`/product/${id}`);
+    setOpen(false);
   };
 
   console.log(isPending);
@@ -44,15 +53,6 @@ export default function Search() {
     if (query.trim()) {
       _debouncedSearch();
     }
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
-    };
-
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
   }, [query]);
 
   return (
@@ -81,11 +81,12 @@ export default function Search() {
           )}
 
           <CommandGroup className="">
-            {isPending && results?.length === 0 ? (
+            {isPending ? (
               <Spinner />
             ) : (
-              results?.map((result) => (
+              results?.slice(0, 6).map((result) => (
                 <CommandItem
+                  onSelect={() => handleSearchItemSelect(result._id)}
                   className=" flex flex-row gap-4"
                   value={result._id}
                   key={result._id}
