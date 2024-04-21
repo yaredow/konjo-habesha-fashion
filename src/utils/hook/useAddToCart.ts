@@ -1,17 +1,28 @@
 import { toast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
-import { CartItem, Product } from "../../../types/product";
-export default function useAddToCart(product: Product) {
+import { CartItem, Product } from "@/types/product";
+
+export default function useAddToCart(cartFilter: CartItem) {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(getCart);
-  const { images, _id, sizes, name, category, price } = product;
+
+  if (cartFilter === null) {
+    toast({
+      variant: "destructive",
+      description: "Product details are not ready yet",
+    });
+    return;
+  }
+
+  const { _id, size, images, name, category, price } = cartFilter;
+
   const handleAddToCart = () => {
-    const isProductInCart = cart.some((it) => it._id === _id);
+    const isProductInCart = cart.some((item: CartItem) => item._id === _id);
 
     const newProduct: CartItem = {
       _id,
-      sizes,
+      size,
       images,
       name,
       category,

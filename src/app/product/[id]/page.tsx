@@ -9,7 +9,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   BoxIcon,
   PackageIcon,
-  Star,
   StarIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
@@ -29,42 +28,53 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Product } from "@/types/product";
+import { CartItem, Product } from "@/types/product";
 import ImageUploader from "@/components/ImageUploader";
 import { cn } from "@/utils/cn";
-
-type CartFilter = {
-  size: string;
-  quantity: number;
-};
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addItem, getCart } from "@/store/slices/cartSlice";
+import { toast } from "@/components/ui/use-toast";
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [files, setFiles] = React.useState<File[] | null>(null);
-  const [cartFilter, setCartFilter] = React.useState<CartFilter>({
-    size: "S",
-    quantity: 1,
-  });
-
-  console.log(cartFilter);
-
+  const [cartFilter, setCartFilter] = React.useState<CartItem | null>(null);
   const { id } = params;
-  const { product = {}, isFetched }: { product: Product; isFetched: boolean } =
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(getCart);
+
+  const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
 
-  const { handleAddToCart } = useAddToCart(product);
+  const handleAddToCart = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    const isProductInCart = cart.some(
+      (item: CartItem) => item._id === cartFilter?._id,
+    );
 
-  function handleAddToCartClick() {
-    if (!product?.inStock) {
-      console.log("The item is out of stock");
-      return;
+    if (!isProductInCart && isFetched) {
+      dispatch(addItem(cartFilter as CartItem));
+    } else {
+      toast({
+        variant: "destructive",
+        description: "Item already exists",
+      });
     }
-    handleAddToCart();
-  }
+  };
 
   const handleThumbnailClick = (index: any) => {
     setSelectedPhotoIndex(index);
   };
+
+  React.useEffect(() => {
+    if (isFetched && product) {
+      setCartFilter({
+        ...product,
+        quantity: 1,
+        size: product.sizes[0],
+      });
+    }
+  }, [isFetched, product]);
 
   if (!isFetched) return <Spinner />;
 
@@ -199,7 +209,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   </Label>
                   <RadioGroup
                     className="flex items-center gap-2"
-                    defaultValue={cartFilter.size}
+                    defaultValue={cartFilter?.size}
                     id="size"
                   >
                     {product.sizes.map((size, index) => (
@@ -211,11 +221,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
                         <RadioGroupItem
                           onClick={() => {
                             setCartFilter((prev) => ({
-                              ...(prev as CartFilter),
+                              ...(prev as CartItem),
                               size: size,
                             }));
                           }}
-                          checked={size === cartFilter.size}
+                          checked={size === cartFilter?.size}
                           id={size}
                           value={size}
                         />
@@ -241,7 +251,9 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button size="lg">Add to cart</Button>
+                <Button onClick={handleAddToCart} size="lg">
+                  Add to cart
+                </Button>
               </form>
             </div>
           </div>
@@ -282,11 +294,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
                             <SelectValue placeholder="Select rating" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="2">2</SelectItem>
-                            <SelectItem value="3">3</SelectItem>
-                            <SelectItem value="4">4</SelectItem>
-                            <SelectItem value="5">5</SelectItem>
+                            {Array.from({ length: 8 }).map((_, index) => (
+                              <SelectItem value={index + 1}>
+                                {index + 1}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>

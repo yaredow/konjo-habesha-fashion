@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { Field } from "react-hook-form";
 
 type Product = {
@@ -17,23 +18,18 @@ type Product = {
   status: string;
 };
 
-type Data = {
-  trendingProducts: Product[];
-  featuredProducts: Product[];
-  newArrivalProducts: Product[];
-};
-
-type CartItem = Omit<
-  Product,
-  | "description"
-  | "stockQuantity"
-  | "unitsSold"
-  | "productAddedDate"
-  | "isFeatured"
-  | "inStock"
-> & {
+type CartItem = {
+  _id: string;
+  images: {
+    public_id: string;
+    url: string;
+  }[];
+  name: string;
+  category: string;
+  price: number;
+  size: string;
   quantity: number;
-  totalPrice?: number;
+  totalPrice?: number | undefined;
 };
 
 type CartState = {
