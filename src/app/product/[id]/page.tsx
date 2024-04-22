@@ -52,12 +52,19 @@ function ProductDetail({ params }: { params: { id: string } }) {
       (item: CartItem) => item._id === cartFilter?._id,
     );
 
-    if (!isProductInCart && isFetched) {
-      dispatch(addItem(cartFilter as CartItem));
+    if (product.stockQuantity > 0 && isFetched) {
+      if (!isProductInCart) {
+        dispatch(addItem(cartFilter as CartItem));
+      } else {
+        toast({
+          variant: "destructive",
+          description: "Item already exists",
+        });
+      }
     } else {
       toast({
         variant: "destructive",
-        description: "Item already exists",
+        description: "Item is out of stock",
       });
     }
   };
@@ -65,8 +72,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
   const handleThumbnailClick = (index: any) => {
     setSelectedPhotoIndex(index);
   };
-
-  console.log(cartFilter);
 
   React.useEffect(() => {
     if (isFetched && product) {

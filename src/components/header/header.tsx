@@ -1,17 +1,13 @@
 "use client";
 
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import {
   HiOutlineHome,
   HiOutlinePhoneOutgoing,
   HiOutlineShoppingBag,
 } from "react-icons/hi";
-import {
-  AiOutlineSearch,
-  AiOutlineShoppingCart,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
@@ -23,18 +19,25 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
-import { useCart } from "@/lib/context/CartContext";
 import Search from "../Search";
 import { NAV_LINKS } from "@/utils/constants";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { stat } from "fs";
 
 function Header() {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const { data: session, status } = useSession();
-  const [searchFormOpen, setSearchFormOpem] = useState(false);
   const cartQuantity = useAppSelector(getTotalCartQuantity);
-  const handleToggleSearchForm = () => {
-    setSearchFormOpem((searchFormOpen) => !searchFormOpen);
-  };
+  const router = useRouter();
 
   React.useEffect(() => {
     setIsLoaded(true);
@@ -65,41 +68,59 @@ function Header() {
           </ul>
         </div>
 
-        <div className="hidden gap-8 md:flex md:justify-end">
+        <div className="hidden gap-6 md:flex md:justify-end">
           <div className=" flex flex-row gap-[1.3rem]">
             <Search />
-            <div className=" flex flex-row items-center gap-2">
-              <Link
-                href={
-                  status === "authenticated"
-                    ? "/account/user-details"
-                    : "/account"
-                }
-              >
-                <AiOutlineUser className=" text-xl hover:text-blue-500 " />
-              </Link>
-
-              <p
-                className={`${status === "unauthenticated" ? "hidden" : "flex"}`}
-              >
-                {session?.user?.name?.split(" ")[0]}
-              </p>
+            <div className=" mt-[4px]">
+              <ModeToggle />
             </div>
-
             <div className=" relative flex items-center">
-              <Link href="/cart">
-                <AiOutlineShoppingCart className=" text-xl font-semibold hover:text-blue-500" />
-              </Link>
+              <Button
+                variant="outline"
+                size="icon"
+                className="overflow-hidden rounded-full"
+              >
+                <Link href="/cart">
+                  <ShoppingCart
+                    strokeWidth={1.5}
+                    className=" h-[20px] w-[20px]"
+                  />
+                </Link>
+              </Button>
 
               {cartQuantity > 0 && (
-                <div className=" absolute bottom-5 left-5 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
+                <div className=" absolute bottom-[26px] left-[26px] flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
                   {cartQuantity}
                 </div>
               )}
             </div>
+            <div className=" flex flex-row items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      if (status === "unauthenticated") {
+                        router.replace("/account");
+                      }
+                    }}
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    <User strokeWidth={1.5} className=" h-[20px] w-[20px]" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Your Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-
-          <ModeToggle />
         </div>
       </div>
 
