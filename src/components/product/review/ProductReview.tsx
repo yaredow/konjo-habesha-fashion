@@ -1,37 +1,59 @@
 import ImageUploader from "@/components/ImageUploader";
+import Spinner from "@/components/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import { createProductReviewAction } from "@/server/actions/product/createProductReviewAction";
+import { cn } from "@/utils/cn";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
 import React from "react";
 
-export default function ProductReview() {
+export default function ProductReview({ productId }: { productId: string }) {
   const { data: session, status } = useSession();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [rating, setRating] = React.useState<number>(1);
   const [review, setReview] = React.useState<string>("");
+  const [title, setTitle] = React.useState<string>("");
+  const [isLoading, setIsloading] = React.useState<boolean>(false);
+  const userId = session?.user._id as string;
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
     const formData = new FormData();
     formData.append("rating", rating.toString());
     formData.append("email", session?.user.email.toString());
     formData.append("review", review);
+    formData.append("title", title);
+
     if (files) {
       files.forEach((file) => {
         formData.append("images", file);
       });
     }
 
-    const response = await createProductReviewAction(formData);
+    setIsloading(true);
+    const response = await createProductReviewAction(
+      formData,
+      userId,
+      productId,
+    );
+
+    if (response.success) {
+      toast({
+        description: response.message,
+      });
+      setIsloading(false);
+    }
   };
 
   return (
@@ -81,6 +103,18 @@ export default function ProductReview() {
             </div>
           </div>
 
+          <div className=" flex flex-grow flex-col gap-2">
+            <Label htmlFor="email">Title</Label>
+            <Input
+              required
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                setTitle(evt.target.value);
+              }}
+              placeholder="Add a title to your review"
+              type="text"
+            />
+          </div>
+
           <div className="grid gap-2">
             <Label htmlFor="review">Review</Label>
             <Textarea
@@ -96,13 +130,15 @@ export default function ProductReview() {
           <div className="grid gap-2">
             <ImageUploader files={files} setFiles={setFiles} />
           </div>
-          <Button
-            onClick={(evt: React.MouseEvent<HTMLButtonElement>) => {
-              evt.preventDefault();
-            }}
-            type="submit"
-          >
-            {status === "unauthenticated" ? "Login to review" : "Submit"}
+
+          <Button type="submit">
+            {isLoading ? (
+              <Spinner className={cn({ "text-white": isLoading })} />
+            ) : status === "unauthenticated" ? (
+              "Login to review"
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
 

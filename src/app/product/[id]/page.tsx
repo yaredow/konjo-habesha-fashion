@@ -273,7 +273,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
               <div className=" mt-4">{product.description}</div>
             </TabsContent>
             <TabsContent value="Reviews">
-              <ProductReview />
+              <ProductReview productId={product._id} />
             </TabsContent>
           </Tabs>
         </div>
