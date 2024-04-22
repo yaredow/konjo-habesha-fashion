@@ -273,10 +273,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
               <div className=" mt-4">{product.description}</div>
             </TabsContent>
             <TabsContent value="Reviews">
-              <ProductReview
-                cartFilter={cartFilter}
-                setCartFilter={setCartFilter}
-              />
+              <ProductReview />
             </TabsContent>
           </Tabs>
         </div>
