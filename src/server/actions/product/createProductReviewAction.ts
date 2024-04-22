@@ -3,17 +3,15 @@
 import Order from "@/models/orderModel";
 import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
-import { ObjectId } from "mongoose";
 
 export async function createProductReviewAction(
   formData: FormData,
   userId: string,
   productId: string,
 ) {
-  const review = formData.get("review");
-  const rating = formData.get("rating");
-  const title = formData.get("title");
-  const images = formData.getAll("images");
+  const userReview = formData.get("review");
+  const reviewTitle = formData.get("title");
+  const userRating = Number(formData.get("rating"));
 
   try {
     await connectMongoDB();
@@ -35,27 +33,30 @@ export async function createProductReviewAction(
     if (!order) {
       return {
         success: false,
-        message: "You have not purchased this product",
+        message: "You didn't not purchased this product",
       };
     }
 
     const newReview = await Review.create({
-      title,
-      review,
-      rating,
+      review: reviewTitle,
+      title: userReview,
+      rating: userRating,
       product: productId,
       user: userId,
       order: order._id,
     });
 
-    if (newReview) {
+    if (!newReview) {
       return {
-        success: true,
-        message: "Review added successfully",
+        success: false,
+        message: "Failed to save your review. Please try again!",
       };
     }
 
-    return { message: "success" };
+    return {
+      success: true,
+      message: "Review saved successfully",
+    };
   } catch (err) {
     throw err;
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import ImageUploader from "@/components/ImageUploader";
 import Spinner from "@/components/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,7 +12,6 @@ import { toast } from "@/components/ui/use-toast";
 import { createProductReviewAction } from "@/server/actions/product/createProductReviewAction";
 import { cn } from "@/utils/cn";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
-import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
 import React from "react";
 
@@ -18,10 +19,8 @@ export default function ProductReview({ productId }: { productId: string }) {
   const { data: session, status } = useSession();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [rating, setRating] = React.useState<number>(1);
-  const [review, setReview] = React.useState<string>("");
-  const [title, setTitle] = React.useState<string>("");
   const [isLoading, setIsloading] = React.useState<boolean>(false);
-  const userId = session?.user._id as string;
+  const userId = session?.user._id;
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
@@ -29,11 +28,9 @@ export default function ProductReview({ productId }: { productId: string }) {
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(evt.currentTarget);
     formData.append("rating", rating.toString());
-    formData.append("email", session?.user.email.toString());
-    formData.append("review", review);
-    formData.append("title", title);
+    console.log(formData);
 
     if (files) {
       files.forEach((file) => {
@@ -50,6 +47,12 @@ export default function ProductReview({ productId }: { productId: string }) {
 
     if (response.success) {
       toast({
+        description: response.message,
+      });
+      setIsloading(false);
+    } else {
+      toast({
+        variant: "destructive",
         description: response.message,
       });
       setIsloading(false);
@@ -106,10 +109,8 @@ export default function ProductReview({ productId }: { productId: string }) {
           <div className=" flex flex-grow flex-col gap-2">
             <Label htmlFor="email">Title</Label>
             <Input
+              name="title"
               required
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                setTitle(evt.target.value);
-              }}
               placeholder="Add a title to your review"
               type="text"
             />
@@ -118,11 +119,8 @@ export default function ProductReview({ productId }: { productId: string }) {
           <div className="grid gap-2">
             <Label htmlFor="review">Review</Label>
             <Textarea
-              onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-                setReview(evt.target.value);
-              }}
+              name="review"
               className="min-h-[120px]"
-              id="review"
               placeholder="Write your review here..."
             />
           </div>

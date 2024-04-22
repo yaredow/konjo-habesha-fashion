@@ -47,8 +47,6 @@ export default function Search() {
     setOpen(false);
   };
 
-  console.log(isPending);
-
   React.useEffect(() => {
     if (query.trim()) {
       _debouncedSearch();
