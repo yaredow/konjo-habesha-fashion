@@ -5,8 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectMongoDB();
-
-    const reviews = await Review.find();
+    const reviews = await Review.find({});
 
     if (!reviews) {
       return NextResponse.json(
