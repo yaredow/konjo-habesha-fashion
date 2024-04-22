@@ -1,54 +1,38 @@
 import ImageUploader from "@/components/ImageUploader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CommentRatings } from "@/components/ui/rating-stars";
 import { Textarea } from "@/components/ui/textarea";
 import { createProductReviewAction } from "@/server/actions/product/createProductReviewAction";
-import { CartItem } from "@/types/product";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React from "react";
-import { useFormState } from "react-dom";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const ProductReviewShcema = z.object({
-  review: z.string().min(4, {
-    message: "Review is required",
-  }),
-  rating: z.number().min(1, {
-    message: "Please choose a review",
-  }),
-});
-
-const initialState = {
-  message: "",
-};
 
 export default function ProductReview() {
+  const { data: session, status } = useSession();
   const [files, setFiles] = React.useState<File[] | null>(null);
-  const [state, formAction] = useFormState(
-    createProductReviewAction,
-    initialState,
-  );
+  const [rating, setRating] = React.useState<number>(1);
+  const [review, setReview] = React.useState<string>("");
 
-  const form = useForm<z.infer<typeof ProductReviewShcema>>({
-    resolver: zodResolver(ProductReviewShcema),
-    defaultValues: {
-      review: "",
-      rating: 1,
-    },
-  });
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
+  };
 
-  const handleReviewSubmit = () => {};
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("rating", rating.toString());
+    formData.append("email", session?.user.email.toString());
+    formData.append("review", review);
+    if (files) {
+      files.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
+
+    const response = await createProductReviewAction(formData);
+  };
 
   return (
     <div className="max-w-2xl px-4 py-8 md:px-6">
@@ -59,43 +43,68 @@ export default function ProductReview() {
             Share your thoughts on this product.
           </p>
         </div>
-        <Form {...form}>
-          <form
-            action={formAction}
-            onSubmit={handleReviewSubmit}
-            className="grid gap-4"
-          >
+
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="review">Review</Label>
-              <Textarea
-                className="min-h-[120px]"
-                id="review"
-                placeholder="Write your review here..."
+              <Label htmlFor="rating">Rating</Label>
+              <CommentRatings
+                rating={rating}
+                variant="yellow"
+                onRatingChange={handleRatingChange}
+                totalStars={5}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="rating">Rating</Label>
-                <Select defaultValue="1">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select rating" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <SelectItem value={(index + 1).toString()}>
-                        {index + 1}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          </div>
+
+          <div className=" flex flex-row gap-2">
+            <div className=" flex flex-grow flex-col gap-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                disabled={status === "authenticated"}
+                placeholder={
+                  status === "authenticated" ? session?.user?.name : "Full Name"
+                }
+                type="text"
+              />
             </div>
-            <div className="grid gap-2">
-              <ImageUploader files={files} setFiles={setFiles} />
+
+            <div className=" flex flex-grow flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                disabled={status === "authenticated"}
+                placeholder={
+                  status === "authenticated" ? session?.user?.email : "Email"
+                }
+                type="email"
+              />
             </div>
-            <Button type="submit">Submit Review</Button>
-          </form>
-        </Form>
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="review">Review</Label>
+            <Textarea
+              onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+                setReview(evt.target.value);
+              }}
+              className="min-h-[120px]"
+              id="review"
+              placeholder="Write your review here..."
+            />
+          </div>
+
+          <div className="grid gap-2">
+            <ImageUploader files={files} setFiles={setFiles} />
+          </div>
+          <Button
+            onClick={(evt: React.MouseEvent<HTMLButtonElement>) => {
+              evt.preventDefault();
+            }}
+            type="submit"
+          >
+            {status === "unauthenticated" ? "Login to review" : "Submit"}
+          </Button>
+        </form>
 
         <div className="grid gap-4 border-t pt-4 dark:border-gray-800">
           <div className="flex items-center justify-between">
