@@ -8,7 +8,8 @@ export async function GET(request: Request) {
 
   try {
     await connectMongoDB();
-    const product = await Product.findById(id).populate("reviews");
+    const product = await Product.findById(id);
+    await product.populate("reviews");
 
     if (!product) {
       return NextResponse.json(

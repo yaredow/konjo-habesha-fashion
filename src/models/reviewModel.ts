@@ -1,11 +1,11 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 interface IReview {
   review: string;
   title: string;
   rating: number;
   createdAt: Date;
-  images: string[];
+  images: { public_id: string; url: string }[];
   likes: number;
   dislikes: number;
   user: Types.ObjectId;
@@ -13,7 +13,7 @@ interface IReview {
   product: Types.ObjectId;
 }
 
-const reviewSchema = new Schema<IReview>(
+const reviewSchema = new mongoose.Schema<IReview>(
   {
     review: {
       type: String,
@@ -33,17 +33,18 @@ const reviewSchema = new Schema<IReview>(
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Tour",
+      ref: "Product",
       required: [true, "Review must belong to a product."],
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "User",
       required: [true, "Review must belong to a product"],
     },
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
+      required: [true, "Review must belong to an order"],
     },
     images: [
       {
@@ -71,12 +72,6 @@ const reviewSchema = new Schema<IReview>(
     toObject: { virtuals: true },
   },
 );
-
-// reviewSchema.pre(/^find/, function () {
-//   this.populate({ path: "user", select: "name" })
-//     .populate({ path: "order" })
-//     .populate({ path: "product" });
-// });
 
 const Review = mongoose.models.Review || mongoose.model("Review", reviewSchema);
 

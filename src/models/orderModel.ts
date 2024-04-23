@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const orderSchema = new Schema(
+const orderSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -48,8 +48,11 @@ const orderSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
+
 export default Order;

@@ -27,6 +27,17 @@ interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
   onRatingChange?: (rating: number) => void;
 }
 
+interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
+  rating: number;
+  totalStars?: number;
+  size?: number;
+  fill?: boolean;
+  Icon?: React.ReactElement;
+  variant?: keyof typeof ratingVariants;
+  onRatingChange?: (rating: number) => void;
+  fixed?: boolean; // Add this line
+}
+
 export const CommentRatings = ({
   rating: initialRating,
   totalStars = 5,
@@ -35,34 +46,45 @@ export const CommentRatings = ({
   Icon = <Star />,
   variant = "default",
   onRatingChange,
+  fixed = false, // Default to false
   ...props
 }: RatingsProps) => {
-  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [currentRating, setCurrentRating] = useState(initialRating);
+
+  // Remove hoverRating and isHovering states if fixed
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    setIsHovering(true);
-    const starIndex = parseInt(
-      (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
-    );
-    setHoverRating(starIndex);
-  };
+  // Conditionally add event handlers based on the fixed prop
+  const handleMouseEnter = fixed
+    ? undefined
+    : (event: React.MouseEvent<HTMLDivElement>) => {
+        setIsHovering(true);
+        const starIndex = parseInt(
+          (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
+        );
+        setHoverRating(starIndex);
+      };
 
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    setHoverRating(null);
-  };
+  const handleMouseLeave = fixed
+    ? undefined
+    : () => {
+        setIsHovering(false);
+        setHoverRating(null);
+      };
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const starIndex = parseInt(
-      (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
-    );
-    setCurrentRating(starIndex);
-    setHoverRating(null);
-    onRatingChange?.(starIndex);
-  };
+  const handleClick = fixed
+    ? undefined
+    : (event: React.MouseEvent<HTMLDivElement>) => {
+        const starIndex = parseInt(
+          (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
+        );
+        setCurrentRating(starIndex);
+        setHoverRating(null);
+        onRatingChange?.(starIndex);
+      };
 
+  // Use hoverRating if available, otherwise use currentRating
   const displayRating = hoverRating ?? currentRating;
   const fullStars = Math.floor(displayRating);
   const partialStar =
@@ -109,9 +131,8 @@ export const CommentRatings = ({
           }),
         )}
       </div>
-      <span className="text-muted-foreground">
-        Current Rating: {`${currentRating}`}
-      </span>
+      {/* Display the currentRating when fixed, otherwise display the dynamic rating */}
+      <span className="text-muted-foreground">{`(${fixed ? currentRating : displayRating})`}</span>
     </div>
   );
 };

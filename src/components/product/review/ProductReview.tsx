@@ -10,10 +10,22 @@ import { CommentRatings } from "@/components/ui/rating-stars";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { createProductReviewAction } from "@/server/actions/product/createProductReviewAction";
+import { Review } from "@/types/review";
 import { cn } from "@/utils/cn";
+import useGetReviews from "@/utils/hook/useGetReviews";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
+import UserReview from "./Review";
+
+type UserReviewsType = {
+  reviews: Review[];
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
 
 export default function ProductReview({ productId }: { productId: string }) {
   const { data: session, status } = useSession();
@@ -21,6 +33,9 @@ export default function ProductReview({ productId }: { productId: string }) {
   const [rating, setRating] = React.useState<number>(1);
   const [isLoading, setIsloading] = React.useState<boolean>(false);
   const userId = session?.user._id;
+
+  const { reviews = [], isFetched, refetch }: UserReviewsType = useGetReviews();
+  console.log("reviews:", reviews);
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
@@ -141,41 +156,17 @@ export default function ProductReview({ productId }: { productId: string }) {
         </form>
 
         <div className="grid gap-4 border-t pt-4 dark:border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage alt="User Image" src="/placeholder-user.jpg" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-0.5 text-sm">
-                <div className="font-medium">John Doe</div>
-                <div className="text-gray-500 dark:text-gray-400">
-                  Order #12345
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <time className="text-sm text-gray-500 dark:text-gray-400">
-                2 days ago
-              </time>
-              <div className="flex items-center gap-1 text-sm font-medium">
-                <ThumbsUpIcon className="h-5 w-5 fill-primary" />
-                <span>12</span>
-              </div>
-              <div className="flex items-center gap-1 text-sm font-medium">
-                <ThumbsDownIcon className="h-5 w-5 fill-primary" />
-                <span>3</span>
-              </div>
-            </div>
-          </div>
-          <div className="text-sm leading-loose text-gray-500 dark:text-gray-400">
-            <p>
-              The product I purchased is absolutely stunning! The quality of the
-              fabric and the intricate embroidery are truly impressive. It fits
-              perfectly and is so comfortable to wear. I can't wait to wear it
-              to my next event.
-            </p>
-          </div>
+          <ul>
+            {!isFetched ? (
+              <Spinner />
+            ) : (
+              reviews.map((review) => (
+                <li>
+                  <UserReview review={review} />
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       </div>
     </div>

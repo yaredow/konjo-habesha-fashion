@@ -15,7 +15,7 @@ interface IProduct {
   status: String;
 }
 
-const productSchema = new Schema<IProduct>(
+const productSchema = new mongoose.Schema<IProduct>(
   {
     name: {
       type: String,
