@@ -24,6 +24,21 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
 import { toast } from "@/components/ui/use-toast";
 import ProductReview from "@/components/product/review/ProductReview";
+import { Review } from "@/types/review";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import useGetReviews from "@/utils/hook/useGetReviews";
+import UserReview from "@/components/product/review/Review";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { CommentRatings } from "@/components/ui/rating-stars";
+
+type UserReviewsType = {
+  reviews: Review[];
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
@@ -31,6 +46,18 @@ function ProductDetail({ params }: { params: { id: string } }) {
   const { id } = params;
   const dispatch = useAppDispatch();
   const cart = useAppSelector(getCart);
+  const {
+    reviews = [],
+    isFetched: isReviewsFetched,
+    refetch,
+  }: UserReviewsType = useGetReviews(id);
+
+  const avgRating = reviews.reduce(
+    (acc, review) => (acc + review.rating) / reviews.length,
+    0,
+  );
+
+  console.log(avgRating);
 
   const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
@@ -77,7 +104,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
   return (
     <section className="mx-12">
       <div>
-        <div>
+        <div className=" mb-4">
           <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
             <div className="grid items-start gap-3 md:grid-cols-5">
               {/* Mobile */}
@@ -90,13 +117,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     <p>{product.description}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-0.5">
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
-                      <StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
-                    </div>
+                    <CommentRatings
+                      variant="yellow"
+                      fixed={true}
+                      rating={avgRating}
+                    />
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center gap-2">
@@ -166,13 +191,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     <p>{product.description}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-0.5">
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-primary" />
-                      <StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
-                      <StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
-                    </div>
+                    <CommentRatings
+                      variant="yellow"
+                      fixed={true}
+                      rating={avgRating}
+                    />
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center gap-2">
@@ -263,20 +286,107 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </div>
         </div>
         <Separator className="mb-4" />
-        <div>
-          <Tabs defaultValue="Description">
+        <Tabs defaultValue="Description">
+          <div className="mx-auto flex justify-center">
             <TabsList>
               <TabsTrigger value="Description">Description</TabsTrigger>
-              <TabsTrigger value="Reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="Reviews">
+                Reviews({reviews.length})
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="Description">
-              <div className=" mt-4">{product.description}</div>
-            </TabsContent>
-            <TabsContent value="Reviews">
+          </div>
+          <Separator className="mt-4" />
+          <TabsContent value="Description">
+            <div className=" mt-4 flex-wrap">{product.description}</div>
+          </TabsContent>
+          <TabsContent value="Reviews">
+            <div className=" mx-auto mt-4 flex justify-center">
               <ProductReview productId={product._id} />
-            </TabsContent>
-          </Tabs>
-        </div>
+            </div>
+
+            <div className="grid gap-4 pt-4">
+              <div className="mx-auto grid w-full max-w-2xl gap-12 md:grid-cols-2">
+                <Card className="grid gap-6 p-6">
+                  <CardHeader>
+                    <CardTitle>Overal Rating</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center justify-center gap-4">
+                    <div className="text-8xl font-bold">
+                      {avgRating}
+                      <span className="text-5xl text-gray-500 dark:text-gray-400">
+                        / 5
+                      </span>
+                    </div>
+                    <div className="flex items-center rounded-full bg-gray-100 px-3 py-2 dark:bg-gray-800">
+                      <CommentRatings fixed={true} rating={avgRating} />
+                      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                        out of 5
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="grid gap-6 p-6">
+                  <CardHeader>
+                    <CardTitle>Rating Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid gap-4">
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        5
+                        <StarIcon className="h-4 w-4 shrink-0 fill-green-500" />
+                      </div>
+                      <Progress className="bg-green-500" value={25} />
+                      25%{"\n                "}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        4
+                        <StarIcon className="h-4 w-4 shrink-0 fill-blue-500" />
+                      </div>
+                      <Progress className="bg-blue-500" value={33} />
+                      33%{"\n                "}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        3
+                        <StarIcon className="h-4 w-4 shrink-0 fill-primary" />
+                      </div>
+                      <Progress className="bg-primary" value={22} />
+                      22%{"\n                "}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        2
+                        <StarIcon className="h-4 w-4 shrink-0 fill-orange-500" />
+                      </div>
+                      <Progress className="bg-orange-500" value={13} />
+                      13%{"\n                "}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        1
+                        <StarIcon className="h-4 w-4 shrink-0 fill-red-500" />
+                      </div>
+                      <Progress className="bg-red-500" value={7} />
+                      7%{"\n                "}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              <ul>
+                {!isReviewsFetched ? (
+                  <Spinner />
+                ) : (
+                  reviews.map((review) => (
+                    <li>
+                      <UserReview review={review} />
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </section>
   );

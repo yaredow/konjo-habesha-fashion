@@ -1,10 +1,9 @@
 import Product from "@/models/productModel";
 import connectMongoDB from "@/utils/db/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const id = request.url.slice(request.url.lastIndexOf("/") + 1);
-  console.log(id);
 
   try {
     await connectMongoDB();

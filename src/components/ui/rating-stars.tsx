@@ -12,8 +12,8 @@ const ratingVariants = {
     emptyStar: "text-red-200",
   },
   yellow: {
-    star: "text-yellow-500",
-    emptyStar: "text-yellow-200",
+    star: "text-yellow-600",
+    emptyStar: "text-yellow-400",
   },
 };
 
@@ -132,7 +132,9 @@ export const CommentRatings = ({
         )}
       </div>
       {/* Display the currentRating when fixed, otherwise display the dynamic rating */}
-      <span className="text-muted-foreground">{`(${fixed ? currentRating : displayRating})`}</span>
+      <span className="text-muted-foreground">
+        {fixed ? null : `(${displayRating})`}
+      </span>
     </div>
   );
 };

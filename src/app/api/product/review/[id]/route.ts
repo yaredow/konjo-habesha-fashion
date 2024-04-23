@@ -1,17 +1,18 @@
 import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const id = request.url.slice(request.url.lastIndexOf("/") + 1);
+
   try {
     await connectMongoDB();
-    const reviews = await Review.find()
+    const reviews = await Review.find({ product: id })
       .populate({
-        path: "user",
-        select: "fullName",
+        path: "product",
+        select: "name ",
       })
-      .populate({ path: "order", select: "orderId" })
-      .populate({ path: "product", select: "name" });
+      .populate({ path: "user", select: "fullName" });
 
     if (!reviews) {
       return NextResponse.json(
