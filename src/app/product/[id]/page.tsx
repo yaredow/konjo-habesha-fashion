@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   BoxIcon,
   PackageIcon,
-  ShoppingBag,
   ShoppingCartIcon,
   StarIcon,
   UserIcon,
@@ -24,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CartItem, Product } from "@/types/product";
 import { cn } from "@/utils/cn";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";

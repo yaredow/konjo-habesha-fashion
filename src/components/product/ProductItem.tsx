@@ -11,24 +11,9 @@ import useAddToCart from "@/utils/hook/useAddToCart";
 
 function ProductItem({ product }: { product: Product }) {
   const router = useRouter();
-  const { handleAddToCart } = useAddToCart(product);
-  const { handleCartPopupOpen } = useCart();
 
   const handleClick = () => {
     router.replace(`/product/${product._id}`);
-  };
-
-  const handleAddToCartClick = (e: React.MouseEvent) => {
-    if (!product.inStock) {
-      toast({
-        description: "This item is out of stock",
-      });
-      e.stopPropagation();
-      return;
-    }
-    handleCartPopupOpen();
-    handleAddToCart();
-    e.stopPropagation();
   };
 
   return (
@@ -40,22 +25,10 @@ function ProductItem({ product }: { product: Product }) {
           className="h-full w-full object-cover object-center"
         />
       </div>
-      <div className="mt-4 flex justify-between">
-        <div>
-          <h3 className="text-sm ">{product.name}</h3>
-          <p className="mt-1 text-sm font-medium ">
-            {formatCurrency(product.price)}
-          </p>
-        </div>
 
-        <Button
-          variant="outline"
-          onClick={handleAddToCartClick}
-          size="icon"
-          className=" h-10 w-10 rounded-full"
-        >
-          <IoCartOutline className=" text-2xl text-blue-600" />
-        </Button>
+      <div className=" mt-4 flex flex-row items-center justify-between">
+        <h3 className="text-sm ">{product.name}</h3>
+        <p className="text-sm font-medium ">{formatCurrency(product.price)}</p>
       </div>
     </div>
   );
