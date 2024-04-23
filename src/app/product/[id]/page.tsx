@@ -5,7 +5,14 @@ import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import useGetProduct from "@/utils/hook/useGetProduct";
 import { Separator } from "@/components/ui/separator";
-import { BoxIcon, PackageIcon, StarIcon, UserIcon } from "lucide-react";
+import {
+  BoxIcon,
+  PackageIcon,
+  ShoppingBag,
+  ShoppingCartIcon,
+  StarIcon,
+  UserIcon,
+} from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 
@@ -58,8 +65,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
     0,
   );
 
-  console.log(avgRating);
-
   const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
 
@@ -108,7 +113,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
         <div className=" mb-4">
           <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
             <div className="grid gap-3 md:grid-cols-5">
-              {/* Smaller images on the left in desktop mode and at the bottom in mobile mode */}
               <div className="order-last flex w-full gap-3 overflow-x-auto md:order-first md:col-span-1 md:flex-col">
                 {product.images.slice(0, 4).map((image, index) => (
                   <button
@@ -133,7 +137,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
                 ))}
               </div>
 
-              {/* Larger image on the right in desktop mode and on top in mobile mode */}
               <div className="order-first w-full md:order-last md:col-span-4">
                 <img
                   src={product.images[selectedPhotoIndex].url}
@@ -237,7 +240,15 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button onClick={handleAddToCart} size="lg">
+
+                <Button
+                  className=" flex w-full items-center gap-2"
+                  onClick={handleAddToCart}
+                  size="lg"
+                >
+                  <span>
+                    <ShoppingCartIcon size={20} />
+                  </span>{" "}
                   Add to cart
                 </Button>
               </form>
@@ -259,12 +270,12 @@ function ProductDetail({ params }: { params: { id: string } }) {
             <div className=" mt-4 flex-wrap">{product.description}</div>
           </TabsContent>
           <TabsContent value="Reviews">
-            <div className=" mx-auto mt-4 flex justify-center">
+            <div className=" just ify-center mx-auto mt-12 flex">
               <ProductReview productId={product._id} />
             </div>
 
             <div className="grid gap-4 pt-4">
-              <div className="mx-auto grid w-full max-w-2xl gap-12 md:grid-cols-2">
+              <div className="mx-auto mb-4 grid w-full max-w-2xl gap-12 md:grid-cols-2">
                 <Card className="grid gap-6 p-6">
                   <CardHeader>
                     <CardTitle>Overal Rating</CardTitle>
@@ -332,17 +343,25 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   </CardContent>
                 </Card>
               </div>
-              <ul>
-                {!isReviewsFetched ? (
-                  <Spinner />
-                ) : (
-                  reviews.map((review) => (
-                    <li>
-                      <UserReview review={review} />
-                    </li>
-                  ))
-                )}
-              </ul>
+
+              <Separator />
+
+              <div className=" mt-4">
+                <h1 className=" mb-4 text-center font-semibold">
+                  Reviews<span className=" ml-2">{`(${reviews.length})`}</span>
+                </h1>
+                <ul>
+                  {!isReviewsFetched ? (
+                    <Spinner />
+                  ) : (
+                    reviews.map((review) => (
+                      <li>
+                        <UserReview review={review} />
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

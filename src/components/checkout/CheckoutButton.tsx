@@ -27,6 +27,7 @@ const CheckoutButton = () => {
 
   return (
     <Button
+      className="w-full flex-grow"
       variant="default"
       disabled={session?.user ? false : true}
       onClick={() => handleCheckout(cartItems, user)}

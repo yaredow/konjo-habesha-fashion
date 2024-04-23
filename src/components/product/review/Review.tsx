@@ -8,7 +8,7 @@ import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 
 export default function UserReview({ review }: { review: Review }) {
   return (
-    <div className="mx-auto max-w-2xl space-y-6 py-8">
+    <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex flex-col gap-6">
         <div className="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
           <div className="flex flex-col gap-2">

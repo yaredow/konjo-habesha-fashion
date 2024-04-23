@@ -62,9 +62,9 @@ export default function ProductReview({ productId }: { productId: string }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="link">Leave a review</Button>
+        <Button variant="outline">Leave a review</Button>
       </DialogTrigger>
-      <DialogContent className=" mx-auto max-h-screen overflow-y-scroll">
+      <DialogContent className=" mx-auto max-h-[40rem] overflow-y-scroll">
         <div className="max-w-2xl px-4 py-8 md:px-6">
           <div className="grid gap-6">
             <div>
@@ -74,7 +74,7 @@ export default function ProductReview({ productId }: { productId: string }) {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid gap-4">
+            <form onSubmit={handleSubmit} className="grid gap-8">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="rating">Rating</Label>
@@ -135,6 +135,7 @@ export default function ProductReview({ productId }: { productId: string }) {
               </div>
 
               <div className="grid gap-2">
+                <Label htmlFor="images">Images (optional)</Label>
                 <ImageUploader files={files} setFiles={setFiles} />
               </div>
 

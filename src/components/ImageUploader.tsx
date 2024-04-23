@@ -16,7 +16,9 @@ const FileSvgDraw = () => {
       className="flex aspect-square max-h-[8rem] w-full flex-col items-center justify-center gap-2 rounded-md border border-dashed"
     >
       <Upload className="h-4 w-4 text-muted-foreground" />
-      <span className=" text-sm text-muted-foreground">Click to upload</span>
+      <span className=" text-wrap text-sm text-muted-foreground">
+        Drag and drop or click to upload <br /> JPEG, PNG, GIF up to 10MB
+      </span>
     </button>
   );
 };
