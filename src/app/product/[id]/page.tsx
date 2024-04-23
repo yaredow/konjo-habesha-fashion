@@ -31,6 +31,7 @@ import UserReview from "@/components/product/review/Review";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CommentRatings } from "@/components/ui/rating-stars";
+import { formatCurrency } from "@/utils/helpers";
 
 type UserReviewsType = {
   reviews: Review[];
@@ -106,54 +107,15 @@ function ProductDetail({ params }: { params: { id: string } }) {
       <div>
         <div className=" mb-4">
           <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
-            <div className="grid items-start gap-3 md:grid-cols-5">
-              {/* Mobile */}
-              <div className="flex items-start md:hidden">
-                <div className="grid gap-4">
-                  <h1 className="text-2xl font-bold sm:text-3xl">
-                    {product.name}
-                  </h1>
-                  <div>
-                    <p>{product.description}</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <CommentRatings
-                      variant="yellow"
-                      fixed={true}
-                      rating={avgRating}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                      <PackageIcon className="h-5 w-5 fill-muted" />
-                      <span className="text-sm text-muted-foreground">
-                        {product.unitsSold}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <BoxIcon className="h-5 w-5 fill-muted" />
-                      <span className="text-sm text-muted-foreground">
-                        500 in stock
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <UserIcon className="h-5 w-5 fill-muted" />
-                      <span className="text-sm text-muted-foreground">
-                        {product.category}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="ml-auto text-4xl font-bold">$99</div>
-              </div>
-
-              <div className="hidden flex-col items-start gap-3 md:flex">
-                {product.images.map((image, index) => (
+            <div className="grid gap-3 md:grid-cols-5">
+              {/* Smaller images on the left in desktop mode and at the bottom in mobile mode */}
+              <div className="order-last flex w-full gap-3 overflow-x-auto md:order-first md:col-span-1 md:flex-col">
+                {product.images.slice(0, 4).map((image, index) => (
                   <button
                     onClick={() => handleThumbnailClick(index)}
                     key={index}
                     className={cn(
-                      "overflow-hidden rounded-lg border transition-colors hover:border-gray-900 dark:hover:border-gray-50",
+                      "overflow-hidden rounded-lg border transition-colors",
                       {
                         "opacity-60": index === selectedPhotoIndex,
                       },
@@ -161,20 +123,22 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   >
                     <img
                       alt={image.public_id}
-                      className="aspect-[5/6] object-cover"
+                      className="object-cover"
                       height="120"
                       src={image.url}
                       width="100"
                     />
-                    <span className="sr-only">View Image 1</span>
+                    <span className="sr-only">View Image {index + 1}</span>
                   </button>
                 ))}
               </div>
-              <div className="md:col-span-4">
+
+              {/* Larger image on the right in desktop mode and on top in mobile mode */}
+              <div className="order-first w-full md:order-last md:col-span-4">
                 <img
                   src={product.images[selectedPhotoIndex].url}
                   alt={product.images[selectedPhotoIndex].public_id}
-                  className="aspect-[2/3] w-full overflow-hidden rounded-lg border border-gray-200 object-cover dark:border-gray-800"
+                  className="w-full overflow-hidden rounded-lg border object-cover"
                   height="900"
                   width="600"
                 />
@@ -182,20 +146,16 @@ function ProductDetail({ params }: { params: { id: string } }) {
             </div>
 
             <div className="grid items-start gap-4 md:gap-10">
-              <div className="hidden items-start md:flex">
+              <div className="items-start md:flex">
                 <div className="grid gap-4">
                   <h1 className="text-3xl font-bold lg:text-4xl">
                     {product.name}
                   </h1>
-                  <div>
-                    <p>{product.description}</p>
-                  </div>
+                  <p className=" text-lg font-semibold">
+                    {formatCurrency(product.price)}
+                  </p>
                   <div className="flex items-center gap-4">
-                    <CommentRatings
-                      variant="yellow"
-                      fixed={true}
-                      rating={avgRating}
-                    />
+                    <CommentRatings fixed={true} rating={avgRating} />
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center gap-2">
@@ -218,7 +178,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     </div>
                   </div>
                 </div>
-                <div className="ml-auto text-4xl font-bold">$99</div>
               </div>
 
               <form className="grid gap-4 md:gap-10">
