@@ -87,32 +87,28 @@ export default function ProductReview({ productId }: { productId: string }) {
                 </div>
               </div>
 
-              <div className=" flex flex-row gap-2">
-                <div className=" flex flex-grow flex-col gap-2">
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Input
-                    disabled={status === "authenticated"}
-                    placeholder={
-                      status === "authenticated"
-                        ? session?.user?.name
-                        : "Full Name"
-                    }
-                    type="text"
-                  />
-                </div>
+              <div className=" flex flex-grow flex-col gap-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input
+                  disabled={status === "authenticated"}
+                  placeholder={
+                    status === "authenticated"
+                      ? session?.user?.name
+                      : "Full Name"
+                  }
+                  type="text"
+                />
+              </div>
 
-                <div className=" flex flex-grow flex-col gap-2">
-                  <Label htmlFor="email">Email (Won't be published)</Label>
-                  <Input
-                    disabled={status === "authenticated"}
-                    placeholder={
-                      status === "authenticated"
-                        ? session?.user?.email
-                        : "Email"
-                    }
-                    type="email"
-                  />
-                </div>
+              <div className=" flex flex-grow flex-col gap-2">
+                <Label htmlFor="email">Email (Will not be published)</Label>
+                <Input
+                  disabled={status === "authenticated"}
+                  placeholder={
+                    status === "authenticated" ? session?.user?.email : "Email"
+                  }
+                  type="email"
+                />
               </div>
 
               <div className=" flex flex-grow flex-col gap-2">

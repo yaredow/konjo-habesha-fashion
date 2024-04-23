@@ -269,7 +269,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
             <div className=" mt-4 flex-wrap">{product.description}</div>
           </TabsContent>
           <TabsContent value="Reviews">
-            <div className=" just ify-center mx-auto mt-12 flex">
+            <div className=" mx-auto mb-4 mt-12 flex justify-center">
               <ProductReview productId={product._id} />
             </div>
 
