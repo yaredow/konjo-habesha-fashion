@@ -65,6 +65,8 @@ function ProductDetail({ params }: { params: { id: string } }) {
     0,
   );
 
+  console.log(cartFilter);
+
   const { product, isFetched }: { product: Product; isFetched: boolean } =
     useGetProduct(id);
 
@@ -188,34 +190,33 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   <Label className="text-base" htmlFor="size">
                     Size
                   </Label>
-                  <RadioGroup
-                    className="flex items-center gap-2"
-                    defaultValue={cartFilter?.size}
-                    id="size"
-                  >
+                  <ul className=" flex flex-row gap-4">
                     {product.sizes.map((size, index) => (
-                      <Label
-                        key={index}
-                        className="flex cursor-pointer items-center gap-2 rounded-md border p-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                        htmlFor="size-s"
-                      >
-                        <RadioGroupItem
-                          onClick={() => {
+                      <li key={index}>
+                        <Button
+                          variant={
+                            cartFilter?.size === size ? "default" : "outline"
+                          }
+                          size="icon"
+                          onClick={(
+                            evt: React.MouseEvent<HTMLButtonElement>,
+                          ) => {
+                            evt.preventDefault();
                             setCartFilter((prev) => ({
                               ...(prev as CartItem),
                               size: size,
                             }));
                           }}
-                          checked={size === cartFilter?.size}
                           id={size}
                           value={size}
-                        />
-                        {size.toLocaleUpperCase()}
-                      </Label>
+                        >
+                          {size}
+                        </Button>
+                      </li>
                     ))}
-                  </RadioGroup>
+                  </ul>
                 </div>
-                <div className="grid gap-2">
+                <div className="grid  gap-2">
                   <Label className="text-base" htmlFor="quantity">
                     Quantity
                   </Label>
@@ -228,10 +229,10 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     }}
                     defaultValue={cartFilter?.quantity.toString()}
                   >
-                    <SelectTrigger className="w-24">
+                    <SelectTrigger className="md:w-44">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="">
                       {Array.from({ length: 8 }).map((_, index) => (
                         <SelectItem value={(index + 1).toString()}>
                           {index + 1}
