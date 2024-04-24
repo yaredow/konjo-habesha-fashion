@@ -3,7 +3,8 @@ export interface Review {
   title: string;
   rating: number;
   product: {
-    productId: string;
+    _id: string;
+    name: string;
   };
   user: {
     _id: string;
@@ -12,8 +13,8 @@ export interface Review {
   order: {
     id: string;
   };
-  likes: number;
-  dislikes: number;
+  likes: string[];
+  dislikes: string[];
   createdAt: {
     $date: string;
   };

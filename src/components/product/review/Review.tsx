@@ -1,17 +1,24 @@
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { toast } from "@/components/ui/use-toast";
-import { likeAReviewAction } from "@/server/actions/product/likeAReview";
-import { Review } from "@/types/review";
+import { likeAReviewAction } from "@/server/actions/product/likeAReviewAction";
 import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Review as ReviewTypes } from "@/types/review";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
-export default function UserReview({ review }: { review: Review }) {
+type ReviewType = {
+  review: ReviewTypes;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
+
+export default function UserReview({ review, refetch }: ReviewType) {
   const { data: session } = useSession();
   const router = useRouter();
   const userId = session?.user._id as ObjectId;
@@ -27,9 +34,13 @@ export default function UserReview({ review }: { review: Review }) {
     } else {
       const response = await likeAReviewAction(
         userIdString,
-        review.product.productId,
+        review.product._id,
         "like",
       );
+
+      if (response.success === true) {
+        refetch();
+      }
     }
   };
 
@@ -74,13 +85,13 @@ export default function UserReview({ review }: { review: Review }) {
                 <ThumbsUpIcon className="h-5 w-5" />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {review.likes > 0 ? review.likes : null}
+                {review.likes.length > 0 ? review.likes.length : null}
               </span>
               <Button className="text-red-500" size="icon" variant="ghost">
                 <ThumbsDownIcon className="h-5 w-5" />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {review.dislikes > 0 ? review.dislikes : null}
+                {review.dislikes.length > 0 ? review.dislikes.length : null}
               </span>
             </div>
           </div>

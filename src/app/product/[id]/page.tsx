@@ -355,7 +355,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   ) : (
                     reviews.map((review) => (
                       <li>
-                        <UserReview review={review} />
+                        <UserReview refetch={refetch} review={review} />
                       </li>
                     ))
                   )}
