@@ -8,10 +8,11 @@ export async function likeAReviewAction(
   productId: string,
   action: "like" | "dislike",
 ) {
+  console.log(userId);
   try {
     await connectMongoDB();
 
-    const review = await Review.findOne({ product: productId });
+    const review = await Review.findOne({ product: productId, user: userId });
 
     if (!review) {
       throw new Error("Review not found");
