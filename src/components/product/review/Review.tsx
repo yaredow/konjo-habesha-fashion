@@ -24,7 +24,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
   const userId = session?.user._id as ObjectId;
   const userIdString = userId?.toString();
 
-  const handleLike = async () => {
+  const handleReviewLikeOrDislike = async (action: "like" | "dislike") => {
     if (!userId) {
       toast({
         variant: "destructive",
@@ -35,7 +35,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
       const response = await likeAReviewAction(
         userIdString,
         review.product._id,
-        "like",
+        action,
       );
 
       if (response.success === true) {
@@ -77,7 +77,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
           <div className="ml-auto flex flex-col items-end gap-2">
             <div className="flex items-center gap-1">
               <Button
-                onClick={handleLike}
+                onClick={() => handleReviewLikeOrDislike("like")}
                 className="text-green-500"
                 size="icon"
                 variant="ghost"
@@ -87,7 +87,12 @@ export default function UserReview({ review, refetch }: ReviewType) {
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {review.likes.length > 0 ? review.likes.length : null}
               </span>
-              <Button className="text-red-500" size="icon" variant="ghost">
+              <Button
+                onClick={() => handleReviewLikeOrDislike("dislike")}
+                className="text-red-500"
+                size="icon"
+                variant="ghost"
+              >
                 <ThumbsDownIcon className="h-5 w-5" />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
