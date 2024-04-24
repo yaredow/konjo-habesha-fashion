@@ -1,20 +1,53 @@
 "use server";
 
-import User from "@/models/authModel";
 import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
-import { redirect } from "next/navigation";
 
-export async function likeAReview(userId: string, productId: string) {
+export async function likeAReviewAction(
+  userId: string,
+  productId: string,
+  action: "like" | "dislike",
+) {
   try {
     await connectMongoDB();
-    const user = await User.findById({ _id: userId });
-
-    if (!user) {
-      redirect("/account");
-    }
 
     const review = await Review.findOne({ product: productId });
+
+    if (!review) {
+      throw new Error("Review not found");
+    }
+
+    const existingLike = review.likes.find(
+      (like: any) => like.user.toString() === userId,
+    );
+    const existDislike = review.dislikes.find(
+      (dislike: any) => dislike.user.toString() === userId,
+    );
+
+    if (action === "like") {
+      if (existingLike) {
+        throw new Error("You have already liked this review");
+      }
+
+      if (existDislike) {
+        review.dislikes.filter(
+          (dislike: any) => dislike.user.toString() !== userId,
+        );
+      }
+      review.likes.push({ user: userId });
+      await review.save();
+      return true;
+    } else if ((action = "dislike")) {
+      if (existDislike) {
+        throw new Error("You have already disliked this review");
+      }
+      if (existingLike) {
+        review.likes = review.likes.filter(
+          (like: any) => like.userId.toString() !== userId,
+        );
+      }
+      review.dislikes.push({ userId });
+    }
   } catch (error) {
     console.error(error);
     throw error;

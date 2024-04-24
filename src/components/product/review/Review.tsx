@@ -2,11 +2,37 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CommentRatings } from "@/components/ui/rating-stars";
+import { toast } from "@/components/ui/use-toast";
+import { likeAReviewAction } from "@/server/actions/product/likeAReview";
 import { Review } from "@/types/review";
 import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { ObjectId } from "mongoose";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 export default function UserReview({ review }: { review: Review }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const userId = session?.user._id as ObjectId;
+  const userIdString = userId?.toString();
+
+  const handleLike = async () => {
+    if (!userId) {
+      toast({
+        variant: "destructive",
+        description: "Please login to like a review",
+      });
+      router.push("/account");
+    } else {
+      const response = await likeAReviewAction(
+        userIdString,
+        review.product.productId,
+        "like",
+      );
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex flex-col gap-6">
@@ -39,7 +65,12 @@ export default function UserReview({ review }: { review: Review }) {
           </div>
           <div className="ml-auto flex flex-col items-end gap-2">
             <div className="flex items-center gap-1">
-              <Button className="text-green-500" size="icon" variant="ghost">
+              <Button
+                onClick={handleLike}
+                className="text-green-500"
+                size="icon"
+                variant="ghost"
+              >
                 <ThumbsUpIcon className="h-5 w-5" />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
