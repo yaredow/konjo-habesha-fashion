@@ -17,16 +17,32 @@ export async function likeAReviewAction(
 
     let update: Record<string, any> = {};
 
+    const reviewForCheck = await Review.findOne({ product: productObjectId });
+    const existingLike = reviewForCheck.likes.includes(userObjectId);
+    const existingDislike = reviewForCheck.dislikes.includes(userObjectId);
+
     if (action === "like") {
-      update = {
-        $addToSet: { likes: userObjectId },
-        $pull: { dislikes: userObjectId },
-      };
+      if (existingLike) {
+        update = {
+          $pull: { likes: userObjectId },
+        };
+      } else {
+        update = {
+          $addToSet: { likes: userObjectId },
+          $pull: { dislikes: userObjectId },
+        };
+      }
     } else if (action === "dislike") {
-      update = {
-        $addToSet: { dislikes: userObjectId },
-        $pull: { likes: userObjectId },
-      };
+      if (existingDislike) {
+        update = {
+          $pull: { dislikes: userObjectId },
+        };
+      } else {
+        update = {
+          $addToSet: { dislikes: userObjectId },
+          $pull: { likes: userObjectId },
+        };
+      }
     }
 
     const review = await Review.findOneAndUpdate(
