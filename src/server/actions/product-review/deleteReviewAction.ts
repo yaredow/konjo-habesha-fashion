@@ -4,9 +4,6 @@ import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
 
 export async function deleteReviewAction(reviewId: string, userId: string) {
-  console.log("Review ID:", reviewId);
-  console.log("User ID:", userId);
-
   try {
     await connectMongoDB();
 
