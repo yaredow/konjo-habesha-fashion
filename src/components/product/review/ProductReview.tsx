@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { createProductReviewAction } from "@/server/actions/product/createProductReviewAction";
+import { createProductReviewAction } from "@/server/actions/product-review/createProductReviewAction";
 import { cn } from "@/utils/cn";
 
 import { useSession } from "next-auth/react";

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Review {
+  _id: string;
   review: string;
   title: string;
   rating: number;

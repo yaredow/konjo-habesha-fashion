@@ -2,9 +2,9 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { toast } from "@/components/ui/use-toast";
-import { likeAReviewAction } from "@/server/actions/product/likeAReviewAction";
+import { likeAReviewAction } from "@/server/actions/product-review/likeAReviewAction";
 import { formatName, getInitials } from "@/utils/formatName";
-import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { MoreHorizontalIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,24 @@ import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import React from "react";
 import { cn } from "@/utils/cn";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { deleteReviewAction } from "@/server/actions/product-review/deleteReviewAction";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type ReviewType = {
   review: ReviewTypes;
@@ -72,6 +90,29 @@ export default function UserReview({ review, refetch }: ReviewType) {
     }
   };
 
+  const handleDeleteReview = async (reviewId: string, userId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await deleteReviewAction(reviewId, userId);
+
+      if (response.success === true) {
+        toast({
+          description: response.message,
+        });
+        setIsLoading(false);
+        _debouncedSubmit();
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        description: "An unexpected error occurred",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
       <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
@@ -87,18 +128,25 @@ export default function UserReview({ review, refetch }: ReviewType) {
           <div className="flex-1">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h4 className="font-semibold">
-                  {formatName(review.user.fullName)}
-                </h4>
+                <div className="flex items-center gap-4">
+                  <h4 className="font-semibold">
+                    {formatName(review.user.fullName)}
+                  </h4>
+
+                  <CommentRatings
+                    rating={review.rating}
+                    size={16}
+                    fixed={true}
+                  />
+                </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {` Order ${review.order.id}`}
+                  {`Order #${review.order}`}
                 </p>
               </div>
+
               <div className="flex items-center gap-2">
                 <Button
-                  disabled={isLoading}
                   onClick={() => handleReviewLikeOrDislike("like")}
-                  className="animate-pulse-subtle"
                   size="icon"
                   variant="ghost"
                 >
@@ -114,7 +162,6 @@ export default function UserReview({ review, refetch }: ReviewType) {
                 <Button
                   disabled={isLoading}
                   onClick={() => handleReviewLikeOrDislike("dislike")}
-                  className="animate-pulse-subtle"
                   size="icon"
                   variant="ghost"
                 >
@@ -127,6 +174,50 @@ export default function UserReview({ review, refetch }: ReviewType) {
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {review.dislikes.length > 0 ? review.dislikes.length : null}
                 </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" variant="ghost">
+                      <MoreHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <DropdownMenuItem
+                          className=" w-full text-red-500"
+                          onSelect={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your review.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              () => handleDeleteReview(review._id, userId);
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
             <div className="mt-4">
