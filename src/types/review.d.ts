@@ -5,11 +5,11 @@ export interface Review {
   title: string;
   rating: number;
   product: {
-    _id: mongoose.Types.objectId;
+    _id: string;
     name: string;
   };
   user: {
-    _id: mongoose.Types.ObjectId;
+    _id: string;
     fullName: string;
   };
   order: {

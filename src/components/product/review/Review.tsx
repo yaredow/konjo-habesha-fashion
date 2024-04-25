@@ -22,7 +22,7 @@ type ReviewType = {
 };
 
 export default function UserReview({ review, refetch }: ReviewType) {
-  const [isLiking, setIsLiking] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { data: session } = useSession();
   const router = useRouter();
   const userId = session?.user._id as ObjectId;
@@ -42,7 +42,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
       return;
     }
 
-    setIsLiking(true);
+    setIsLoading(true);
 
     try {
       const response = await likeAReviewAction(
@@ -52,7 +52,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
       );
 
       if (response?.success === true) {
-        setIsLiking(false);
+        setIsLoading(false);
         _debouncedSubmit();
       } else {
         console.error("Error updating review likes/dislikes", response);
@@ -68,72 +68,72 @@ export default function UserReview({ review, refetch }: ReviewType) {
         description: "An unexpected error occurred",
       });
     } finally {
-      setIsLiking(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex flex-col gap-6">
-        <div className="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-10 w-10">
-                <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-                <AvatarFallback>
-                  {getInitials(review.user.fullName)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <h4 className="font-medium">
+    <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
+      <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
+        <div className="flex items-start gap-4">
+          <div className="flex-shrink-0">
+            <Avatar className="h-10 w-10 border">
+              <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
+              <AvatarFallback>
+                {getInitials(review.user.fullName)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h4 className="font-semibold">
                   {formatName(review.user.fullName)}
                 </h4>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {` Order #${review.order.id}`}
+                  {` Order ${review.order.id}`}
                 </p>
               </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handleReviewLikeOrDislike("like")}
+                  className="animate-pulse-subtle"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <ThumbsUpIcon
+                    className={cn("h-5 w-5", {
+                      "fill-muted-foreground": review.likes.includes(userId),
+                    })}
+                  />
+                </Button>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {review.likes.length > 0 ? review.likes.length : null}
+                </span>
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handleReviewLikeOrDislike("dislike")}
+                  className="animate-pulse-subtle"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <ThumbsDownIcon
+                    className={cn("h-5 w-5", {
+                      "fill-muted-foreground": review.dislikes.includes(userId),
+                    })}
+                  />
+                </Button>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {review.dislikes.length > 0 ? review.dislikes.length : null}
+                </span>
+              </div>
             </div>
-
-            <div className=" my-2">
-              <CommentRatings fixed={true} rating={review.rating} />
-            </div>
-
-            <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-              {review.review}
-            </p>
-          </div>
-          <div className="ml-auto flex flex-col items-end gap-2">
-            <div className="flex items-center gap-1">
-              <Button
-                disabled={isLiking}
-                onClick={() => handleReviewLikeOrDislike("like")}
-                size="icon"
-                variant="ghost"
-              >
-                <ThumbsUpIcon
-                  className={cn("h-5 w-5", {
-                    "text-gray-500": review.likes.includes(userId),
-                  })}
-                />
-              </Button>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {review.likes.length > 0 ? review.likes.length : null}
-              </span>
-              <Button
-                disabled={isLiking}
-                onClick={() => handleReviewLikeOrDislike("dislike")}
-                size="icon"
-                variant="ghost"
-              >
-                <ThumbsDownIcon
-                  className={cn("h-5 w-5", {
-                    "text-green": review.dislikes.includes(userId),
-                  })}
-                />
-              </Button>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {review.dislikes.length > 0 ? review.dislikes.length : null}
-              </span>
+            <div className="mt-4">
+              <h5 className="font-semibold">{review.title}</h5>
+              <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                {review.review}
+              </p>
             </div>
           </div>
         </div>
