@@ -2,49 +2,45 @@
 
 import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
+import mongoose from "mongoose";
 
 export async function likeAReviewAction(
   userId: string,
   productId: string,
   action: "like" | "dislike",
 ) {
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+  const productObjectId = new mongoose.Types.ObjectId(productId);
+
   try {
     await connectMongoDB();
 
-    const review = await Review.findOne({
-      product: productId,
-    });
+    let update: Record<string, any> = {};
+
+    if (action === "like") {
+      update = {
+        $addToSet: { likes: userObjectId },
+        $pull: { dislikes: userObjectId },
+      };
+    } else if (action === "dislike") {
+      update = {
+        $addToSet: { dislikes: userObjectId },
+        $pull: { likes: userObjectId },
+      };
+    }
+
+    const review = await Review.findOneAndUpdate(
+      { product: productObjectId },
+      update,
+      {
+        new: true,
+        upsert: false,
+      },
+    );
 
     if (!review) {
       throw new Error("Review not found");
     }
-
-    const existingLike = review.likes.includes(userId);
-    const existingDislike = review.dislikes.includes(userId);
-
-    if (action === "like") {
-      if (existingLike) {
-        review.likes = review.likes.filter((like: string) => like !== userId);
-      } else {
-        // Add userId to likes array and remove from dislikes array if present
-        review.likes.push(userId);
-        review.dislikes = review.dislikes.filter(
-          (dislike: string) => dislike !== userId,
-        );
-      }
-    } else if (action === "dislike") {
-      if (existingDislike) {
-        // If user already disliked, remove userId from dislikes array
-        review.dislikes = review.dislikes.filter(
-          (dislike: string) => dislike !== userId,
-        );
-      } else {
-        review.dislikes.push(userId);
-        review.likes = review.likes.filter((like: string) => like !== userId);
-      }
-    }
-
-    await review.save();
 
     return { success: true, message: "Action performed successfully" };
   } catch (error) {

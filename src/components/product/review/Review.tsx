@@ -10,6 +10,9 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Review as ReviewTypes } from "@/types/review";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import debounce from "lodash.debounce";
+import React from "react";
+import { cn } from "@/utils/cn";
 
 type ReviewType = {
   review: ReviewTypes;
@@ -19,10 +22,15 @@ type ReviewType = {
 };
 
 export default function UserReview({ review, refetch }: ReviewType) {
+  const [isLiking, setIsLiking] = React.useState<boolean>(false);
   const { data: session } = useSession();
   const router = useRouter();
   const userId = session?.user._id as ObjectId;
   const userIdString = userId?.toString();
+
+  const onSubmit = () => refetch();
+  const debouncedSubmit = debounce(onSubmit, 400);
+  const _debouncedSubmit = React.useCallback(debouncedSubmit, []);
 
   const handleReviewLikeOrDislike = async (action: "like" | "dislike") => {
     if (!userId) {
@@ -31,16 +39,36 @@ export default function UserReview({ review, refetch }: ReviewType) {
         description: "Please login to like a review",
       });
       router.push("/account");
-    } else {
+      return;
+    }
+
+    setIsLiking(true);
+
+    try {
       const response = await likeAReviewAction(
         userIdString,
         review.product._id,
         action,
       );
 
-      if (response.success === true) {
-        refetch();
+      if (response?.success === true) {
+        setIsLiking(false);
+        _debouncedSubmit();
+      } else {
+        console.error("Error updating review likes/dislikes", response);
+        toast({
+          variant: "destructive",
+          description: "Failed to update review",
+        });
       }
+    } catch (error) {
+      console.error("Error handling like/dislike action:", error);
+      toast({
+        variant: "destructive",
+        description: "An unexpected error occurred",
+      });
+    } finally {
+      setIsLiking(false);
     }
   };
 
@@ -77,23 +105,31 @@ export default function UserReview({ review, refetch }: ReviewType) {
           <div className="ml-auto flex flex-col items-end gap-2">
             <div className="flex items-center gap-1">
               <Button
+                disabled={isLiking}
                 onClick={() => handleReviewLikeOrDislike("like")}
-                className="text-green-500"
                 size="icon"
                 variant="ghost"
               >
-                <ThumbsUpIcon className="h-5 w-5" />
+                <ThumbsUpIcon
+                  className={cn("h-5 w-5", {
+                    "text-gray-500": review.likes.includes(userId),
+                  })}
+                />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {review.likes.length > 0 ? review.likes.length : null}
               </span>
               <Button
+                disabled={isLiking}
                 onClick={() => handleReviewLikeOrDislike("dislike")}
-                className="text-red-500"
                 size="icon"
                 variant="ghost"
               >
-                <ThumbsDownIcon className="h-5 w-5" />
+                <ThumbsDownIcon
+                  className={cn("h-5 w-5", {
+                    "text-green": review.dislikes.includes(userId),
+                  })}
+                />
               </Button>
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {review.dislikes.length > 0 ? review.dislikes.length : null}

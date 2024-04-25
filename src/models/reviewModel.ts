@@ -58,22 +58,8 @@ const reviewSchema = new mongoose.Schema<IReview>(
         },
       },
     ],
-    likes: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-      },
-    ],
-    dislikes: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-      },
-    ],
+    likes: [mongoose.Schema.Types.ObjectId],
+    dislikes: [mongoose.Schema.Types.ObjectId],
   },
   {
     toJSON: { virtuals: true },
