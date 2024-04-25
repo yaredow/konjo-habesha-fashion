@@ -2,7 +2,6 @@
 
 import Review from "@/models/reviewModel";
 import connectMongoDB from "@/utils/db/db";
-import { revalidatePath } from "next/cache";
 
 export async function likeAReviewAction(
   userId: string,
@@ -20,7 +19,6 @@ export async function likeAReviewAction(
       throw new Error("Review not found");
     }
 
-    // Check if userId is in the likes or dislikes array
     const existingLike = review.likes.includes(userId);
     const existingDislike = review.dislikes.includes(userId);
 
