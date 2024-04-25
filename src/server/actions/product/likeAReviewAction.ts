@@ -26,29 +26,25 @@ export async function likeAReviewAction(
 
     if (action === "like") {
       if (existingLike) {
-        // User already liked, remove the userId from likes
-        review.likes = review.likes.filter(
-          (like) => like.toString() !== userId,
-        );
+        review.likes = review.likes.filter((like: string) => like !== userId);
+        return;
       } else {
-        // Add the userId to the likes and remove from dislikes
+        // Add userId to likes array and remove from dislikes array if present
         review.likes.push(userId);
         review.dislikes = review.dislikes.filter(
-          (dislike) => dislike.toString() !== userId,
+          (dislike: string) => dislike !== userId,
         );
       }
     } else if (action === "dislike") {
       if (existingDislike) {
-        // User already disliked, remove the userId from dislikes
+        // If user already disliked, remove userId from dislikes array
         review.dislikes = review.dislikes.filter(
-          (dislike) => dislike.toString() !== userId,
+          (dislike: string) => dislike !== userId,
         );
       } else {
-        // Add the userId to the dislikes and remove from likes
+        // Add userId to dislikes array and remove from likes array if present
         review.dislikes.push(userId);
-        review.likes = review.likes.filter(
-          (like) => like.toString() !== userId,
-        );
+        review.likes = review.likes.filter((like: string) => like !== userId);
       }
     }
 

@@ -46,6 +46,14 @@ type UserReviewsType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
+type ProductType = {
+  product: Product;
+  isFetched: boolean;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
+
 function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [cartFilter, setCartFilter] = React.useState<CartItem | null>(null);
@@ -55,7 +63,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
   const {
     reviews = [],
     isFetched: isReviewsFetched,
-    refetch,
+    refetch: refetchReviews,
   }: UserReviewsType = useGetReviews(id);
 
   const avgRating = reviews.reduce(
@@ -65,8 +73,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
 
   console.log(cartFilter);
 
-  const { product, isFetched }: { product: Product; isFetched: boolean } =
-    useGetProduct(id);
+  const {
+    product,
+    isFetched,
+    refetch: refetchProduct,
+  }: ProductType = useGetProduct(id);
 
   const handleAddToCart = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -270,7 +281,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </TabsContent>
           <TabsContent value="Reviews">
             <div className=" mx-auto mb-4 mt-12 flex justify-center">
-              <ProductReview productId={product._id} />
+              <ProductReview productId={product._id} refetch={refetchProduct} />
             </div>
 
             <div className="grid gap-4 pt-4">
@@ -355,7 +366,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   ) : (
                     reviews.map((review) => (
                       <li>
-                        <UserReview refetch={refetch} review={review} />
+                        <UserReview refetch={refetchReviews} review={review} />
                       </li>
                     ))
                   )}

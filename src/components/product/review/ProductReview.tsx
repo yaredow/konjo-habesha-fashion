@@ -14,8 +14,19 @@ import { cn } from "@/utils/cn";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
-export default function ProductReview({ productId }: { productId: string }) {
+type ProductReviewType = {
+  productId: string;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<any, Error>>;
+};
+
+export default function ProductReview({
+  productId,
+  refetch,
+}: ProductReviewType) {
   const { data: session, status } = useSession();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [rating, setRating] = React.useState<number>(1);
@@ -50,6 +61,7 @@ export default function ProductReview({ productId }: { productId: string }) {
         description: response.message,
       });
       setIsloading(false);
+      refetch();
     } else {
       toast({
         variant: "destructive",
