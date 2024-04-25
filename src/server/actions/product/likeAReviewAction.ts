@@ -27,7 +27,6 @@ export async function likeAReviewAction(
     if (action === "like") {
       if (existingLike) {
         review.likes = review.likes.filter((like: string) => like !== userId);
-        return;
       } else {
         // Add userId to likes array and remove from dislikes array if present
         review.likes.push(userId);
@@ -42,14 +41,12 @@ export async function likeAReviewAction(
           (dislike: string) => dislike !== userId,
         );
       } else {
-        // Add userId to dislikes array and remove from likes array if present
         review.dislikes.push(userId);
         review.likes = review.likes.filter((like: string) => like !== userId);
       }
     }
 
     await review.save();
-    revalidatePath("/");
 
     return { success: true, message: "Action performed successfully" };
   } catch (error) {

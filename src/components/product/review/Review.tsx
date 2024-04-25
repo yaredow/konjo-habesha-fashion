@@ -38,7 +38,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
         action,
       );
 
-      if (response?.success === true) {
+      if (response.success === true) {
         refetch();
       }
     }
