@@ -58,7 +58,7 @@ function page() {
         toast({
           description: "You have successfully signed in",
         });
-        router.replace("/account/user-details");
+        router.replace("/account/profile");
       } else {
         toast({
           variant: "destructive",

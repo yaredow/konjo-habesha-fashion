@@ -4,7 +4,7 @@ import { CommentRatings } from "@/components/ui/rating-stars";
 import { toast } from "@/components/ui/use-toast";
 import { likeAReviewAction } from "@/server/actions/product-review/likeAReviewAction";
 import { formatName, getInitials } from "@/utils/formatName";
-import { MoreHorizontalIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -191,7 +191,6 @@ export default function UserReview({ review, refetch }: ReviewType) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem

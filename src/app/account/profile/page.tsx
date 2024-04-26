@@ -7,17 +7,9 @@ import UpdateAccount from "@/components/account/UserAccount";
 
 const UserDetails = () => {
   const { data: session } = useSession();
-  console.log(session);
+
   return (
     <div className="container ">
-      <div className="mb-6 flex flex-row items-center justify-between">
-        <Logout />
-
-        <div>
-          <UpdateAccount />
-        </div>
-      </div>
-
       <div className="mx-auto flex flex-col items-start justify-between gap-8 md:container md:flex-row md:items-center">
         {/* Order History */}
         <Card>

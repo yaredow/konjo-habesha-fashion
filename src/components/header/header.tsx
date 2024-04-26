@@ -16,7 +16,7 @@ import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 import Search from "../Search";
@@ -38,6 +38,18 @@ function Header() {
   const { data: session, status } = useSession();
   const cartQuantity = useAppSelector(getTotalCartQuantity);
   const router = useRouter();
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "http://localhost:3000" });
+  };
+
+  const handleClickSetting = () => {
+    router.replace("/account/profile/setting");
+  };
+
+  const handleClickProfile = () => {
+    router.replace("/account/profile");
+  };
 
   React.useEffect(() => {
     setIsLoaded(true);
@@ -110,14 +122,22 @@ function Header() {
                     <User strokeWidth={1.5} className=" h-[20px] w-[20px]" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Your Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
-                </DropdownMenuContent>
+                {status === "authenticated" ? (
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Your Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleClickProfile}>
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleClickSetting}>
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                ) : null}
               </DropdownMenu>
             </div>
           </div>
