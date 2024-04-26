@@ -37,6 +37,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
+import RatingBreakdown from "@/components/product/review/RatingBreakdown";
 
 type UserReviewsType = {
   reviews: Review[];
@@ -309,48 +310,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   <CardHeader>
                     <CardTitle>Rating Breakdown</CardTitle>
                   </CardHeader>
-                  <CardContent className="grid gap-4">
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        5
-                        <StarIcon className="h-4 w-4 shrink-0 fill-green-500" />
-                      </div>
-                      <Progress className="bg-green-500" value={25} />
-                      25%{"\n                "}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        4
-                        <StarIcon className="h-4 w-4 shrink-0 fill-blue-500" />
-                      </div>
-                      <Progress className="bg-blue-500" value={33} />
-                      33%{"\n                "}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        3
-                        <StarIcon className="h-4 w-4 shrink-0 fill-primary" />
-                      </div>
-                      <Progress className="bg-primary" value={22} />
-                      22%{"\n                "}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        2
-                        <StarIcon className="h-4 w-4 shrink-0 fill-orange-500" />
-                      </div>
-                      <Progress className="bg-orange-500" value={13} />
-                      13%{"\n                "}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        1
-                        <StarIcon className="h-4 w-4 shrink-0 fill-red-500" />
-                      </div>
-                      <Progress className="bg-red-500" value={7} />
-                      7%{"\n                "}
-                    </div>
-                  </CardContent>
+                  <RatingBreakdown reviews={reviews} />
                 </Card>
               </div>
 

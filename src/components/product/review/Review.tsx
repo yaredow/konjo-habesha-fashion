@@ -20,6 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteReviewAction } from "@/server/actions/product-review/deleteReviewAction";
+import { FaEllipsisVertical } from "react-icons/fa6";
+import { formatDate } from "@/utils/helpers";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -114,122 +116,118 @@ export default function UserReview({ review, refetch }: ReviewType) {
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
-      <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0">
-            <Avatar className="h-10 w-10 border">
-              <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-              <AvatarFallback>
-                {getInitials(review.user.fullName)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-4">
-                  <h4 className="font-semibold">
-                    {formatName(review.user.fullName)}
-                  </h4>
-
-                  <CommentRatings
-                    rating={review.rating}
-                    size={16}
-                    fixed={true}
-                  />
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {`Order #${review.order}`}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={() => handleReviewLikeOrDislike("like")}
-                  size="icon"
-                  variant="ghost"
-                >
-                  <ThumbsUpIcon
-                    className={cn("h-5 w-5", {
-                      "fill-muted-foreground": review.likes.includes(userId),
-                    })}
-                  />
-                </Button>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {review.likes.length > 0 ? review.likes.length : null}
-                </span>
-                <Button
-                  disabled={isLoading}
-                  onClick={() => handleReviewLikeOrDislike("dislike")}
-                  size="icon"
-                  variant="ghost"
-                >
-                  <ThumbsDownIcon
-                    className={cn("h-5 w-5", {
-                      "fill-muted-foreground": review.dislikes.includes(userId),
-                    })}
-                  />
-                </Button>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {review.dislikes.length > 0 ? review.dislikes.length : null}
-                </span>
-
-                {session?.user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontalIcon className="h-5 w-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <AlertDialog>
-                        <AlertDialogTrigger>
-                          <DropdownMenuItem
-                            className=" w-full text-red-500"
-                            onSelect={(e) => {
-                              e.preventDefault();
-                            }}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete your review.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                () => handleDeleteReview(review._id, userId);
-                              }}
-                            >
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : null}
-              </div>
-            </div>
-            <div className="mt-4">
-              <h5 className="font-semibold">{review.title}</h5>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                {review.review}
-              </p>
+    <div className="mx-auto grid grid-cols-2 rounded-lg border p-6 md:max-w-3xl">
+      <div className="flex flex-col items-start gap-4">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-12 w-12 border">
+            <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
+            <AvatarFallback>{getInitials(review.user.fullName)}</AvatarFallback>
+          </Avatar>
+          <div className="grid gap-1">
+            <h3 className="font-semibold">
+              {formatName(review.user.fullName)}
+            </h3>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Order #12345
             </div>
           </div>
+        </div>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          {formatDate(review.createdAt)}
+        </div>
+      </div>
+      <div className="relative grid gap-4">
+        <div className="flex items-center gap-1">
+          <CommentRatings
+            fixed={true}
+            variant="yellow"
+            rating={review.rating}
+          />
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {review.rating}
+          </span>
+        </div>
+        <h4 className="font-semibold">{review.title}</h4>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          {review.review}
+        </div>
+        <div className="absolute right-0 top-0 flex items-center gap-2">
+          <Button
+            onClick={() => handleReviewLikeOrDislike("like")}
+            size="icon"
+            variant="ghost"
+          >
+            <ThumbsUpIcon
+              className={cn("h-5 w-5", {
+                "fill-primary": review.likes.includes(userId),
+              })}
+            />
+          </Button>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {review.likes.length > 0 ? review.likes.length : null}
+          </span>
+          <Button
+            disabled={isLoading}
+            onClick={() => handleReviewLikeOrDislike("dislike")}
+            size="icon"
+            variant="ghost"
+          >
+            <ThumbsDownIcon
+              className={cn("h-5 w-5", {
+                "fill-primary": review.dislikes.includes(userId),
+              })}
+            />
+          </Button>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {review.dislikes.length > 0 ? review.dislikes.length : null}
+          </span>
+
+          {session?.user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="ghost">
+                  <MoreHorizontalIcon className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem
+                      className=" w-full text-red-500"
+                      onSelect={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your review.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          () => handleDeleteReview(review._id, userId);
+                        }}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
       </div>
     </div>
