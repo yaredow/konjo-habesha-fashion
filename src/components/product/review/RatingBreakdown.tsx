@@ -20,7 +20,7 @@ export default function RatingBreakdown({ reviews }: { reviews: Review[] }) {
             <div key={ratingLevel} className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-2">
                 {ratingLevel}
-                <StarIcon className={`h-4 w-4 shrink-0 fill-primary`} />
+                <StarIcon className={`h-4 w-4 shrink-0 fill-yellow-500`} />
               </div>
               <Progress className=" bg-primary-foreground" value={percentage} />
               {percentage.toFixed(1)}%

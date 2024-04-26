@@ -301,7 +301,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     <div className="flex items-center rounded-full bg-gray-100 px-3 py-2 dark:bg-gray-800">
                       <CommentRatings fixed={true} rating={avgRating} />
                       <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        out of 5
+                        {`out of ${reviews.length} ${reviews.length === 1 ? "review" : "reviews"}`}
                       </span>
                     </div>
                   </CardContent>

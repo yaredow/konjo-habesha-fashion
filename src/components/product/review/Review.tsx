@@ -128,7 +128,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
               {formatName(review.user.fullName)}
             </h3>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              Order #12345
+              {`Order #${review.order}`}
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
                       <AlertDialogAction
                         onClick={(e) => {
                           e.stopPropagation();
-                          () => handleDeleteReview(review._id, userId);
+                          handleDeleteReview(review._id, userId);
                         }}
                       >
                         Continue
