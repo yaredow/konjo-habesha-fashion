@@ -136,6 +136,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
           {formatDate(review.createdAt)}
         </div>
       </div>
+
       <div className="relative grid gap-4">
         <div className="flex items-center gap-1">
           <CommentRatings
