@@ -187,7 +187,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size="icon" variant="ghost">
-                  <MoreHorizontalIcon className="h-5 w-5" />
+                  <FaEllipsisVertical className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

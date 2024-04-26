@@ -8,27 +8,27 @@ export async function createProductReviewAction(
   formData: FormData,
   userId: string,
   productId: string,
-  mode: string,
 ) {
   const userReview = formData.get("review");
   const reviewTitle = formData.get("title");
   const userRating = Number(formData.get("rating"));
 
-  const reviewObject = {
-    review: reviewTitle,
-    title: userReview,
-    rating: userRating,
-    product: productId,
-    user: userId,
-  };
-
   try {
     await connectMongoDB();
+    const review = await Review.findOne({ user: userId, product: productId });
+    if (review) {
+      return {
+        success: false,
+        message: "You have already reviewed this product",
+      };
+    }
 
     const order = await Order.findOne({
       userId,
       "products.productId": productId,
     });
+
+    console.log(order);
 
     if (!order) {
       return {
@@ -37,39 +37,20 @@ export async function createProductReviewAction(
       };
     }
 
-    if (mode === "create") {
-      const review = await Review.findOne({ user: userId, product: productId });
-      if (review) {
-        return {
-          success: false,
-          message: "You have already reviewed this product",
-        };
-      }
+    const newReview = await Review.create({
+      review: reviewTitle,
+      title: userReview,
+      rating: userRating,
+      product: productId,
+      user: userId,
+      order: order._id,
+    });
 
-      const newReview = await Review.create({
-        ...reviewObject,
-        order: order._id,
-      });
-
-      if (!newReview) {
-        return {
-          success: false,
-          message: "Failed to save your review. Please try again!",
-        };
-      }
-    } else if (mode === "edit") {
-      const editedReview = await Review.findOneAndUpdate(
-        { user: userId, product: productId },
-        { $set: { ...reviewObject, order: order._id } },
-        { new: true },
-      );
-
-      if (!editedReview) {
-        return {
-          success: false,
-          message: "Failed to edit your review. Please try again",
-        };
-      }
+    if (!newReview) {
+      return {
+        success: false,
+        message: "Failed to save your review. Please try again!",
+      };
     }
 
     return {

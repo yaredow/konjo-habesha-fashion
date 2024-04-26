@@ -282,7 +282,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </TabsContent>
           <TabsContent value="Reviews">
             <div className=" mx-auto mb-4 mt-12 flex justify-center">
-              <ProductReview productId={product._id} refetch={refetchProduct} />
+              <ProductReview
+                productId={product._id}
+                refetch={refetchProduct}
+                mode="create"
+              />
             </div>
 
             <div className="grid gap-4 pt-4">

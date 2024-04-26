@@ -37,10 +37,7 @@ export default function ProductReview({
     setRating(newRating);
   };
 
-  const handleSubmit = async (
-    evt: React.FormEvent<HTMLFormElement>,
-    mode: "create" | "edit",
-  ) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget);
     formData.append("rating", rating.toString());
@@ -57,7 +54,6 @@ export default function ProductReview({
       formData,
       userId,
       productId,
-      mode,
     );
 
     if (response.success) {
