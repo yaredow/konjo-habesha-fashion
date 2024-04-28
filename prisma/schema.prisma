@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type OrdersProducts {
+  id        String @map("_id") @db.ObjectId
+  name      String
+  productId String
+  quantity  Int
+}
+
+type OrdersShipping {
+  address    OrdersShippingAddress
+  email      String
+  name       String
+  phone      String
+  tax_exempt String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  tax_ids    Json?
+}
+
+type OrdersShippingAddress {
+  city        String
+  country     String
+  line1       String
+  line2       String
+  postal_code String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  state       Json?
+}
+
+type ProductsImages {
+  id        String @map("_id") @db.ObjectId
+  public_id String
+  url       String
+}
+
+model newslettersubscriptions {
+  id                      String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                       Int      @map("__v")
+  email                   String   @unique(map: "email_1")
+  fullName                String
+  isSubscribed            Boolean
+  isVerified              Boolean
+  subscriptionDate        DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  subscriptionPreferences Json?
+  unsubscribeToken        String   @unique(map: "unsubscribeToken_1")
+  unsubscribeTokenExpires DateTime @db.Date
+}
+
+model orders {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  v               Int              @map("__v")
+  createdAt       DateTime         @db.Date
+  customerId      String
+  delivery_status String
+  paymentIntentId String
+  payment_status  String
+  products        OrdersProducts[]
+  shipping        OrdersShipping
+  subtotal        Int
+  updatedAt       DateTime         @db.Date
+  userId          String
+}
+
+model products {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  v                Int              @map("__v")
+  category         String
+  description      String
+  images           ProductsImages[]
+  inStock          Boolean
+  isFeatured       Boolean
+  name             String
+  price            Int
+  productAddedDate DateTime         @db.Date
+  sizes            String[]
+  status           String
+  stockQuantity    Int
+  unitsSold        Int
+}
+
+model reviews {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  createdAt DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  dislikes  Json?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  images    Json?
+  likes     String[]
+  order     String   @db.ObjectId
+  product   String   @db.ObjectId
+  rating    Int
+  review    String
+  title     String
+  user      String   @db.ObjectId
+}
+
+model users {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  v        Int     @map("__v")
+  active   Boolean
+  email    String  @unique(map: "email_1")
+  fullName String
+  /// Field referred in an index, but found no data to define the type.
+  googleId Json?   @unique(map: "googleId_1")
+  password String?
+  role     String
+  verified Boolean
+}

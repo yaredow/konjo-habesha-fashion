@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import GoogleButton from "@/components/GoogleSigninButton";
 import FacebookSigninButton from "@/components/FacebookSigninButton";
 import SpinnerMini from "@/components/ui/SpinnerMini";
+import { nextLog } from "@/server/actions/account/nextLog";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -46,29 +47,29 @@ function page() {
     },
   });
 
-  const onSubmit = async () => {
-    const formData = form.getValues();
-    try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        ...formData,
-      });
-      console.log(res);
-      if (res?.ok) {
-        toast({
-          description: "You have successfully signed in",
-        });
-        router.replace("/account/profile");
-      } else {
-        toast({
-          variant: "destructive",
-          description: res?.error,
-        });
-      }
-    } catch (error: any) {
-      throw new Error("Unexpected error during sign-in");
-    }
-  };
+  // const onSubmit = async () => {
+  //   const formData = form.getValues();
+  //   try {
+  //     const res = await signIn("credentials", {
+  //       redirect: false,
+  //       ...formData,
+  //     });
+  //     console.log(res);
+  //     if (res?.ok) {
+  //       toast({
+  //         description: "You have successfully signed in",
+  //       });
+  //       router.replace("/account/profile");
+  //     } else {
+  //       toast({
+  //         variant: "destructive",
+  //         description: res?.error,
+  //       });
+  //     }
+  //   } catch (error: any) {
+  //     throw new Error("Unexpected error during sign-in");
+  //   }
+  // };
 
   return (
     <main className=" my-auto flex items-center justify-center">
@@ -79,7 +80,7 @@ function page() {
         <CardContent>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              action={nextLog}
               className="w-full flex-grow items-center justify-center gap-4"
             >
               <div className=" flex flex-col space-y-6">
