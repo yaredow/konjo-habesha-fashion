@@ -1,14 +1,15 @@
-import Product from "@/models/productModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const id = request.url.slice(request.url.lastIndexOf("/") + 1);
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id") as string;
+  console.log(id);
 
   try {
-    await connectMongoDB();
-    const product = await Product.findById(id);
-    await product.populate("reviews");
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
 
     if (!product) {
       return NextResponse.json(

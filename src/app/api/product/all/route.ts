@@ -1,10 +1,9 @@
-import Product from "@/models/productModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectMongoDB();
-  const products = await Product.find();
+  const products = await prisma.product.findMany();
+
   if (!products) {
     return NextResponse.json(
       { message: "Products not found" },
