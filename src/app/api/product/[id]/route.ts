@@ -2,13 +2,14 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id") as string;
-  console.log(id);
+  const id = request.url.slice(request.url.lastIndexOf("/") + 1);
 
   try {
     const product = await prisma.product.findUnique({
       where: { id },
+      include: {
+        Review: true,
+      },
     });
 
     if (!product) {

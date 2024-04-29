@@ -2,7 +2,7 @@ import { ObjectId } from "mongoose";
 import { Field } from "react-hook-form";
 
 type Product = {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   category: string;

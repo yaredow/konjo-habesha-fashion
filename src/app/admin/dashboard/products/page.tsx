@@ -64,6 +64,7 @@ export type FetchProductstype = {
 export default function page() {
   const [isClient, setIsClient] = React.useState(false);
   const { products = [], isFetched, refetch } = useGetProducts();
+  console.log(products);
   const router = useRouter();
 
   const handleProductDelete = async (id: string) => {
@@ -161,7 +162,7 @@ export default function page() {
                       <Spinner className=" flex items-center justify-center" />
                     ) : (
                       products.map((product: Product) => (
-                        <TableRow key={product._id}>
+                        <TableRow key={product.id}>
                           <TableCell className="hidden sm:table-cell">
                             <Image
                               alt={product.images[0].public_id}
@@ -203,7 +204,7 @@ export default function page() {
                                 <DropdownMenuItem
                                   onClick={() =>
                                     router.replace(
-                                      `/admin/dashboard/products/${product._id}`,
+                                      `/admin/dashboard/products/${product.id}`,
                                     )
                                   }
                                 >
@@ -237,7 +238,7 @@ export default function page() {
                                       <AlertDialogAction
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleProductDelete(product._id);
+                                          handleProductDelete(product.id);
                                         }}
                                       >
                                         Continue
