@@ -12,7 +12,6 @@ import StoreProvider from "@/lib/providers/StoreProvider";
 import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
-import { CartProvider } from "@/lib/context/CartContext";
 import { cn } from "@/utils/cn";
 
 const league_spartan = League_Spartan({
@@ -63,16 +62,14 @@ export default function RootLayout({
           <AuthProvider>
             <StoreProvider>
               <QueryProviders>
-                <CartProvider>
-                  <div className=" flex flex-col">
-                    <Header />
-                    <div className="flex min-h-[90vh] items-center justify-center">
-                      {children}
-                    </div>
-                    <Footer />
-                    <Toaster />
+                <div className=" flex flex-col">
+                  <Header />
+                  <div className="flex min-h-[90vh] items-center justify-center">
+                    {children}
                   </div>
-                </CartProvider>
+                  <Footer />
+                  <Toaster />
+                </div>
               </QueryProviders>
             </StoreProvider>
           </AuthProvider>

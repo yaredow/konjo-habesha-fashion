@@ -54,7 +54,71 @@ model newslettersubscriptions {
   unsubscribeTokenExpires DateTime @db.Date
 }
 
-model orders {
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  Review        Review[]
+  Like          Like[]
+  Dislike       Dislike[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification-tokens")
+}
+
+model Order {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
   v               Int              @map("__v")
   createdAt       DateTime         @db.Date
@@ -67,9 +131,12 @@ model orders {
   subtotal        Int
   updatedAt       DateTime         @db.Date
   userId          String
+  Review          Review[]
+
+  @@map("orders")
 }
 
-model products {
+model Product {
   id               String           @id @default(auto()) @map("_id") @db.ObjectId
   v                Int              @map("__v")
   category         String
@@ -84,34 +151,51 @@ model products {
   status           String
   stockQuantity    Int
   unitsSold        Int
+  Review           Review[]
+
+  @@map("products")
 }
 
-model reviews {
+model Like {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  v         Int      @map("__v")
-  createdAt DateTime @db.Date
-  /// Could not determine type: the field only had null or empty values in the sample set.
-  dislikes  Json?
-  /// Could not determine type: the field only had null or empty values in the sample set.
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  review    Review   @relation(fields: [reviewId], references: [id])
+  reviewId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("likes")
+}
+
+model Dislike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  review    Review   @relation(fields: [reviewId], references: [id])
+  reviewId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("dislikes")
+}
+
+model Review {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int       @map("__v")
+  createdAt DateTime  @db.Date
+  dislikes  Dislike[]
+  likes     Like[]
   images    Json?
-  likes     String[]
-  order     String   @db.ObjectId
-  product   String   @db.ObjectId
+  order     Order     @relation(fields: [orderId], references: [id])
+  orderId   String    @map("orders") @db.ObjectId
+  product   Product   @relation(fields: [productId], references: [id])
+  productId String    @map("products") @db.ObjectId
   rating    Int
   review    String
   title     String
-  user      String   @db.ObjectId
-}
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @map("users") @db.ObjectId
 
-model users {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  v        Int     @map("__v")
-  active   Boolean
-  email    String  @unique(map: "email_1")
-  fullName String
-  /// Field referred in an index, but found no data to define the type.
-  googleId Json?   @unique(map: "googleId_1")
-  password String?
-  role     String
-  verified Boolean
+  @@map("reviews")
 }
