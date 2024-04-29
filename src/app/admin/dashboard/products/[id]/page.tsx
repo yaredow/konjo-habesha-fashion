@@ -80,6 +80,7 @@ export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { id } = params;
   const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
+  console.log(product);
 
   const hasNoChanges = compareObject(productDetails as Product, product);
 
