@@ -46,8 +46,7 @@ model newslettersubscriptions {
   isSubscribed            Boolean
   isVerified              Boolean
   subscriptionDate        DateTime @db.Date
-  /// Could not determine type: the field only had null or empty values in the sample set.
-  subscriptionPreferences Json?
+  subscriptionPreferences String[]
   unsubscribeToken        String   @unique(map: "unsubscribeToken_1")
   unsubscribeTokenExpires DateTime @db.Date
 }
