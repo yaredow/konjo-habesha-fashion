@@ -1,6 +1,6 @@
 "use server";
 
-import User from "@/models/authModel";
+import prisma from "@/lib/prisma";
 import connectMongoDB from "@/utils/db/db";
 import { registrationFormSchema } from "@/utils/validators/form-validators";
 
@@ -25,13 +25,12 @@ export async function register(
   try {
     const { fullName, email, password, passwordConfirm } = validatedFields.data;
 
-    await connectMongoDB();
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return { message: "User already exists" };
     }
 
-    const newUser = await User.create({
+    const newUser = await prisma.user.create({
       fullName,
       email,
       password,

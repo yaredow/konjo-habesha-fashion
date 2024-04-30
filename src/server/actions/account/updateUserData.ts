@@ -1,7 +1,6 @@
 "use server";
 
-import User from "@/models/authModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 
 export type FormState = {
@@ -23,9 +22,8 @@ export async function updateUserData(
 
   try {
     const { fullName } = validatedFields.data;
-    await connectMongoDB();
 
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
       return { message: "You have to login first" };

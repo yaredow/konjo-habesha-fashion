@@ -29,7 +29,6 @@ import { useRouter } from "next/navigation";
 import GoogleButton from "@/components/GoogleSigninButton";
 import FacebookSigninButton from "@/components/FacebookSigninButton";
 import SpinnerMini from "@/components/ui/SpinnerMini";
-import { nextLog } from "@/server/actions/account/nextLog";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -79,10 +78,7 @@ function page() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form
-              action={nextLog}
-              className="w-full flex-grow items-center justify-center gap-4"
-            >
+            <form className="w-full flex-grow items-center justify-center gap-4">
               <div className=" flex flex-col space-y-6">
                 <FormField
                   control={form.control}

@@ -63,7 +63,7 @@ export function RegistrationDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="link">
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
             Add Product

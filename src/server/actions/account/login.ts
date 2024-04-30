@@ -1,14 +1,19 @@
 "use server";
 
-import User from "@/models/authModel";
+import prisma from "@/lib/prisma";
 import connectMongoDB from "@/utils/db/db";
 import bcrypt from "bcryptjs";
 
 export async function login(credentials: { email: string; password: string }) {
   const { email, password } = credentials;
+
   try {
-    await connectMongoDB();
-    const user = await User.findOne({ email }).select("+password");
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        password: true,
+      },
+    });
 
     if (user && !user.password) {
       throw new Error(

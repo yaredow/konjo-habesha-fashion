@@ -1,11 +1,11 @@
 "use server";
 
-import User from "@/models/authModel";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
 import connectMongoDB from "@/utils/db/db";
 import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
+import prisma from "@/lib/prisma";
 
 export async function updatePasswordAction(
   email: string,
@@ -28,8 +28,12 @@ export async function updatePasswordAction(
     validatedFields.data;
 
   try {
-    await connectMongoDB();
-    const user = await User.findOne({ email }).select("+password");
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        password: true,
+      },
+    });
 
     if (!user) {
       return { message: "You have to login first" };

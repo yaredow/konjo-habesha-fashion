@@ -1,4 +1,4 @@
-import Product from "@/models/productModel";
+import prisma from "@/lib/prisma";
 import { GROUP_OBJECTS } from "@/utils/constants";
 import connectMongoDB from "@/utils/db/db";
 import { NextResponse } from "next/server";
@@ -6,11 +6,10 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const type = request.url.slice(request.url.lastIndexOf("/") + 1);
 
-  await connectMongoDB();
   switch (type) {
     case "trending":
       const minUnitSold = 10;
-      const trendingProducts = await Product.aggregate([
+      const trendingProducts = await prisma.product.aggregate([
         {
           $match: { unitsSold: { $gte: minUnitSold } },
         },
