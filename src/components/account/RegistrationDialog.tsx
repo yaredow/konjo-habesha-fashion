@@ -27,40 +27,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import SubmitButton from "../LogoutButton";
 import { registrationFormSchema } from "@/utils/validators/form-validators";
 
-const initialState = {
-  message: "",
-};
-
 export function RegistrationDialog() {
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(register, initialState);
-
-  const form = useForm<z.infer<typeof registrationFormSchema>>({
-    resolver: zodResolver(registrationFormSchema),
-    defaultValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      passwordConfirm: "",
-    },
-  });
-
-  const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
-  };
-
-  useEffect(() => {
-    if (state?.message !== "" && state?.message === "success") {
-      toast({
-        description: "You have registered successfully",
-      });
-    }
-    form.reset();
-  }, [state?.message]);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -77,89 +44,7 @@ export function RegistrationDialog() {
             Fill out the detail below to create your account
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Form {...form}>
-            {state?.message !== "" && state?.message !== "success" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
-            <form
-              ref={formRef}
-              className=" grid gap-4 py-4"
-              action={formAction}
-              onSubmit={handleSubmitRegistration}
-            >
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} placeholder="Name" type="text" />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} placeholder="Email" type="email" />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="password"
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="passwordConfirm"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Confirm Password"
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <SubmitButton />
-            </form>
-          </Form>
-        </div>
+        <div className="grid gap-4 py-4"></div>
       </DialogContent>
     </Dialog>
   );

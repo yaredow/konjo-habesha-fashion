@@ -11,21 +11,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import SpinnerMini from "../ui/SpinnerMini";
-import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import SubmitButton from "../SubmitButton";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(4),
 });
-
-const SubmitButtom = () => {
-  const { pending } = useFormStatus();
-
-  return <Button type="submit">{pending ? <SpinnerMini /> : "Submit"}</Button>;
-};
 
 export default function LoginForm() {
   const router = useRouter();
@@ -36,30 +28,6 @@ export default function LoginForm() {
       password: "",
     },
   });
-
-  //   const onSubmit = async () => {
-  //     const formData = form.getValues();
-  //     try {
-  //       const res = await signIn("credentials", {
-  //         redirect: false,
-  //         ...formData,
-  //       });
-  //       console.log(res);
-  //       if (res?.ok) {
-  //         toast({
-  //           description: "You have successfully signed in",
-  //         });
-  //         router.replace("/account/profile");
-  //       } else {
-  //         toast({
-  //           variant: "destructive",
-  //           description: res?.error,
-  //         });
-  //       }
-  //     } catch (error: any) {
-  //       throw new Error("Unexpected error during sign-in");
-  //     }
-  //   };
 
   return (
     <Form {...form}>
@@ -94,7 +62,7 @@ export default function LoginForm() {
               );
             }}
           />
-          <SubmitButtom />
+          <SubmitButton />
         </div>
       </form>
     </Form>

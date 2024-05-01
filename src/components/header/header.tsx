@@ -31,7 +31,6 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import LogoutButton from "../LogoutButton";
 
 export default function HeaderComp() {
   const { data: session, status } = useSession();
@@ -40,14 +39,6 @@ export default function HeaderComp() {
 
   const handleLogout = () => {
     signOut({ callbackUrl: "http://localhost:3000" });
-  };
-
-  const handleClickSetting = () => {
-    router.replace("/account/profile/setting");
-  };
-
-  const handleClickProfile = () => {
-    router.replace("/account/profile");
   };
 
   return (
@@ -129,15 +120,15 @@ export default function HeaderComp() {
                         : "Your Account"}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleClickProfile}>
-                      Profile
+                    <DropdownMenuItem>
+                      <Link href="/account/profile">Profile</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleClickSetting}>
-                      Settings
+                    <DropdownMenuItem>
+                      <Link href="/accout/profile/settings">Settings</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <LogoutButton />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Log out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 ) : null}
