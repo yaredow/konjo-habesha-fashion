@@ -1,5 +1,4 @@
-import Order from "@/models/orderModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 import Filter from "@/utils/hook/filter";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,7 +6,6 @@ export async function POST(request: NextRequest) {
   const data = await request.json();
 
   try {
-    await connectMongoDB();
     const { delivery_status, time_range } = data.filter;
 
     const filter = new Filter();
@@ -35,7 +33,9 @@ export async function POST(request: NextRequest) {
       filter.add("createdAt", { $gte: startDate, $lt: endDate });
     }
 
-    const orders = await Order.find(filter.hasFilter() ? filter.get() : {});
+    const orders = await prisma.order.findMany({
+      where: filter.hasFilter() ? filter.get() : {},
+    });
 
     if (!orders) {
       return NextResponse.json(

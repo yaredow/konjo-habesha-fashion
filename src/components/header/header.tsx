@@ -7,7 +7,6 @@ import {
   HiOutlinePhoneOutgoing,
   HiOutlineShoppingBag,
 } from "react-icons/hi";
-import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
@@ -15,7 +14,6 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
@@ -31,10 +29,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { stat } from "fs";
+import { User as UserType } from "next-auth";
 
-function Header() {
-  const [isLoaded, setIsLoaded] = React.useState(false);
+export default function HeaderComp() {
   const { data: session, status } = useSession();
   const cartQuantity = useAppSelector(getTotalCartQuantity);
   const router = useRouter();
@@ -50,12 +47,6 @@ function Header() {
   const handleClickProfile = () => {
     router.replace("/account/profile");
   };
-
-  React.useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  if (!isLoaded) return null;
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
@@ -124,7 +115,11 @@ function Header() {
                 </DropdownMenuTrigger>
                 {status === "authenticated" ? (
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Your Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      {status === "authenticated"
+                        ? session.user?.name
+                        : "Your Account"}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleClickProfile}>
                       Profile
@@ -217,5 +212,3 @@ function Header() {
     </nav>
   );
 }
-
-export default Header;

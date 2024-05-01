@@ -1,21 +1,21 @@
 "use server";
 
-import Order from "@/models/orderModel";
-import Review from "@/models/reviewModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 
 export async function createProductReviewAction(
   formData: FormData,
   userId: string,
   productId: string,
 ) {
-  const userReview = formData.get("review");
-  const reviewTitle = formData.get("title");
+  const userReview = formData.get("review") as string;
+  const reviewTitle = formData.get("title") as string;
   const userRating = Number(formData.get("rating"));
 
   try {
-    await connectMongoDB();
-    const review = await Review.findOne({ user: userId, product: productId });
+    const review = await prisma.review.findFirst({
+      where: { userId, productId },
+    });
+
     if (review) {
       return {
         success: false,
@@ -23,12 +23,9 @@ export async function createProductReviewAction(
       };
     }
 
-    const order = await Order.findOne({
-      userId,
-      "products.productId": productId,
+    const order = await prisma.order.findFirst({
+      where: { userId, products: { some: { productId } } },
     });
-
-    console.log(order);
 
     if (!order) {
       return {
@@ -37,13 +34,15 @@ export async function createProductReviewAction(
       };
     }
 
-    const newReview = await Review.create({
-      review: reviewTitle,
-      title: userReview,
-      rating: userRating,
-      product: productId,
-      user: userId,
-      order: order._id,
+    const newReview = await prisma.review.create({
+      data: {
+        review: reviewTitle,
+        title: userReview,
+        rating: userRating,
+        productId,
+        userId,
+        orderId: order.id,
+      },
     });
 
     if (!newReview) {

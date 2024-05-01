@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 function FacebookSigninButton() {
   const loginWithFb = () => {
     signIn("facebook", {
-      callbackUrl: "http://localhost:300/account/user-details",
+      callbackUrl: "http://localhost:300/account/profile",
     });
   };
   return (

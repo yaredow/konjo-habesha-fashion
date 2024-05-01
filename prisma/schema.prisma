@@ -178,11 +178,11 @@ model Dislike {
 
 model Review {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  v         Int       @map("__v")
-  createdAt DateTime  @db.Date
-  dislikes  Dislike[]
+  v         Int      @map("__v")  @default(0)
+  createdAt DateTime  @default(now())
+  dislikes  Dislike[] 
   likes     Like[]
-  images    Json?
+  images    ProductsImages[]
   order     Order     @relation(fields: [orderId], references: [id])
   orderId   String    @map("orders") @db.ObjectId
   product   Product   @relation(fields: [productId], references: [id])

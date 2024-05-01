@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 const GoogleButton = () => {
   const loginWithGoogle = () =>
     signIn("google", {
-      callbackUrl: "http://localhost:3000/account/user-details",
+      callbackUrl: "http://localhost:3000/account/profile",
     });
 
   return (

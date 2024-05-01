@@ -1,15 +1,12 @@
 "use server";
 
-import Order from "@/models/orderModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 
 export async function deleteOrderAction(id: string) {
   try {
-    await connectMongoDB();
+    await prisma.order.delete({ where: { id } });
 
-    await Order.findByIdAndDelete({ _id: id });
-
-    const order = await Order.findById({ _id: id });
+    const order = await prisma.order.findMany({ where: { id } });
 
     if (!order) {
       return { success: true, message: "Order is deleted successfully" };

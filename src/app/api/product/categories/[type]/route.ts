@@ -9,58 +9,46 @@ export async function GET(request: Request) {
   switch (type) {
     case "trending":
       const minUnitSold = 10;
-      const trendingProducts = await prisma.product.aggregate([
-        {
-          $match: { unitsSold: { $gte: minUnitSold } },
+      const trendingProducts = await prisma.product.findMany({
+        where: {
+          unitsSold: {
+            gte: minUnitSold,
+          },
         },
-        {
-          $group: GROUP_OBJECTS,
+        take: 8,
+        orderBy: {
+          unitsSold: "desc",
         },
-        {
-          $limit: 8,
-        },
-        {
-          $sort: { unitsSold: -1 },
-        },
-      ]);
+      });
 
       return NextResponse.json({ trendingProducts }, { status: 200 });
 
     case "featured":
-      const featuredProducts = await Product.aggregate([
-        {
-          $match: {
-            isFeatured: true,
-            stockQuantity: { $gt: 0 },
+      const featuredProducts = await prisma.product.findMany({
+        where: {
+          isFeatured: true,
+          stockQuantity: {
+            gt: 0,
           },
         },
-        {
-          $group: GROUP_OBJECTS,
-        },
-      ]);
+        take: 8,
+      });
 
       return NextResponse.json({ featuredProducts }, { status: 200 });
 
     case "new-arrival":
       const daysAgo = 30;
-      const newArrivalProducts = await Product.aggregate([
-        {
-          $match: {
-            productAddedDate: {
-              $gte: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000),
-            },
+      const newArrivalProducts = await prisma.product.findMany({
+        where: {
+          productAddedDate: {
+            gte: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000),
           },
         },
-        {
-          $group: GROUP_OBJECTS,
+        take: 8,
+        orderBy: {
+          productAddedDate: "desc",
         },
-        {
-          $sort: { productAddedDate: -1 },
-        },
-        {
-          $limit: 8,
-        },
-      ]);
+      });
 
       return NextResponse.json({ newArrivalProducts }, { status: 200 });
   }
