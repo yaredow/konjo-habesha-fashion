@@ -2,10 +2,9 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { toast } from "@/components/ui/use-toast";
-import { likeAReviewAction } from "@/server/actions/product-review/likeAReviewAction";
+import { likeOrDislikeAReviewAction } from "@/server/actions/product-review/likeOrDislikeAReviewAction";
 import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
-import { ObjectId } from "mongoose";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Review as ReviewTypes } from "@/types/review";
@@ -45,8 +44,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { data: session } = useSession();
   const router = useRouter();
-  const userId = session?.user._id as ObjectId;
-  const userIdString = userId?.toString();
+  const userId = session?.user?.id;
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
@@ -65,8 +63,8 @@ export default function UserReview({ review, refetch }: ReviewType) {
     setIsLoading(true);
 
     try {
-      const response = await likeAReviewAction(
-        userIdString,
+      const response = await likeOrDislikeAReviewAction(
+        userId,
         review.product._id,
         action,
       );

@@ -8,7 +8,7 @@ function ProductItem({ product }: { product: Product }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.replace(`/product/${product._id}`);
+    router.replace(`/product/${product.id}`);
   };
 
   return (

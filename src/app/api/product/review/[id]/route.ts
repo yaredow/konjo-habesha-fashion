@@ -1,18 +1,24 @@
-import Review from "@/models/reviewModel";
+import prisma from "@/lib/prisma";
 import connectMongoDB from "@/utils/db/db";
+import { includes } from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const id = request.url.slice(request.url.lastIndexOf("/") + 1);
 
   try {
-    await connectMongoDB();
-    const reviews = await Review.find({ product: id })
-      .populate({
-        path: "product",
-        select: "name ",
-      })
-      .populate({ path: "user", select: "fullName" });
+    const reviews = await prisma.review.findUnique({
+      where: { id },
+      include: {
+        product: true,
+        user: true,
+      },
+    });
+    // .populate({
+    //   path: "product",
+    //   select: "name ",
+    // })
+    // .populate({ path: "user", select: "fullName" });
 
     if (!reviews) {
       return NextResponse.json(

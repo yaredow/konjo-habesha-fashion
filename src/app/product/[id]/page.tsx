@@ -72,8 +72,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
     0,
   );
 
-  console.log(cartFilter);
-
   const {
     product,
     isFetched,
@@ -282,11 +280,14 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </TabsContent>
           <TabsContent value="Reviews">
             <div className=" mx-auto mb-4 mt-12 flex justify-center">
-              <ProductReview
-                productId={product._id}
-                refetch={refetchProduct}
-                mode="create"
-              />
+              <p
+                className={
+                  reviews.length > 0
+                    ? "hidden"
+                    : "Be the first to rate this product"
+                }
+              ></p>
+              <ProductReview productId={product.id} refetch={refetchProduct} />
             </div>
 
             <div className="grid gap-4 pt-4">

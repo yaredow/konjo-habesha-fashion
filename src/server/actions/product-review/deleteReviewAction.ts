@@ -1,18 +1,14 @@
 "use server";
 
-import Review from "@/models/reviewModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 
 export async function deleteReviewAction(reviewId: string, userId: string) {
-  console.log("reviewId", reviewId);
-  console.log("userId", userId);
-
   try {
-    await connectMongoDB();
-
-    const review = await Review.findOneAndDelete({
-      _id: reviewId,
-      user: userId,
+    const review = await prisma.review.delete({
+      where: {
+        id: reviewId,
+        userId,
+      },
     });
 
     if (!review) {
