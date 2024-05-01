@@ -5,7 +5,7 @@ export default function FacebookSigninButton() {
   return (
     <form
       action={async () => {
-        "server side";
+        "use server";
         await signIn("facebook", {
           callbackUrl: "http://localhost:300/account/profile",
         });

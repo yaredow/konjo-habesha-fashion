@@ -62,7 +62,7 @@ function page() {
 
   return (
     <main className="my-auto  flex items-center justify-center">
-      <Card className="mx-auto max-w-2xl items-center p-6">
+      <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
         <CardHeader>
           <CardTitle className=" pb-4">Contact Us</CardTitle>
           <CardDescription>

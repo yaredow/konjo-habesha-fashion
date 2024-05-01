@@ -4,7 +4,7 @@ const GoogleButton = () => {
   return (
     <form
       action={async () => {
-        "server side";
+        "use server";
 
         await signIn("google", {
           callbackUrl: "http://localhost:3000/account/profile",

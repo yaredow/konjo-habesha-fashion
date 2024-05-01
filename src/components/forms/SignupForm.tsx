@@ -54,7 +54,7 @@ export default function SignupForm() {
   }, [state?.message]);
 
   return (
-    <Card className=" min-w-3xl w-full">
+    <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
       <CardHeader>
         <CardTitle>Sign up</CardTitle>
         <CardDescription>

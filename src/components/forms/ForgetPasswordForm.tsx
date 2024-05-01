@@ -34,7 +34,7 @@ export default function ForgetPasswordForm() {
   };
 
   return (
-    <Card className="mx-auto max-w-2xl items-center p-6">
+    <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
       <CardHeader>
         <CardTitle className=" pb-4">Reset Your Password</CardTitle>
         <CardDescription>
