@@ -19,6 +19,8 @@ import { useAppSelector } from "@/store/hooks";
 import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 import Search from "../Search";
 import { NAV_LINKS } from "@/utils/constants";
+import AvatarPlaceholder from "@/assets/User-Profile-PNG (1).png";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +31,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { User as UserType } from "next-auth";
+import LogoutButton from "../LogoutButton";
 
 export default function HeaderComp() {
   const { data: session, status } = useSession();
@@ -110,7 +112,13 @@ export default function HeaderComp() {
                     size="icon"
                     className="overflow-hidden rounded-full"
                   >
-                    <User strokeWidth={1.5} className=" h-[20px] w-[20px]" />
+                    <Image
+                      src={session?.user?.image || AvatarPlaceholder}
+                      alt="User profile picture"
+                      width={50}
+                      height={50}
+                      className="aspect-square rounded-full bg-background object-cover"
+                    />
                   </Button>
                 </DropdownMenuTrigger>
                 {status === "authenticated" ? (
@@ -128,8 +136,8 @@ export default function HeaderComp() {
                       Settings
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      Logout
+                    <DropdownMenuItem>
+                      <LogoutButton />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 ) : null}

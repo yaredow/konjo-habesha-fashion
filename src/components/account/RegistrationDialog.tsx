@@ -24,7 +24,7 @@ import { toast } from "../ui/use-toast";
 import React, { useEffect, useRef, useState } from "react";
 import { register } from "@/server/actions/account/register";
 import { useFormState, useFormStatus } from "react-dom";
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "../LogoutButton";
 import { registrationFormSchema } from "@/utils/validators/form-validators";
 
 const initialState = {

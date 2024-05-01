@@ -39,7 +39,7 @@ import { Controller } from "react-hook-form";
 import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "../LogoutButton";
 
 const options = [
   { value: "XS", label: "Extra Small" },
