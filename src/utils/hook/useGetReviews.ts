@@ -5,7 +5,6 @@ async function fetchUserReviews(id: string) {
   const response = await axios.get(
     `http://localhost:3000/api/product/review/${id}`,
   );
-  console.log(response);
 
   return response.data;
 }

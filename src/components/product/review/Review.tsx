@@ -44,7 +44,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { data: session } = useSession();
   const router = useRouter();
-  const userId = session?.user?.id;
+  const userId = session?.user?.id as string;
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);

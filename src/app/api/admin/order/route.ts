@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import Filter from "@/utils/hook/filter";
+import Filter from "@/utils/filter";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

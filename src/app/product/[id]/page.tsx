@@ -72,6 +72,8 @@ function ProductDetail({ params }: { params: { id: string } }) {
     0,
   );
 
+  console.log(reviews);
+
   const {
     product,
     isFetched,

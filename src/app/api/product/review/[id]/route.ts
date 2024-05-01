@@ -7,18 +7,15 @@ export async function GET(request: NextRequest) {
   const id = request.url.slice(request.url.lastIndexOf("/") + 1);
 
   try {
-    const reviews = await prisma.review.findUnique({
-      where: { id },
+    const reviews = await prisma.review.findMany({
+      where: { productId: id },
       include: {
         product: true,
         user: true,
       },
     });
-    // .populate({
-    //   path: "product",
-    //   select: "name ",
-    // })
-    // .populate({ path: "user", select: "fullName" });
+
+    console.log(reviews);
 
     if (!reviews) {
       return NextResponse.json(
