@@ -6,6 +6,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  theme: {
+    logo: "/images/logo/logo.png",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [Google, Facebook],
 });
