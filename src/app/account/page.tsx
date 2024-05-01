@@ -6,8 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { RegistrationDialog } from "@/components/account/RegistrationDialog";
-import { ForgotPasswordDialog } from "@/components/forgot-password/ForgotPasswordDialog";
 import GoogleButton from "@/components/GoogleSigninButton";
 import FacebookSigninButton from "@/components/FacebookSigninButton";
 import LoginForm from "@/components/forms/LoginForm";
@@ -23,8 +21,6 @@ function page() {
         <CardContent>
           <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
             <LoginForm />
-            <RegistrationDialog />
-            <ForgotPasswordDialog />
           </div>
         </CardContent>
         <CardFooter className=" grid grid-rows-1">
