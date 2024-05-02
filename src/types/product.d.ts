@@ -19,7 +19,7 @@ type Product = {
 };
 
 type CartItem = {
-  _id: string;
+  id: string;
   images: {
     public_id: string;
     url: string;

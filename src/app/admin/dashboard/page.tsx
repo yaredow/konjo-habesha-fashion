@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Activity,
-  ArrowUpRight,
-  CreditCard,
-  DollarSign,
-  Users,
-} from "lucide-react";
+import { Activity, ArrowUpRight, CreditCard, DollarSign } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useGetOrders from "@/utils/hook/useGetOrders";
 import { FetchOrderType } from "./order/page";
 import Spinner from "@/components/Spinner";
@@ -37,6 +31,10 @@ import useGetProducts from "@/utils/hook/useGetProducts";
 import { Product } from "@/types/product";
 
 export default function Dashboard() {
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+  const [activeProducts, setActiveProducts] = useState<number>(0);
+  const [totalNumberOfSales, setTotalNumberOfSales] = useState<number>(0);
   const {
     orders = [],
     isFetched: isOrdersFetched,
@@ -45,16 +43,13 @@ export default function Dashboard() {
     delivery_status: "",
     time_range: "",
   });
-  const [isClient, setIsClient] = React.useState<boolean>(false);
-  const [totalRevenue, setTotalRevenue] = React.useState<number>(0);
-  const [activeProducts, setActiveProducts] = React.useState<number>(0);
-  const [totalNumberOfSales, setTotalNumberOfSales] = React.useState<number>(0);
   const {
     products = [],
     isFetched: isProductsFetched,
   }: { products: Product[]; isFetched: boolean } = useGetProducts();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setIsClient(true);
     if (isProductsFetched) {
       const numberOfProducts = products.length;
       setActiveProducts(numberOfProducts);
@@ -72,7 +67,6 @@ export default function Dashboard() {
       );
       setTotalRevenue(revenue);
     }
-    setIsClient(true);
   }, [orders, products]);
 
   if (!isClient) return null;

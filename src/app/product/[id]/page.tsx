@@ -5,13 +5,7 @@ import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import useGetProduct from "@/utils/hook/useGetProduct";
 import { Separator } from "@/components/ui/separator";
-import {
-  BoxIcon,
-  PackageIcon,
-  ShoppingCartIcon,
-  StarIcon,
-  UserIcon,
-} from "lucide-react";
+import { BoxIcon, PackageIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 
@@ -34,7 +28,6 @@ import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import useGetReviews from "@/utils/hook/useGetReviews";
 import UserReview from "@/components/product/review/Review";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
 import RatingBreakdown from "@/components/product/review/RatingBreakdown";
@@ -83,7 +76,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
   const handleAddToCart = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     const isProductInCart = cart.some(
-      (item: CartItem) => item._id === cartFilter?._id,
+      (item: CartItem) => item.id === cartFilter?.id,
     );
 
     if (product.stockQuantity > 0 && isFetched) {
