@@ -1,11 +1,12 @@
-"use client";
-
 import UpdateUserData from "@/components/account/UpdateUserData";
 import UpdateUserPassword from "@/components/account/UpdateUserPassword";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSession } from "next-auth/react";
+import getSession from "@/utils/getSession";
 
-export default function setting() {
+export default async function setting() {
+  const session = await getSession();
+  const user = session?.user;
+
   return (
     <div>
       <h1 className=" mb-8 text-center text-3xl font-semibold">
@@ -18,7 +19,7 @@ export default function setting() {
         </TabsList>
 
         <TabsContent value="account">
-          <UpdateUserData />
+          <UpdateUserData user={user} />
         </TabsContent>
 
         <TabsContent value="password">

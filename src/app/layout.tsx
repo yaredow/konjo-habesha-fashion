@@ -13,6 +13,7 @@ import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import { cn } from "@/utils/cn";
+import { SessionProvider } from "next-auth/react";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
@@ -62,14 +63,16 @@ export default function RootLayout({
           <AuthProvider>
             <StoreProvider>
               <QueryProviders>
-                <div className=" flex flex-col">
-                  <Header />
-                  <div className="flex min-h-[90vh] items-center justify-center">
-                    {children}
+                <SessionProvider>
+                  <div className=" flex flex-col">
+                    <Header />
+                    <div className="flex min-h-[90vh] items-center justify-center">
+                      {children}
+                    </div>
+                    <Footer />
+                    <Toaster />
                   </div>
-                  <Footer />
-                  <Toaster />
-                </div>
+                </SessionProvider>
               </QueryProviders>
             </StoreProvider>
           </AuthProvider>

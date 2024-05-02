@@ -8,11 +8,13 @@ import {
   CardTitle,
 } from "../ui/card";
 import { redirect } from "next/navigation";
+import { User } from "next-auth";
 
-export default async function UpdateUserData() {
-  const session = await auth();
-  const user = session?.user;
+type UserType = {
+  user: User | undefined;
+};
 
+export default async function UpdateUserData({ user }: UserType) {
   if (!user) {
     redirect("/account");
   }
