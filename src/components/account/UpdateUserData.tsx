@@ -26,7 +26,7 @@ export default async function UpdateUserData() {
         </CardDescription>
         <CardContent>
           <div className="grid gap-4">
-            <UpdateUserDataForm />
+            <UpdateUserDataForm user={user} />
           </div>
         </CardContent>
       </CardHeader>

@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+"use client";
+
 import {
   Form,
   FormControl,
@@ -23,19 +18,24 @@ import { useFormState } from "react-dom";
 import { updateUserData } from "@/server/actions/account/updateUserData";
 import SubmitButton from "../SubmitButton";
 import { toast } from "../ui/use-toast";
+import { User } from "next-auth";
 
 const initialState = {
   message: "",
 };
 
-export default function UpdateUserDataForm() {
+type UserDataType = {
+  user: User;
+};
+
+export default function UpdateUserDataForm({ user }: UserDataType) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(updateUserData, initialState);
 
   const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
-      name: "",
+      name: user.name || "",
     },
   });
 

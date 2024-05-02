@@ -4,11 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import SpinnerMini from "../ui/SpinnerMini";
 import { useFormState, useFormStatus } from "react-dom";
 import { updatePasswordAction } from "@/server/actions/account/updatePassword";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import {
   Form,

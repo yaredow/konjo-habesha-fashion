@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
 
 export default function setting() {
-  const { data: session } = useSession();
   return (
     <div>
       <h1 className=" mb-8 text-center text-3xl font-semibold">
@@ -23,7 +22,7 @@ export default function setting() {
         </TabsContent>
 
         <TabsContent value="password">
-          <UpdateUserPassword email={session?.user?.email as string} />
+          <UpdateUserPassword />
         </TabsContent>
       </Tabs>
     </div>
