@@ -1,4 +1,4 @@
-import { signIn } from "next-auth/react";
+import { signIn } from "@/auth";
 import { Button } from "./ui/button";
 
 export default function FacebookSigninButton() {
@@ -7,7 +7,7 @@ export default function FacebookSigninButton() {
       action={async () => {
         "use server";
         await signIn("facebook", {
-          callbackUrl: "http://localhost:300/account/profile",
+          redirectTo: "http://localhost:300/account/profile",
         });
       }}
     >

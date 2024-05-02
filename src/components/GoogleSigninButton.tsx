@@ -1,4 +1,4 @@
-import { signIn } from "next-auth/react";
+import { signIn } from "@/auth";
 import { Button } from "./ui/button";
 export default function GoogleButton() {
   return (
@@ -7,7 +7,7 @@ export default function GoogleButton() {
         "use server";
 
         await signIn("google", {
-          callbackUrl: "http://localhost:3000/account/profile",
+          redirectTo: "http://localhost:3000/account/profile",
         });
       }}
     >

@@ -15,7 +15,7 @@ function NewArrivedProducts() {
       <div className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data
           ? data.trendingProducts.map((product: Product) => (
-              <ProductItem key={product._id} product={product} />
+              <ProductItem key={product.id} product={product} />
             ))
           : Array.from({ length: 8 }).map((_, index) => (
               <ProductSkeleton key={index} />
