@@ -1,10 +1,14 @@
 "use client";
 
-import { Product } from "../../../types/product";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/utils/helpers";
+import { Product } from "@prisma/client";
 
-function ProductItem({ product }: { product: Product }) {
+type ProductType = {
+  product: Product;
+};
+
+function ProductItem({ product }: ProductType) {
   const router = useRouter();
 
   const handleClick = () => {

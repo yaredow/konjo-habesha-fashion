@@ -2,8 +2,9 @@ import FeaturedProducts from "@/components/product/categories/FeaturedProducts";
 import NewArrivedProducts from "@/components/product/categories/NewArrivedProducts";
 import NewCollection from "@/components/product/categories/NewCollection";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-function page() {
+export default function page() {
   return (
     <div className=" flex flex-col md:gap-16">
       <div>
@@ -13,10 +14,8 @@ function page() {
       </div>
 
       <Button variant="secondary" className="mx-auto inline-block items-center">
-        Browse All
+        <Link href="/shop">Browse All</Link>
       </Button>
     </div>
   );
 }
-
-export default page;

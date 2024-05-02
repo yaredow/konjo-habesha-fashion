@@ -1,12 +1,11 @@
-"use client";
-
-import useGetProductsWithCatagory from "@/utils/hook/useGetProductsWithCatagory";
-import { Product } from "../../../../types/product";
+import { fetchProductsWithCategory } from "@/server/actions/product/fetchProductsWithCatagory";
 import ProductItem from "../ProductItem";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
+import { Product } from "@prisma/client";
 
-function NewArrivedProducts() {
-  const { data } = useGetProductsWithCatagory("trending");
+export default async function NewArrivedProducts() {
+  const data = await fetchProductsWithCategory("new-arrival");
+
   return (
     <div className="mt-[5rem]">
       <h1 className=" items-center text-2xl font-semibold md:items-start">
@@ -14,7 +13,7 @@ function NewArrivedProducts() {
       </h1>
       <div className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data
-          ? data.trendingProducts.map((product: Product) => (
+          ? data.products.map((product) => (
               <ProductItem key={product.id} product={product} />
             ))
           : Array.from({ length: 8 }).map((_, index) => (
@@ -24,5 +23,3 @@ function NewArrivedProducts() {
     </div>
   );
 }
-
-export default NewArrivedProducts;
