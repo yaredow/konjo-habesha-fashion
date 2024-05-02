@@ -13,7 +13,6 @@ import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import { cn } from "@/utils/cn";
-import { SessionProvider } from "next-auth/react";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
@@ -60,22 +59,20 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <StoreProvider>
-              <QueryProviders>
-                <SessionProvider>
-                  <div className=" flex flex-col">
-                    <Header />
-                    <div className="flex min-h-[90vh] items-center justify-center">
-                      {children}
-                    </div>
-                    <Footer />
-                    <Toaster />
+          <StoreProvider>
+            <QueryProviders>
+              <AuthProvider>
+                <div className=" flex flex-col">
+                  <Header />
+                  <div className="flex min-h-[90vh] items-center justify-center">
+                    {children}
                   </div>
-                </SessionProvider>
-              </QueryProviders>
-            </StoreProvider>
-          </AuthProvider>
+                  <Footer />
+                  <Toaster />
+                </div>
+              </AuthProvider>
+            </QueryProviders>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

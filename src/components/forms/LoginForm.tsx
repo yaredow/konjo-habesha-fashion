@@ -11,16 +11,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
-import { useRouter } from "next/navigation";
 import SubmitButton from "../SubmitButton";
+import { signIn } from "@/auth";
+import { toast } from "../ui/use-toast";
+import { redirect } from "next/navigation";
+import { useFormState } from "react-dom";
+import { login } from "@/server/actions/account/login";
 
-const loginFormSchema = z.object({
+export const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(4),
 });
 
 export default function LoginForm() {
-  const router = useRouter();
+  const [state, dispatch] = useFormState(login, undefined);
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -31,7 +36,10 @@ export default function LoginForm() {
 
   return (
     <Form {...form}>
-      <form className="w-full flex-grow items-center justify-center gap-4">
+      <form
+        action={dispatch}
+        className="w-full flex-grow items-center justify-center gap-4"
+      >
         <div className=" flex flex-col space-y-6">
           <FormField
             control={form.control}

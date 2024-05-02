@@ -1,36 +1,22 @@
 "use server";
 
-import prisma from "@/lib/prisma";
-import connectMongoDB from "@/utils/db/db";
-import bcrypt from "bcryptjs";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 
-export async function login(credentials: { email: string; password: string }) {
-  const { email, password } = credentials;
+// ...
 
+export async function login(prevState: string | undefined, formData: FormData) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-      include: {},
-    });
-
-    if (user && !user.password) {
-      throw new Error(
-        "It appears you previously signed up using social media. Please use your Google or Facebook account.",
-      );
-    }
-
-    if (user) {
-      const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-      if (isPasswordCorrect) {
-        return user;
-      } else {
-        throw new Error("Passord or email doesn't match");
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
       }
-    } else {
-      throw new Error("User does not exist.");
     }
-  } catch (err: any) {
-    throw new Error(err);
+    throw error;
   }
 }
