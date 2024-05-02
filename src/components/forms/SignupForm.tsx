@@ -10,7 +10,6 @@ import {
 } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { registrationFormSchema } from "@/utils/validators/form-validators";
 import { useFormState } from "react-dom";
 import { register } from "@/server/actions/account/register";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,14 +17,12 @@ import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
 import { toast } from "../ui/use-toast";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-
-const initialState = {
-  message: "",
-};
+import { SignupFormSchema } from "@/utils/validators/form-validators";
+import { X } from "lucide-react";
 
 export default function SignupForm() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(register, initialState);
+  const [state, formAction] = useFormState(register, undefined);
 
   const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -34,13 +31,14 @@ export default function SignupForm() {
     })(evt);
   };
 
-  const form = useForm<z.infer<typeof registrationFormSchema>>({
-    resolver: zodResolver(registrationFormSchema),
+  const form = useForm<z.infer<typeof SignupFormSchema>>({
+    resolver: zodResolver(SignupFormSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
       passwordConfirm: "",
+      ...(state?.fields ?? {}),
     },
   });
 
@@ -62,7 +60,20 @@ export default function SignupForm() {
         </CardDescription>
         <Form {...form}>
           {state?.message !== "" && state?.message !== "success" && (
-            <div className=" text-red-500">{state.message}</div>
+            <div className=" text-red-500">{}</div>
+          )}
+
+          {state?.issues && (
+            <div className="text-red-500">
+              <ul>
+                {state.issues.map((issue) => (
+                  <li key={issue} className="flex gap-1">
+                    <X fill="red" />
+                    {issue}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           <form
             ref={formRef}
@@ -72,7 +83,7 @@ export default function SignupForm() {
           >
             <FormField
               control={form.control}
-              name="fullName"
+              name="name"
               render={({ field }) => {
                 return (
                   <FormItem>

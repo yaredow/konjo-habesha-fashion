@@ -30,9 +30,9 @@ export const UpdatePasswordFormSchema = z
     },
   );
 
-export const registrationFormSchema = z
+export const SignupFormSchema = z
   .object({
-    fullName: z.string().refine(
+    name: z.string().refine(
       (value) => {
         if (value !== "") {
           const names = value.trim().split(" ");
@@ -43,19 +43,40 @@ export const registrationFormSchema = z
         message: "Please enter your full name with both first and last names.",
       },
     ),
-    email: z.string().email(),
-    password: z.string().min(8),
-    passwordConfirm: z.string().min(8),
+    email: z.string().email({ message: "Please enter a valid email." }).trim(),
+    password: z
+      .string()
+      .min(8, { message: "Be at least 8 characters long" })
+      .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+      .regex(/[0-9]/, { message: "Contain at least one number." })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Contain at least one special character.",
+      })
+      .trim(),
+    passwordConfirm: z.string().trim().min(8),
   })
   .refine(
     (data) => {
-      return (data.password = data.passwordConfirm);
+      return data.password === data.passwordConfirm;
     },
     {
       message: "Password do not match",
       path: ["passwordConfirm"],
     },
   );
+
+export type FormState =
+  | {
+      errors?: {
+        name?: string[];
+        email?: string[];
+        password?: string[];
+      };
+      message?: string;
+      fields?: Record<string, string>;
+      issues?: string[];
+    }
+  | undefined;
 
 export const CreateProductFormSchema = z.object({
   name: z

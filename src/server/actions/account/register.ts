@@ -1,29 +1,37 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import connectMongoDB from "@/utils/db/db";
-import { registrationFormSchema } from "@/utils/validators/form-validators";
-
-type FormState = {
-  message: string;
-};
+import {
+  FormState,
+  SignupFormSchema,
+} from "@/utils/validators/form-validators";
+import { redirect } from "next/navigation";
 
 export async function register(
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const validatedFields = registrationFormSchema.safeParse({
-    fullName: formData.get("fullName"),
+  const validatedFields = SignupFormSchema.safeParse({
+    name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
     passwordConfirm: formData.get("passwordConfirm"),
   });
 
   if (!validatedFields.success) {
-    return { message: "Invalid form data" };
+    const fields: Record<string, string> = {};
+    for (const key of Object.keys(formData)) {
+      fields[key] = formData[key].toString();
+    }
+    return {
+      message: "Invalid data",
+      fields,
+      issues: validatedFields.error.issues.map((issue) => issue.message),
+    };
   }
+
   try {
-    const { fullName, email, password, passwordConfirm } = validatedFields.data;
+    const { name, email, password } = validatedFields.data;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -31,11 +39,16 @@ export async function register(
     }
 
     const newUser = await prisma.user.create({
-      fullName,
-      email,
-      password,
-      passwordConfirm,
+      data: {
+        name,
+        email,
+        password,
+      },
     });
+
+    if (newUser) {
+      redirect("/account");
+    }
 
     return { message: "success" };
   } catch (err) {
