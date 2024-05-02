@@ -1,4 +1,4 @@
-import { Product } from "@/types/product";
+import { Product } from "../../types/product";
 import _ from "lodash";
 
 export default function compareObject(obj1: Product, obj2: Product) {

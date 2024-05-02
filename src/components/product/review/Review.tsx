@@ -7,7 +7,7 @@ import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Review as ReviewTypes } from "@/types/review";
+import { Review as ReviewTypes } from "../../../../types/review";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import React from "react";

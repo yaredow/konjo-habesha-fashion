@@ -1,7 +1,7 @@
 "use server";
 
 import Product from "@/models/productModel";
-import { Product as ProductType } from "@/types/product";
+import { Product as ProductType } from "../../../../types/product";
 import connectMongoDB from "@/utils/db/db";
 
 type ReturnType = {

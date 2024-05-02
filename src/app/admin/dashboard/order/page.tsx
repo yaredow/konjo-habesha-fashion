@@ -47,7 +47,7 @@ import useGetOrders from "@/utils/hook/useGetOrders";
 import React, { useCallback } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
-import { Order } from "@/types/order";
+import { Order } from "../../../../../types/order";
 import _ from "lodash";
 import {
   AlertDialog,

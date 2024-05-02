@@ -1,6 +1,6 @@
 import { signIn } from "next-auth/react";
 import { Button } from "./ui/button";
-const GoogleButton = () => {
+export default function GoogleButton() {
   return (
     <form
       action={async () => {
@@ -62,6 +62,4 @@ const GoogleButton = () => {
       </Button>
     </form>
   );
-};
-
-export default GoogleButton;
+}

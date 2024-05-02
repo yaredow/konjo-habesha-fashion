@@ -1,4 +1,4 @@
-import { Product } from "@/types/product";
+import { Product } from "../../../types/product";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";

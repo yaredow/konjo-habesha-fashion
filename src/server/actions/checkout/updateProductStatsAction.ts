@@ -1,7 +1,7 @@
 "use server";
 
 import Product from "@/models/productModel";
-import { CartItem, Product as ProductType } from "@/types/product";
+import { CartItem, Product as ProductType } from "../../../../types/product";
 
 export async function updateProductStats(formData: FormData) {
   const customer = JSON.parse(formData.get("customer") as string);

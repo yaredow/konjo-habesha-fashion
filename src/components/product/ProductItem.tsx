@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "../../types/product";
+import { Product } from "../../../types/product";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/utils/helpers";
 

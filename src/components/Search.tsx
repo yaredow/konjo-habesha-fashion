@@ -14,7 +14,7 @@ import { ArrowRight, Search as SearchIcon } from "lucide-react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { UseMutateFunction } from "@tanstack/react-query";
 import Spinner from "./Spinner";
-import { Product } from "@/types/product";
+import { Product } from "../../types/product";
 import Image from "next/image";
 import { debounce } from "lodash";
 import { Button } from "./ui/button";

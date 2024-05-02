@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
-import { FormState } from "@/types/product";
+import { FormState } from "../../../../types/product";
 import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";

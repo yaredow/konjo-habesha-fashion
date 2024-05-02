@@ -17,13 +17,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CartItem, Product } from "@/types/product";
+import { CartItem, Product } from "../../../../types/product";
 import { cn } from "@/utils/cn";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
 import { toast } from "@/components/ui/use-toast";
 import ProductReview from "@/components/product/review/ProductReview";
-import { Review } from "@/types/review";
+import { Review } from "../../../../types/review";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import useGetReviews from "@/utils/hook/useGetReviews";
 import UserReview from "@/components/product/review/Review";

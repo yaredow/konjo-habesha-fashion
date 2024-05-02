@@ -33,7 +33,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import CreateProduct from "@/components/dashboard/CreateProduct";
-import { Product } from "../../../../types/product";
+import { Product } from "../../../../../types/product";
 import useGetProducts from "@/utils/hook/useGetProducts";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { deleteProductAction } from "@/server/actions/product/deleteProductAction";

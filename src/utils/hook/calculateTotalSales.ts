@@ -1,4 +1,4 @@
-import { Order } from "@/types/order";
+import { Order } from "../../../types/order";
 import axios from "axios";
 
 export async function calculateTotalSales(timeRange: string) {

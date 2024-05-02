@@ -1,4 +1,4 @@
-import { Review } from "@/types/review";
+import { Review } from "../../types/review";
 
 function calculateRatingBreakdown(reviews: Review[]) {
   const ratingCounts = {

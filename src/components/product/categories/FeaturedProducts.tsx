@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Product } from "../../../types/product";
+import { Product } from "../../../../types/product";
 import ProductItem from "../ProductItem";
 import axios from "axios";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";

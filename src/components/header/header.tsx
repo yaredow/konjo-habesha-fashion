@@ -56,11 +56,20 @@ export default function HeaderComp() {
 
         <div className=" hidden font-nav md:flex">
           <ul className="flex gap-[1.3rem]">
-            {NAV_LINKS.map((navLink, index) => (
-              <li key={index}>
-                <NavLink href={navLink.path}>{navLink.name}</NavLink>
-              </li>
-            ))}
+            {NAV_LINKS.map((navLink, index) => {
+              const role = session?.user?.role;
+              const dashboardLink = navLink.path === "/admin/dashboard";
+
+              if (dashboardLink && role !== "admin") {
+                return null;
+              }
+
+              return (
+                <li key={index}>
+                  <NavLink href={navLink.path}>{navLink.name}</NavLink>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -124,7 +133,7 @@ export default function HeaderComp() {
                       <Link href="/account/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href="/accout/profile/settings">Settings</Link>
+                      <Link href="/account/profile/settings">Settings</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>

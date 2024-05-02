@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { FormState } from "@/types/product";
+import { FormState } from "../../../../types/product";
 import Product from "@/models/productModel";
 
 import connectMongoDB from "@/utils/db/db";

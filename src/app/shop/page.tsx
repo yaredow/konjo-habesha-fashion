@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/utils/cn";
 import EmptyState from "@/components/product/EmptyState";
-import { Product } from "../../types/product";
+import { Product } from "../../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 import debounce from "lodash.debounce";

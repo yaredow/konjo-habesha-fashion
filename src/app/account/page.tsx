@@ -12,7 +12,7 @@ import LoginForm from "@/components/forms/LoginForm";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-function page() {
+export default function page() {
   return (
     <main className=" my-auto flex items-center justify-center">
       <Card className=" mx-auto max-w-[36rem] flex-grow items-center p-6">
@@ -49,5 +49,3 @@ function page() {
     </main>
   );
 }
-
-export default page;

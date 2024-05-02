@@ -1,6 +1,6 @@
 "use server";
 
-import { CartItem } from "@/types/product";
+import { CartItem } from "../../../../types/product";
 import { stripe } from "@/utils/stripe";
 
 export async function getCheckoutSessionUrlAction(formData: FormData) {

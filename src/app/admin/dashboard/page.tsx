@@ -28,7 +28,7 @@ import { FetchOrderType } from "./order/page";
 import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
 import useGetProducts from "@/utils/hook/useGetProducts";
-import { Product } from "@/types/product";
+import { Product } from "../../../../types/product";
 
 export default function Dashboard() {
   const [isClient, setIsClient] = useState<boolean>(false);
