@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const UpdateAccountFormSchema = z.object({
-  fullName: z.string().refine(
+  name: z.string().refine(
     (value) => {
       if (value !== "") {
         const names = value.trim().split(" ");

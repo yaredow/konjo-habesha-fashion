@@ -1,36 +1,44 @@
 "use server";
 
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
+import { revalidatePath } from "next/cache";
 
 export type FormState = {
   message: string;
 };
 
 export async function updateUserData(
-  email: string,
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
   const validatedFields = UpdateAccountFormSchema.safeParse({
-    fullName: formData.get("fullName"),
+    name: formData.get("name"),
   });
 
   if (!validatedFields.success) {
     return { message: "Invalid data" };
   }
 
+  const name = validatedFields.data.name;
+
   try {
-    const { fullName } = validatedFields.data;
+    const session = await auth();
+    const userId = session?.user?.id;
 
-    const user = await prisma.user.findUnique({ where: { email } });
-
-    if (!user) {
-      return { message: "You have to login first" };
+    if (!userId) {
+      throw new Error("Unauthorized access");
     }
 
-    user.fullName = fullName;
-    await user.save();
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name,
+      },
+    });
+
+    revalidatePath("/");
 
     return { message: "success" };
   } catch (err) {

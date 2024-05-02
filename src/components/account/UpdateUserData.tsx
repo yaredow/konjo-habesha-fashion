@@ -41,18 +41,14 @@ function SubmitUserData() {
   );
 }
 
-function UpdateUserData({ email }: { email: string }) {
+function UpdateUserData() {
   const formRef = useRef<HTMLFormElement>(null);
-  const updateUserDataWithEmail = updateUserData.bind(null, email);
-  const [state, formAction] = useFormState(
-    updateUserDataWithEmail,
-    initialState,
-  );
+  const [state, formAction] = useFormState(updateUserData, initialState);
 
   const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
     },
   });
 
@@ -96,7 +92,7 @@ function UpdateUserData({ email }: { email: string }) {
             >
               <FormField
                 control={form.control}
-                name="fullName"
+                name="name"
                 render={({ field }) => {
                   return (
                     <FormItem>
