@@ -60,7 +60,7 @@ export default function SignupForm() {
         </CardDescription>
         <Form {...form}>
           {state?.message !== "" && state?.message !== "success" && (
-            <div className=" text-red-500">{}</div>
+            <div className=" text-red-500">{state?.message}</div>
           )}
 
           {state?.issues && (

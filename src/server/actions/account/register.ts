@@ -21,7 +21,7 @@ export async function register(
   if (!validatedFields.success) {
     const fields: Record<string, string> = {};
     for (const key of Object.keys(formData)) {
-      fields[key] = formData[key].toString();
+      fields[key] = formData.get(key)?.toString() || "";
     }
     return {
       message: "Invalid data",
