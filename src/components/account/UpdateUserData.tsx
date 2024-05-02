@@ -1,18 +1,5 @@
-"use client";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useFormState, useFormStatus } from "react-dom";
-import {
-  FormState,
-  updateUserData,
-} from "@/server/actions/account/updateUserData";
-import SpinnerMini from "../ui/SpinnerMini";
-import React, { useEffect, useRef } from "react";
-import { toast } from "../ui/use-toast";
+import { auth } from "@/auth";
+import UpdateUserDataForm from "../forms/UpdateUserDataForm";
 import {
   Card,
   CardContent,
@@ -20,55 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
+import { redirect } from "next/navigation";
 
-const initialState: FormState = {
-  message: "",
-};
+export default async function UpdateUserData() {
+  const session = await auth();
+  const user = session?.user;
 
-function SubmitUserData() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit">{pending ? <SpinnerMini /> : "Submit change"}</Button>
-  );
-}
-
-function UpdateUserData() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(updateUserData, initialState);
-
-  const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
-    resolver: zodResolver(UpdateAccountFormSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
-  const handleSubmitData = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
-  };
-
-  useEffect(() => {
-    if (state?.message !== "") {
-      if (state?.message === "success") {
-        toast({
-          description: "Username updated successfully",
-        });
-      }
-      form.reset();
-    }
-  }, [state?.message]);
+  if (!user) {
+    redirect("/account");
+  }
 
   return (
     <Card>
@@ -77,41 +24,12 @@ function UpdateUserData() {
         <CardDescription>
           Make changes to your account here. Click save when you're done.
         </CardDescription>
+        <CardContent>
+          <div className="grid gap-4">
+            <UpdateUserDataForm />
+          </div>
+        </CardContent>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="grid gap-4">
-          <Form {...form}>
-            {state?.message !== "" && state?.message !== "success" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
-            <form
-              ref={formRef}
-              className=" grid gap-4 py-4"
-              action={formAction}
-              onSubmit={handleSubmitData}
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} placeholder="Name" type="text" />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <SubmitUserData />
-            </form>
-          </Form>
-        </div>
-      </CardContent>
     </Card>
   );
 }
-
-export default UpdateUserData;

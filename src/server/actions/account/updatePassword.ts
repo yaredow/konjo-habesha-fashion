@@ -3,12 +3,11 @@
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { FormState } from "@/types/product";
-import connectMongoDB from "@/utils/db/db";
 import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 import prisma from "@/lib/prisma";
+import { auth } from "@/auth";
 
 export async function updatePasswordAction(
-  email: string,
   prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -28,20 +27,16 @@ export async function updatePasswordAction(
     validatedFields.data;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        password: true,
-      },
-    });
+    const session = await auth();
+    const user = session?.user;
 
     if (!user) {
-      return { message: "You have to login first" };
+      throw new Error("Unauthorized access");
     }
 
     const isCorrectPasswod = await bcrypt.compare(
       currentPassword as string,
-      user.password,
+      user.email,
     );
 
     if (!isCorrectPasswod) {
@@ -50,9 +45,6 @@ export async function updatePasswordAction(
       };
     }
 
-    user.password = newPassword;
-    user.passwordConfirm = passwordConfirm;
-    await user.save();
     revalidatePath("/");
     return { message: "success" };
   } catch (err) {

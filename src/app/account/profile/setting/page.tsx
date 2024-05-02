@@ -19,7 +19,7 @@ export default function setting() {
         </TabsList>
 
         <TabsContent value="account">
-          <UpdateUserData email={session?.user?.email as string} />
+          <UpdateUserData />
         </TabsContent>
 
         <TabsContent value="password">

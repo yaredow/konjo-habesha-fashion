@@ -1,14 +1,5 @@
-"use client";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import SpinnerMini from "../ui/SpinnerMini";
-import { useFormState, useFormStatus } from "react-dom";
-import { updatePasswordAction } from "@/server/actions/account/updatePassword";
-import { useEffect, useRef, useState } from "react";
+import { auth } from "@/auth";
+import UpdatePasswordForm from "../forms/UpdatePasswordForm";
 import {
   Card,
   CardContent,
@@ -16,64 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-import { toast } from "../ui/use-toast";
-import { signOut } from "next-auth/react";
-import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
+import { redirect } from "next/navigation";
 
-function SubmitPassword() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit">
-      {pending ? <SpinnerMini /> : "Submit Passowrd"}
-    </Button>
-  );
-}
+export default async function UpdateUserPassword() {
+  const session = await auth();
+  const user = session?.user;
 
-const initialState = {
-  message: "",
-};
-
-function UpdateUserPassword({ email }: { email: string }) {
-  const formRef = useRef<HTMLFormElement>(null);
-  const updatePasswordActionWithEmail = updatePasswordAction.bind(null, email);
-
-  const [state, formAction] = useFormState(
-    updatePasswordActionWithEmail,
-    initialState,
-  );
-
-  const form = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
-    resolver: zodResolver(UpdatePasswordFormSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      passwordConfirm: "",
-    },
-  });
-
-  const handlePasswordSubmit = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
-  };
-
-  useEffect(() => {
-    if (state?.message !== "" && state?.message === "success") {
-      toast({
-        description: "Password has been updated successfully",
-      });
-      form.reset();
-      signOut({ callbackUrl: "http://localhost:3000/account" });
-    }
-  }, [state?.message]);
+  if (!user) {
+    redirect("/account");
+  }
 
   return (
     <Card>
@@ -85,80 +27,9 @@ function UpdateUserPassword({ email }: { email: string }) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid gap-4">
-          <Form {...form}>
-            {state?.message !== "" && state?.message !== "success" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
-            <form
-              ref={formRef}
-              className=" grid gap-4 py-4"
-              action={formAction}
-              onSubmit={handlePasswordSubmit}
-            >
-              <FormField
-                control={form.control}
-                name="currentPassword"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Current Password"
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="newPassword"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="New Password"
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="passwordConfirm"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Confirm Password"
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage className=" mx-2" />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <SubmitPassword />
-            </form>
-          </Form>
+          <UpdatePasswordForm />
         </div>
       </CardContent>
     </Card>
   );
 }
-
-export default UpdateUserPassword;
