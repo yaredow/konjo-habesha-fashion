@@ -13,16 +13,11 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
 import { useFormState } from "react-dom";
-import { login } from "@/server/actions/account/login";
-
-export const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(4),
-});
+import { authenticate } from "@/server/actions/account/authenticate";
+import { loginFormSchema } from "@/utils/validators/form-validators";
 
 export default function LoginForm() {
-  const [state, dispatch] = useFormState(login, undefined);
-
+  const [state, dispatch] = useFormState(authenticate, undefined);
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {

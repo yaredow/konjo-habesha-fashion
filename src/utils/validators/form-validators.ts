@@ -30,6 +30,11 @@ export const UpdatePasswordFormSchema = z
     },
   );
 
+export const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(4),
+});
+
 export const SignupFormSchema = z
   .object({
     name: z.string().refine(

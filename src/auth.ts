@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthError } from "next-auth";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import { loginFormSchema } from "./components/forms/LoginForm";
 import bcrypt from "bcryptjs";
+import { loginFormSchema } from "./utils/validators/form-validators";
 
 const prisma = new PrismaClient();
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -26,21 +26,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           let user = null;
 
-          const parsedData = loginFormSchema.safeParse(credentials);
+          const parsedData = loginFormSchema.safeParse({
+            email: credentials.email,
+            password: credentials.password,
+          });
 
           if (!parsedData.success) {
-            return null;
+            throw new Error("Invalid credentials");
           }
 
           const { email, password } = parsedData.data;
 
           user = await prisma.user.findUnique({
             where: { email },
-            select: { password: true },
+            select: { id: true, password: true, name: true, role: true },
           });
 
           if (!user) {
-            throw new Error("User does not exist.");
+            throw new Error("User not found");
           }
 
           if (!user.password) {
@@ -59,11 +62,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return user;
         } catch (error) {
-          if (error instanceof Error) {
-            return null;
-          } else {
-            throw error;
-          }
+          console.error(error);
+          throw error;
         }
       },
     }),

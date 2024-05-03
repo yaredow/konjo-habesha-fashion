@@ -5,9 +5,19 @@ import { AuthError } from "next-auth";
 
 // ...
 
-export async function login(prevState: string | undefined, formData: FormData) {
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  const email = formData.get("email");
+  const password = formData.get("password");
+
   try {
-    await signIn("credentials", formData);
+    await signIn("credentials", {
+      redirectTo: "/account/profile",
+      email,
+      password,
+    });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
