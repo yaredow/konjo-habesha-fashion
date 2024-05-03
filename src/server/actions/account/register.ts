@@ -6,6 +6,7 @@ import {
   SignupFormSchema,
 } from "@/utils/validators/form-validators";
 import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
 
 export async function register(
   prevState: FormState,
@@ -23,6 +24,7 @@ export async function register(
     for (const key of Object.keys(formData)) {
       fields[key] = formData.get(key)?.toString() || "";
     }
+
     return {
       message: "Invalid data",
       fields,
@@ -38,11 +40,12 @@ export async function register(
       return { message: "User already exists" };
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password,
+        password: hashedPassword,
       },
     });
 

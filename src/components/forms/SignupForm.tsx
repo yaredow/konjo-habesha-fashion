@@ -43,13 +43,18 @@ export default function SignupForm() {
   });
 
   useEffect(() => {
-    if (state?.message !== "" && state?.message === "success") {
+    console.log(state?.message);
+    if (
+      !state?.issues &&
+      state?.message !== "" &&
+      state?.message === "success"
+    ) {
       toast({
         description: "You have registered successfully",
       });
     }
     form.reset();
-  }, [state?.message]);
+  }, [state?.message, state?.issues]);
 
   return (
     <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
@@ -59,9 +64,11 @@ export default function SignupForm() {
           Provide the following information to create a new account
         </CardDescription>
         <Form {...form}>
-          {state?.message !== "" && state?.message !== "success" && (
-            <div className=" text-red-500">{state?.message}</div>
-          )}
+          {state?.message !== "" &&
+            state?.message !== "success" &&
+            !state?.issues && (
+              <div className=" text-sm text-red-500">{state?.message}</div>
+            )}
 
           {state?.issues && (
             <div className="text-red-500">
