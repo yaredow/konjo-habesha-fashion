@@ -1,11 +1,12 @@
-import NextAuth, { AuthError } from "next-auth";
+import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { loginFormSchema } from "./utils/validators/form-validators";
+import { createSession } from "./lib/session";
 
 const prisma = new PrismaClient();
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -59,6 +60,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!isPasswordCorrect) {
             throw new Error("Password or email doesn't match.");
           }
+
+          await createSession(user as User);
 
           return user;
         } catch (error) {

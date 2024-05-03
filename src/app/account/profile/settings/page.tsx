@@ -6,6 +6,7 @@ import getSession from "@/utils/getSession";
 export default async function setting() {
   const session = await getSession();
   const user = session?.user;
+  console.log(user);
 
   return (
     <div>

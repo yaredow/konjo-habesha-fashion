@@ -15,9 +15,7 @@ function UpdateAccount() {
       <DialogTrigger asChild>
         <Button variant="link">Update</Button>
       </DialogTrigger>
-      <DialogContent className="flex items-center justify-center sm:max-w-[425px] md:max-w-[540px]">
-        <
-      </DialogContent>
+      <DialogContent className="flex items-center justify-center sm:max-w-[425px] md:max-w-[540px]"></DialogContent>
     </Dialog>
   );
 }
