@@ -34,8 +34,8 @@ export async function register(
     },
   });
 
-  if (newUser) {
-    redirect("/account");
+  if (!newUser) {
+    return { error: "User creation failed" };
   }
 
   return { success: "Registration successfull" };

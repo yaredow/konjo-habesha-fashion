@@ -38,6 +38,11 @@ type ProductsImages {
   url       String
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model newslettersubscriptions {
   id                      String   @id @default(auto()) @map("_id") @db.ObjectId
   v                       Int      @map("__v")
@@ -58,7 +63,7 @@ model User {
   emailVerified DateTime?
   password      String?
   image         String?
-  role          String?   @default("user")
+  role          UserRole  @default(USER)
   accounts      Account[]
   updatedAt     DateTime  @updatedAt
   Review        Review[]
