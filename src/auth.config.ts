@@ -8,13 +8,25 @@ import bcrypt from "bcryptjs";
 
 export default {
   providers: [
-    Google,
-    Facebook,
-    Credentials({
-      credentials: {
-        email: {},
-        password: {},
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+        },
       },
+    }),
+    Facebook({
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+        },
+      },
+    }),
+    Credentials({
       authorize: async (credentials) => {
         try {
           let user = null;

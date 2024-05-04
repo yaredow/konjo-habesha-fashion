@@ -9,6 +9,8 @@ type SubmitButtonProps = {
 
 export default function SubmitButton({ isPending }: SubmitButtonProps) {
   return (
-    <Button type="submit">{isPending ? <SpinnerMini /> : "Submit"}</Button>
+    <Button disabled={isPending} type="submit">
+      {isPending ? <SpinnerMini /> : "Submit"}
+    </Button>
   );
 }
