@@ -4,21 +4,20 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { ErrorAndSuccessType } from "./authenticate";
 
 export type FormState = {
   message: string;
 };
 
 export async function updateUserData(
-  prevState: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const validatedFields = UpdateAccountFormSchema.safeParse({
-    name: formData.get("name"),
-  });
+  values: z.infer<typeof UpdateAccountFormSchema>,
+): Promise<ErrorAndSuccessType> {
+  const validatedFields = UpdateAccountFormSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { message: "Invalid data" };
+    return { error: "Invalid data" };
   }
 
   const name = validatedFields.data.name;
@@ -40,8 +39,9 @@ export async function updateUserData(
 
     revalidatePath("/");
 
-    return { message: "success" };
+    return { success: "User account updated successfully" };
   } catch (err) {
-    return { message: "Changing user data failed" };
+    console.error(err);
+    throw err;
   }
 }

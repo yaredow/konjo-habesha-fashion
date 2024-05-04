@@ -20,7 +20,7 @@ export default async function setting() {
         </TabsList>
 
         <TabsContent value="account">
-          <UpdateUserData user={user} />
+          <UpdateUserData />
         </TabsContent>
 
         <TabsContent value="password">

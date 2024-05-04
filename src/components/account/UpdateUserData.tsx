@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import UpdateUserDataForm from "../forms/UpdateUserDataForm";
 import {
   Card,
@@ -7,18 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { redirect } from "next/navigation";
-import { User } from "next-auth";
 
-type UserType = {
-  user: User | undefined;
-};
-
-export default async function UpdateUserData({ user }: UserType) {
-  if (!user) {
-    redirect("/account");
-  }
-
+export default async function UpdateUserData() {
   return (
     <Card>
       <CardHeader>
@@ -28,7 +17,7 @@ export default async function UpdateUserData({ user }: UserType) {
         </CardDescription>
         <CardContent>
           <div className="grid gap-4">
-            <UpdateUserDataForm user={user} />
+            <UpdateUserDataForm />
           </div>
         </CardContent>
       </CardHeader>

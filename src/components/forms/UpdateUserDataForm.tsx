@@ -10,63 +10,46 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import React, { useEffect, useRef } from "react";
+import React, { useState, useTransition } from "react";
 import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 
 import { Input } from "../ui/input";
-import { useFormState } from "react-dom";
 import { updateUserData } from "@/server/actions/account/updateUserData";
 import SubmitButton from "../SubmitButton";
-import { toast } from "../ui/use-toast";
-import { User } from "next-auth";
+import { useSession } from "next-auth/react";
+import { FormError } from "../FormError";
+import { FormSuccess } from "../FormSuccess";
 
 const initialState = {
   message: "",
 };
 
-type UserDataType = {
-  user: User;
-};
+export default function UpdateUserDataForm() {
+  const [isLoading, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
-export default function UpdateUserDataForm({ user }: UserDataType) {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(updateUserData, initialState);
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const form = useForm<z.infer<typeof UpdateAccountFormSchema>>({
     resolver: zodResolver(UpdateAccountFormSchema),
     defaultValues: {
-      name: user.name || "",
+      name: user?.name || "",
     },
   });
 
-  const handleSubmitData = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
+  const onSubmit = async (values: z.infer<typeof UpdateAccountFormSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      updateUserData(values);
+    });
   };
 
-  useEffect(() => {
-    if (state?.message !== "") {
-      if (state?.message === "success") {
-        toast({
-          description: "Username updated successfully",
-        });
-      }
-      form.reset();
-    }
-  }, [state?.message]);
   return (
     <Form {...form}>
-      {state?.message !== "" && state?.message !== "success" && (
-        <div className=" text-red-500">{state.message}</div>
-      )}
-      <form
-        ref={formRef}
-        className=" grid gap-4 py-4"
-        action={formAction}
-        onSubmit={handleSubmitData}
-      >
+      <form className=" grid gap-4 py-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="name"
@@ -81,8 +64,9 @@ export default function UpdateUserDataForm({ user }: UserDataType) {
             );
           }}
         />
-
-        <SubmitButton />
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <SubmitButton isPending={isLoading} />
       </form>
     </Form>
   );

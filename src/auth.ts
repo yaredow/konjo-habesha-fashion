@@ -8,13 +8,13 @@ import { getUserById } from "./data/user";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     session: async ({ token, session }) => {
-      if (token.sub && session.user) {
+      if (token.sub && token.role && session.user) {
         session.user = {
           ...session.user,
           id: token.sub,
-          image: token.picture,
           role: token.role as string,
           email: token.email as string,
+          image: token.picture,
         };
       }
       return session;
