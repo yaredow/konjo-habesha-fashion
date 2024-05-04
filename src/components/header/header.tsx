@@ -100,7 +100,7 @@ export default function Header() {
                   <Button
                     onClick={() => {
                       if (status === "unauthenticated") {
-                        router.replace("/account");
+                        router.replace("/auth/signin");
                       }
                     }}
                     variant="outline"
@@ -123,10 +123,10 @@ export default function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <Link href="/account/profile">Profile</Link>
+                      <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href="/account/profile/settings">Settings</Link>
+                      <Link href="/profile/settings">Settings</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
@@ -197,7 +197,7 @@ export default function Header() {
                 <div className=" w-full border"></div>
 
                 <div className="flex flex-row justify-between">
-                  <Link href="/account" className="flex items-center gap-2">
+                  <Link href="/auth/signin" className="flex items-center gap-2">
                     Log in{" "}
                     <span>
                       <FaArrowRightLong />
