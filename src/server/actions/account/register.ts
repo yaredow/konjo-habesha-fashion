@@ -1,60 +1,42 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import {
-  FormState,
-  SignupFormSchema,
-} from "@/utils/validators/form-validators";
+import { SignupFormSchema } from "@/utils/validators/form-validators";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
+import { ErrorAndSuccessType } from "./authenticate";
+import { z } from "zod";
+import { getUserByEmail } from "@/data/user";
 
 export async function register(
-  prevState: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    passwordConfirm: formData.get("passwordConfirm"),
-  });
+  values: z.infer<typeof SignupFormSchema>,
+): Promise<ErrorAndSuccessType> {
+  const validatedFields = SignupFormSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    const fields: Record<string, string> = {};
-    for (const key of Object.keys(formData)) {
-      fields[key] = formData.get(key)?.toString() || "";
-    }
-
-    return {
-      message: "Invalid data",
-      fields,
-      issues: validatedFields.error.issues.map((issue) => issue.message),
-    };
+    return { error: "Invalid data" };
   }
 
-  try {
-    const { name, email, password } = validatedFields.data;
+  const { name, email, password } = validatedFields.data;
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return { message: "User already exists" };
-    }
+  const existingUser = await getUserByEmail(email);
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
-    });
-
-    if (newUser) {
-      redirect("/account");
-    }
-
-    return { message: "success" };
-  } catch (err) {
-    throw err;
+  if (existingUser) {
+    return { error: "User already exists" };
   }
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+  const newUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+    },
+  });
+
+  if (newUser) {
+    redirect("/account");
+  }
+
+  return { success: "Registration successfull" };
 }

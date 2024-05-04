@@ -1,11 +1,14 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
 import { Button } from "./ui/button";
 import SpinnerMini from "./ui/SpinnerMini";
 
-export default function SubmitButton() {
-  const { pending } = useFormStatus();
+type SubmitButtonProps = {
+  isPending: boolean;
+};
 
-  return <Button type="submit">{pending ? <SpinnerMini /> : "Submit"}</Button>;
+export default function SubmitButton({ isPending }: SubmitButtonProps) {
+  return (
+    <Button type="submit">{isPending ? <SpinnerMini /> : "Submit"}</Button>
+  );
 }

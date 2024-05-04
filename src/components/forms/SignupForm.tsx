@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -10,26 +10,19 @@ import {
 } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useFormState } from "react-dom";
-import { register } from "@/server/actions/account/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
-import { toast } from "../ui/use-toast";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { SignupFormSchema } from "@/utils/validators/form-validators";
-import { X } from "lucide-react";
+import { register } from "@/server/actions/account/register";
+import { FormSuccess } from "../FormSuccess";
+import { FormError } from "../FormError";
 
 export default function SignupForm() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(register, undefined);
-
-  const handleSubmitRegistration = (evt: React.MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    form.handleSubmit(() => {
-      formAction(new FormData(formRef.current!));
-    })(evt);
-  };
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof SignupFormSchema>>({
     resolver: zodResolver(SignupFormSchema),
@@ -38,23 +31,19 @@ export default function SignupForm() {
       email: "",
       password: "",
       passwordConfirm: "",
-      ...(state?.fields ?? {}),
     },
   });
 
-  useEffect(() => {
-    console.log(state?.message);
-    if (
-      !state?.issues &&
-      state?.message !== "" &&
-      state?.message === "success"
-    ) {
-      toast({
-        description: "You have registered successfully",
+  const onSubmit = async (values: z.infer<typeof SignupFormSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      register(values).then((data) => {
+        setSuccess(data.success);
+        setError(data.error);
       });
-    }
-    form.reset();
-  }, [state?.message, state?.issues]);
+    });
+  };
 
   return (
     <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
@@ -64,29 +53,9 @@ export default function SignupForm() {
           Provide the following information to create a new account
         </CardDescription>
         <Form {...form}>
-          {state?.message !== "" &&
-            state?.message !== "success" &&
-            !state?.issues && (
-              <div className=" text-sm text-red-500">{state?.message}</div>
-            )}
-
-          {state?.issues && (
-            <div className="text-red-500">
-              <ul>
-                {state.issues.map((issue) => (
-                  <li key={issue} className="flex gap-1">
-                    <X fill="red" />
-                    {issue}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
           <form
-            ref={formRef}
             className=" grid gap-4 py-4"
-            action={formAction}
-            onSubmit={handleSubmitRegistration}
+            onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
               control={form.control}
@@ -155,8 +124,9 @@ export default function SignupForm() {
                 );
               }}
             />
-
-            <SubmitButton />
+            <FormSuccess message={success} />
+            <FormError message={error} />
+            <SubmitButton isPending={isPending} />
           </form>
         </Form>
       </CardHeader>
