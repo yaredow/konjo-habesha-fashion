@@ -2,7 +2,7 @@ export const publicRoutes = ["/", "/contact", "/cart", "/shop"];
 
 export const authRoutes = [
   "/account",
-  "/account/register",
+  "/account/signup",
   "/account/forget-password",
   "/account/reset-password",
 ];

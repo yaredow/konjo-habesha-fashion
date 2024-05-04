@@ -5,9 +5,21 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  trustHost: true,
-  theme: {
-    logo: "/images/logo/logo.png",
+  callbacks: {
+    session: async ({ token, session }) => {
+      if (token.sub && session.user) {
+        session.user = {
+          ...session.user,
+          id: token.sub,
+          image: token.picture,
+          email: token.email as string,
+        };
+      }
+      return session;
+    },
+    jwt: async ({ token }) => {
+      return token;
+    },
   },
   adapter: PrismaAdapter(prisma),
   session: {

@@ -13,7 +13,7 @@ export type ErrorAndSuccessType = {
 
 export async function authenticate(
   values: z.infer<typeof loginFormSchema>,
-): Promise<LoginFormType> {
+): Promise<ErrorAndSuccessType> {
   console.log(values);
   const validatedFields = loginFormSchema.safeParse(values);
   if (!validatedFields.success) {
