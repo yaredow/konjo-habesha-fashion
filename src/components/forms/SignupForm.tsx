@@ -46,90 +46,75 @@ export default function SignupForm() {
   };
 
   return (
-    <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
-      <CardHeader>
-        <CardTitle>Sign up</CardTitle>
-        <CardDescription>
-          Provide the following information to create a new account
-        </CardDescription>
-        <Form {...form}>
-          <form
-            className=" grid gap-4 py-4"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} placeholder="Name" type="text" />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
+    <Form {...form}>
+      <form className=" grid gap-4 py-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} placeholder="Name" type="text" />
+                </FormControl>
+                <FormMessage className=" mx-2" />
+              </FormItem>
+            );
+          }}
+        />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} placeholder="Email" type="email" />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} placeholder="Email" type="email" />
+                </FormControl>
+                <FormMessage className=" mx-2" />
+              </FormItem>
+            );
+          }}
+        />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="password"
-                        type="password"
-                      />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} placeholder="password" type="password" />
+                </FormControl>
+                <FormMessage className=" mx-2" />
+              </FormItem>
+            );
+          }}
+        />
 
-            <FormField
-              control={form.control}
-              name="passwordConfirm"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Confirm Password"
-                        type="password"
-                      />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormSuccess message={success} />
-            <FormError message={error} />
-            <SubmitButton isPending={isPending} />
-          </form>
-        </Form>
-      </CardHeader>
-    </Card>
+        <FormField
+          control={form.control}
+          name="passwordConfirm"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Confirm Password"
+                    type="password"
+                  />
+                </FormControl>
+                <FormMessage className=" mx-2" />
+              </FormItem>
+            );
+          }}
+        />
+        <FormSuccess message={success} />
+        <FormError message={error} />
+        <SubmitButton isPending={isPending} />
+      </form>
+    </Form>
   );
 }

@@ -3,6 +3,7 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -12,21 +13,24 @@ import BackButton from "./account/BackButton";
 
 type CardWrapperProps = {
   children: React.ReactNode;
-  headerLabel: string;
+  title: string;
+  description: string;
   showSocial?: boolean;
   isLogin?: boolean;
 };
 
 export default function CardWrapper({
   children,
-  headerLabel,
+  title,
+  description,
   showSocial,
   isLogin,
 }: CardWrapperProps) {
   return (
     <Card className=" w-[400px] shadow-md">
       <CardHeader>
-        <CardTitle>{headerLabel}</CardTitle>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className=" items-center">
         {children}

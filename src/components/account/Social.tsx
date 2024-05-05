@@ -6,14 +6,14 @@ import { Button } from "../ui/button";
 
 export default function Social() {
   return (
-    <div className=" flex flex-col">
-      <div className="mb-8 flex flex-grow items-center">
+    <>
+      {/* <div className="mb-8 flex items-center">
         <hr className="border-1 w-full flex-grow rounded-full" />
         <div className="mx-4 text-xs font-normal">OR LOGIN WITH</div>
         <hr className="border-1 w-full rounded-full" />
-      </div>
+      </div> */}
 
-      <div className="w-full flex-grow flex-row items-center justify-between">
+      <div className="flex w-full flex-row items-center justify-between space-x-2">
         <Button
           size="lg"
           className="w-1/2"
@@ -32,6 +32,6 @@ export default function Social() {
           <FaGithub className=" h-5 w-5" />
         </Button>
       </div>
-    </div>
+    </>
   );
 }
