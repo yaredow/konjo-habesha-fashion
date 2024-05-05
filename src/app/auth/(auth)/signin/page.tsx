@@ -23,10 +23,10 @@ export default function page() {
           <LoginForm />
           <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
             <Button variant="link">
-              <Link href="/account/signup">Register here</Link>
+              <Link href="/auth/signup">Register here</Link>
             </Button>
             <Button variant="link">
-              <Link href="/account/forget-password">Forgot your password</Link>
+              <Link href="/auth/forget-password">Forgot your password</Link>
             </Button>
           </div>
         </CardContent>

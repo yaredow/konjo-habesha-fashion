@@ -36,6 +36,8 @@ export default function Header() {
     signOut({ callbackUrl: "http://localhost:3000" });
   };
 
+  console.log(status);
+
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
       <div className="flex items-center justify-between">
