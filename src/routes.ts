@@ -1,7 +1,7 @@
 export const publicRoutes = ["/", "/contact", "/cart", "/shop"];
 
 export const authRoutes = [
-  "auth/signin",
+  "/auth/signin",
   "/auth/register",
   "/auth/forget-password",
   "/auth/reset-password",
