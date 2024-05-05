@@ -1,9 +1,5 @@
 "use cclient";
 
-import Link from "next/link";
-import FacebookSigninButton from "./FacebookSigninButton";
-import GoogleButton from "./GoogleSigninButton";
-import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -11,21 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import Social from "./account/Social";
+import BackButton from "./account/BackButton";
 
 type CardWrapperProps = {
   children: React.ReactNode;
   headerLabel: string;
-  backButtonLabel: string;
-  backButtonHref: string;
   showSocial?: boolean;
-  isLogin?: string;
+  isLogin?: boolean;
 };
 
 export default function CardWrapper({
   children,
   headerLabel,
-  backButtonHref,
-  backButtonLabel,
   showSocial,
   isLogin,
 }: CardWrapperProps) {
@@ -34,32 +28,13 @@ export default function CardWrapper({
       <CardHeader>
         <CardTitle>{headerLabel}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div>{children}</div>
-        {isLogin && (
-          <div className=" mx-4 my-4 flex flex-row justify-between text-sm ">
-            <Button variant="link">
-              <Link href="/auth/signup">Register here</Link>
-            </Button>
-            <Button variant="link">
-              <Link href="/auth/forget-password">Forgot your password</Link>
-            </Button>
-          </div>
-        )}
+      <CardContent className=" items-center">
+        {children}
+        {isLogin && <BackButton />}
       </CardContent>
       {showSocial && (
         <CardFooter>
-          <div className="mb-8 mt-2 flex flex-grow items-center">
-            <hr className="border-1 w-full rounded-full" />
-            <div className="mx-4 flex-none text-xs font-normal">
-              OR LOGIN WITH
-            </div>
-            <hr className="border-1 w-full rounded-full" />
-          </div>
-          <div className="flex flex-col gap-4 md:flex-row">
-            <GoogleButton />
-            <FacebookSigninButton />
-          </div>
+          <Social />
         </CardFooter>
       )}
     </Card>
