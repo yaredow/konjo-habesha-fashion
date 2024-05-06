@@ -7,6 +7,7 @@ import { ErrorAndSuccessType } from "./authenticate";
 import { z } from "zod";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export async function register(
   values: z.infer<typeof SignupFormSchema>,
@@ -35,6 +36,8 @@ export async function register(
   });
 
   const verificationToken = await generateVerificationToken(email);
+
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   return { success: "Confirmation email sent" };
 }
