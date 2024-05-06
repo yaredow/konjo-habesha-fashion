@@ -17,13 +17,17 @@ import { loginFormSchema } from "@/utils/validators/form-validators";
 import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
 import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-
-  console.log(error);
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already used with different provider"
+      : "";
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -90,7 +94,7 @@ export default function LoginForm() {
               );
             }}
           />
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <SubmitButton isPending={isPending} />
         </div>

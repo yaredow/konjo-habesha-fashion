@@ -1,5 +1,5 @@
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import { signIn } from "@/auth";
 
@@ -10,7 +10,7 @@ export default function Social() {
         className="w-full items-center"
         action={async () => {
           "use server";
-          await signIn("facebook", {
+          await signIn("google", {
             redirectTo: "http://localhost:300/account/profile",
           });
         }}
@@ -25,13 +25,13 @@ export default function Social() {
         action={async () => {
           "use server";
 
-          await signIn("google", {
+          await signIn("facebook", {
             redirectTo: "http://localhost:3000/account/profile",
           });
         }}
       >
         <Button type="submit" size="lg" className=" w-full" variant="outline">
-          <FaGithub className=" h-5 w-5" />
+          <FaFacebook className=" h-5 w-5 text-blue-500 dark:text-blue-400" />
         </Button>
       </form>
     </div>
