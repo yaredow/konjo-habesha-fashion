@@ -2,18 +2,10 @@ import CardWrapper from "@/components/auth/CardWrapper";
 import UpdatePasswordForm from "@/components/forms/UpdatePasswordForm";
 import UpdateUserDataForm from "@/components/forms/UpdateUserDataForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import getSession from "@/utils/getSession";
 
 export default async function setting() {
-  const session = await getSession();
-  const user = session?.user;
-  console.log(user);
-
   return (
     <div>
-      <h1 className=" mb-8 text-center text-3xl font-semibold">
-        Update your account
-      </h1>
       <Tabs defaultValue="account" className=" my-4">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="account">Account</TabsTrigger>
@@ -26,6 +18,8 @@ export default async function setting() {
             description="Fill the data to update your account"
             isLogin={false}
             showSocial={false}
+            backButtonHref="/profile"
+            backButtonLabel="Back to profile"
           >
             <UpdateUserDataForm />
           </CardWrapper>
@@ -37,6 +31,8 @@ export default async function setting() {
             description="You will be logged out once your password has been updated"
             isLogin={false}
             showSocial={false}
+            backButtonHref="/profile"
+            backButtonLabel="Back to profile"
           >
             <UpdatePasswordForm />
           </CardWrapper>

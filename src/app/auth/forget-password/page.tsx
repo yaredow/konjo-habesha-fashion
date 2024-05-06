@@ -1,11 +1,5 @@
-import CardWrapper from "@/components/CardWrapper";
+import CardWrapper from "@/components/auth/CardWrapper";
 import ForgetPasswordForm from "@/components/forms/ForgetPasswordForm";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export default function page() {
   return (
@@ -15,6 +9,8 @@ export default function page() {
         description="We will send you an email to reset your password."
         isLogin={false}
         showSocial={false}
+        backButtonHref="/auth/signin"
+        backButtonLabel="Go back to login"
       >
         <ForgetPasswordForm />
       </CardWrapper>

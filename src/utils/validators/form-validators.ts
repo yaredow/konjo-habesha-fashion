@@ -103,3 +103,26 @@ export const CreateProductFormSchema = z.object({
     .min(1, { message: "Description is required" })
     .max(2000, { message: "Description cannot exceed 2000 characters" }),
 });
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+);
+
+export const contactFormSchema = z.object({
+  fullName: z.string().refine(
+    (value) => {
+      if (value !== "") {
+        const names = value.trim().split(" ");
+        return names.length === 2 && names.every((name) => name.length > 0);
+      }
+    },
+    {
+      message: "Please enter your full name with both first and last names.",
+    },
+  ),
+  email: z.string().email(),
+  phone: z.string().regex(phoneRegex, "Invalid phone number"),
+  message: z.string().max(1000, {
+    message: "Message must not be longer than 1000 characters.",
+  }),
+});

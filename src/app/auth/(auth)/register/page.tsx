@@ -1,4 +1,4 @@
-import CardWrapper from "@/components/CardWrapper";
+import CardWrapper from "@/components/auth/CardWrapper";
 import SignupForm from "@/components/forms/SignupForm";
 
 export default function page() {
@@ -9,6 +9,8 @@ export default function page() {
         description="Fill the form below to create an account"
         showSocial
         isLogin={false}
+        backButtonHref="/auth/signin"
+        backButtonLabel="Go back to login"
       >
         <SignupForm />
       </CardWrapper>

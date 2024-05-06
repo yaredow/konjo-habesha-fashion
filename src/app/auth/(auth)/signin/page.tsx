@@ -1,5 +1,5 @@
+import CardWrapper from "@/components/auth/CardWrapper";
 import LoginForm from "@/components/forms/LoginForm";
-import CardWrapper from "@/components/CardWrapper";
 
 export default function page() {
   return (
@@ -9,6 +9,8 @@ export default function page() {
         description="Provide your credentials to log in"
         isLogin={true}
         showSocial={true}
+        backButtonHref="/"
+        backButtonLabel="Go back to home"
       >
         <LoginForm />
       </CardWrapper>
