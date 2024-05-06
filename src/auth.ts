@@ -21,12 +21,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   callbacks: {
-    signIn: async ({ user }) => {
-      // const existingUser = await getUserById(user.id!);
+    signIn: async ({ user, account }) => {
+      if (account?.provider !== "credentials") return true;
 
-      // if (!existingUser || !existingUser.emailVerified) {
-      //   return false;
-      // }
+      const existingUser = await getUserById(user.id!);
+
+      if (!existingUser || !existingUser.emailVerified) return false;
+
       return true;
     },
     session: async ({ token, session }) => {

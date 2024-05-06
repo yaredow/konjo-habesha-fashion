@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { ErrorAndSuccessType } from "./authenticate";
 import { z } from "zod";
 import { getUserByEmail } from "@/data/user";
-import { getVerificationTokenByEmail } from "@/data/verification_token";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export async function register(
   values: z.infer<typeof SignupFormSchema>,
@@ -26,7 +26,7 @@ export async function register(
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  const newUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name,
       email,
@@ -34,11 +34,7 @@ export async function register(
     },
   });
 
-  if (!newUser) {
-    return { error: "User creation failed" };
-  }
-
-  const verificationToken = await getVerificationTokenByEmail(email);
+  const verificationToken = await generateVerificationToken(email);
 
   return { success: "Confirmation email sent" };
 }
