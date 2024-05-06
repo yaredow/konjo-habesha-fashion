@@ -8,11 +8,11 @@ import { getUserById } from "./data/user";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     signIn: async ({ user }) => {
-      const existingUser = await getUserById(user.id!);
+      // const existingUser = await getUserById(user.id!);
 
-      if (!existingUser || !existingUser.emailVerified) {
-        return false;
-      }
+      // if (!existingUser || !existingUser.emailVerified) {
+      //   return false;
+      // }
       return true;
     },
     session: async ({ token, session }) => {

@@ -4,6 +4,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: "res.cloudinary.com" },
       { hostname: "lh3.googleusercontent.com" },
+      { hostname: "platform-lookaside.fbsbx.com" },
     ],
   },
   transpilePackages: ["lucid-react"],

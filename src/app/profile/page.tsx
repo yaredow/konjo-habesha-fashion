@@ -1,9 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Logout from "../../../components/account/Logout";
 import { Card } from "@/components/ui/card";
-import UpdateAccount from "@/components/account/UserAccount";
 
 const UserDetails = () => {
   const { data: session } = useSession();

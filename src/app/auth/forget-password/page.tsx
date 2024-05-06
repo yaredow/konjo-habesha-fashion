@@ -1,3 +1,4 @@
+import CardWrapper from "@/components/CardWrapper";
 import ForgetPasswordForm from "@/components/forms/ForgetPasswordForm";
 import {
   Card,
@@ -9,15 +10,14 @@ import {
 export default function page() {
   return (
     <main className="my-auto flex items-center justify-center">
-      <Card className="mx-auto max-w-[36rem] flex-grow items-center p-6">
-        <CardHeader>
-          <CardTitle className=" pb-4">Reset Your Password</CardTitle>
-          <CardDescription>
-            We will send you an email to reset your password.
-          </CardDescription>
-        </CardHeader>
+      <CardWrapper
+        title="Reset your password"
+        description="We will send you an email to reset your password."
+        isLogin={false}
+        showSocial={false}
+      >
         <ForgetPasswordForm />
-      </Card>
+      </CardWrapper>
     </main>
   );
 }
