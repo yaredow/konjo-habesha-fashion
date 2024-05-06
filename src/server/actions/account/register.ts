@@ -2,11 +2,11 @@
 
 import prisma from "@/lib/prisma";
 import { SignupFormSchema } from "@/utils/validators/form-validators";
-import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { ErrorAndSuccessType } from "./authenticate";
 import { z } from "zod";
 import { getUserByEmail } from "@/data/user";
+import { getVerificationTokenByEmail } from "@/data/verification_token";
 
 export async function register(
   values: z.infer<typeof SignupFormSchema>,
@@ -38,5 +38,7 @@ export async function register(
     return { error: "User creation failed" };
   }
 
-  return { success: "Registration successfull" };
+  const verificationToken = await getVerificationTokenByEmail(email);
+
+  return { success: "Confirmation email sent" };
 }
