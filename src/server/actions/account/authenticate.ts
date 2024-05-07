@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getUserByEmail } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { loginFormSchema } from "@/utils/validators/form-validators";
@@ -31,6 +32,11 @@ export async function authenticate(
 
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(email);
+
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token,
+    );
 
     return { success: "Verification email sent" };
   }
