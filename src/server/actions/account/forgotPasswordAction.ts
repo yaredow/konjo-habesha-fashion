@@ -7,6 +7,7 @@ import { z } from "zod";
 export async function forgotPasswordAction(
   values: z.infer<typeof forgotPasswordFormSchema>,
 ) {
+  console.log(values);
   const validatedField = forgotPasswordFormSchema.safeParse({
     email: values.email,
   });

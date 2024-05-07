@@ -15,6 +15,8 @@ import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { forgotPasswordAction } from "@/server/actions/account/forgotPasswordAction";
+import { FormSuccess } from "../FormSuccess";
+import { FormError } from "../FormError";
 
 export default function ForgetPasswordForm() {
   const [error, setError] = useState<string | undefined>("");
@@ -31,7 +33,15 @@ export default function ForgetPasswordForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      forgotPasswordAction(value);
+      forgotPasswordAction(value)
+        .then((data) => {
+          setSuccess(data.success);
+          setError(data.error);
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("Something went wrong");
+        });
     });
   };
 
@@ -56,6 +66,8 @@ export default function ForgetPasswordForm() {
           }}
         />
 
+        <FormSuccess message={success} />
+        <FormError message={error} />
         <SubmitButton isPending={isLoading} />
       </form>
     </Form>

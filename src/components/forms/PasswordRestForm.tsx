@@ -14,7 +14,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
-import { useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function PasswordResetForm() {
@@ -33,6 +33,8 @@ export default function PasswordResetForm() {
       passwordConfirm: "",
     },
   });
+
+  const handlePassowrdReset = useCallback(() => {}, []);
 
   const onSubmit = async () => {
     setError("");
