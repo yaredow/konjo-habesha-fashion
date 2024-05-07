@@ -1,5 +1,5 @@
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendPasswordResetToken } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
@@ -25,7 +25,10 @@ export async function forgotPasswordAction(
 
   const verificationToken = await generateVerificationToken(email);
 
-  // await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  await sendPasswordResetToken(
+    verificationToken.email,
+    verificationToken.token,
+  );
 
   return { success: "Password reset token sent successfully" };
 }
