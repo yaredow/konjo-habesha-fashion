@@ -18,6 +18,7 @@ import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
+import CardWrapper from "../auth/CardWrapper";
 
 export default function LoginForm() {
   const [error, setError] = useState<string | undefined>("");
@@ -49,56 +50,65 @@ export default function LoginForm() {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full flex-grow items-center justify-center gap-4"
-      >
-        <div className=" flex flex-col space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="email"
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage className=" mx-2" />
-                </FormItem>
-              );
-            }}
-          />
+    <CardWrapper
+      title="Login"
+      description="Provide your credentials to log in"
+      isLogin={true}
+      showSocial={true}
+      backButtonHref="/"
+      backButtonLabel="Go back to home"
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full flex-grow items-center justify-center gap-4"
+        >
+          <div className=" flex flex-col space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="email"
+                        type="text"
+                      />
+                    </FormControl>
+                    <FormMessage className=" mx-2" />
+                  </FormItem>
+                );
+              }}
+            />
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="password"
-                      type="password"
-                    />
-                  </FormControl>
-                  <FormMessage className=" mx-2" />
-                </FormItem>
-              );
-            }}
-          />
-          <FormError message={error || urlError} />
-          <FormSuccess message={success} />
-          <SubmitButton isPending={isPending} />
-        </div>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="password"
+                        type="password"
+                      />
+                    </FormControl>
+                    <FormMessage className=" mx-2" />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormError message={error || urlError} />
+            <FormSuccess message={success} />
+            <SubmitButton isPending={isPending} />
+          </div>
+        </form>
+      </Form>
+    </CardWrapper>
   );
 }
