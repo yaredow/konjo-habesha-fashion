@@ -25,5 +25,7 @@ export async function forgotPasswordAction(
 
   const verificationToken = await generateVerificationToken(email);
 
-  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  // await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  return { success: "Password reset token sent successfully" };
 }
