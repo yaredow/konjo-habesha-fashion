@@ -3,7 +3,7 @@ export const publicRoutes = [
   "/contact",
   "/cart",
   "/shop",
-  "/auth/password-reset",
+  "/auth/new-verification",
 ];
 
 export const authRoutes = [
