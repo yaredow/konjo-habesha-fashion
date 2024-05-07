@@ -35,6 +35,10 @@ export const loginFormSchema = z.object({
   password: z.string().min(4),
 });
 
+export const forgotPasswordFormSchema = z.object({
+  email: z.string().email(),
+});
+
 export const SignupFormSchema = z
   .object({
     name: z.string().refine(

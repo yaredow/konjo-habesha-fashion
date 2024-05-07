@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 
 export async function tokenVerificationAction(token: string) {
   const existingVerification = await getVerificationTokenByToken(token);
-  console.log(existingVerification);
 
   if (!existingVerification) {
     return { error: "Token not found" };

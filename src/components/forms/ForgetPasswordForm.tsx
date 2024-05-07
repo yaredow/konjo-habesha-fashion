@@ -8,17 +8,18 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { toast } from "../ui/use-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SubmitButton from "../SubmitButton";
 import { Input } from "../ui/input";
-
-const forgotPasswordFormSchema = z.object({
-  email: z.string().email(),
-});
+import { useState, useTransition } from "react";
+import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
+import { forgotPasswordAction } from "@/server/actions/account/forgotPasswordAction";
 
 export default function ForgetPasswordForm() {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isLoading, startTransition] = useTransition();
   const form = useForm<z.infer<typeof forgotPasswordFormSchema>>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
@@ -26,9 +27,11 @@ export default function ForgetPasswordForm() {
     },
   });
 
-  const onSubmit = () => {
-    toast({
-      description: "You have successfully registered",
+  const onSubmit = (value: z.infer<typeof forgotPasswordFormSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      forgotPasswordAction(value);
     });
   };
 
@@ -53,7 +56,7 @@ export default function ForgetPasswordForm() {
           }}
         />
 
-        <SubmitButton />
+        <SubmitButton isPending={isLoading} />
       </form>
     </Form>
   );

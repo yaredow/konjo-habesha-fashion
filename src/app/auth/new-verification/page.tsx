@@ -45,7 +45,7 @@ export default function Page() {
       backButtonHref="/auth/signin"
       backButtonLabel="Go back to sign in"
     >
-      {!error || !success ? (
+      {!error && !success ? (
         <div className=" flex w-full items-center justify-center">
           <Spinner />
         </div>
