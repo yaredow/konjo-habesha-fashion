@@ -16,12 +16,9 @@ export async function resetPasswordAction(
     return { error: "Token not found" };
   }
 
-  const validatedFields = ResetPasswordFormSchema.safeParse({
-    newPassword: values.newPassword,
-    passwordConfirm: values.passwordConfirm,
-  });
+  const validatedFields = ResetPasswordFormSchema.safeParse(values);
 
-  console.log(!validatedFields.success);
+  console.log(validatedFields.success);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };

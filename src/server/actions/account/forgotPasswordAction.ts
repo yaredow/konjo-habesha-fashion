@@ -5,10 +5,11 @@ import { sendPasswordResetToken } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
+import { ErrorAndSuccessType } from "./authenticate";
 
 export async function forgotPasswordAction(
   values: z.infer<typeof forgotPasswordFormSchema>,
-) {
+): Promise<ErrorAndSuccessType> {
   const validatedField = forgotPasswordFormSchema.safeParse({
     email: values.email,
   });

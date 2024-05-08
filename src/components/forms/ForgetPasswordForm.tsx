@@ -32,8 +32,8 @@ export default function ForgetPasswordForm() {
   const onSubmit = (value: z.infer<typeof forgotPasswordFormSchema>) => {
     setError("");
     setSuccess("");
-    startTransition(() => {
-      forgotPasswordAction(value)
+    startTransition(async () => {
+      await forgotPasswordAction(value)
         .then((data) => {
           setSuccess(data.success);
           setError(data.error);

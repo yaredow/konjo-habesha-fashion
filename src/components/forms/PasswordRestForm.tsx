@@ -35,7 +35,7 @@ export default function PasswordResetForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof ResetPasswordFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ResetPasswordFormSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
@@ -45,7 +45,7 @@ export default function PasswordResetForm() {
           setError(data.error);
         })
         .then((error) => {
-          console.error(error);
+          console.error("Error in password reset action:", error);
           setError("Something went wrong");
         });
     });
