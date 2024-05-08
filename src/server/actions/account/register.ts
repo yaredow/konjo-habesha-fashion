@@ -8,6 +8,7 @@ import { z } from "zod";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
+import { getVerificationTokenByToken } from "@/data/verification_token";
 
 export async function register(
   values: z.infer<typeof SignupFormSchema>,

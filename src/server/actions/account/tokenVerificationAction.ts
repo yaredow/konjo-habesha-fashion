@@ -1,8 +1,13 @@
+"use server";
+
 import { getUserByEmail } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verification_token";
 import prisma from "@/lib/prisma";
+import { ErrorAndSuccessType } from "./authenticate";
 
-export async function tokenVerificationAction(token: string) {
+export async function tokenVerificationAction(
+  token: string,
+): Promise<ErrorAndSuccessType> {
   const existingVerification = await getVerificationTokenByToken(token);
 
   if (!existingVerification) {

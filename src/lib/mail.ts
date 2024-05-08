@@ -21,6 +21,6 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     from: "onboarding@resend.dev",
     to: email,
     subject: "Reset your password",
-    html: `Here <p><a href="${confirmLink}">Here</a></p>`,
+    html: `Click <p><a href="${confirmLink}">Here</a></p> to verifiy your email`,
   });
 };
