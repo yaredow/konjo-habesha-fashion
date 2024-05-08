@@ -1,5 +1,6 @@
 import { v4 as uuid4 } from "uuid";
 import prisma from "@/lib/prisma";
+import crypto from "crypto";
 
 export const generateVerificationToken = async (email: string) => {
   const token = uuid4();
@@ -52,7 +53,7 @@ export const generatePasswordResetToken = async (email: string) => {
 };
 
 export const generateTwoFactorConfirmationToken = async (email: string) => {
-  const token = uuid4();
+  const token = crypto.randomInt(100000, 1000000).toString();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
   const existingTwoFactorToken = await prisma.twoFactorToken.findFirst({
