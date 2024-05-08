@@ -1,13 +1,14 @@
+"use server";
+
 import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetToken } from "@/lib/mail";
-import { generateVerificationToken } from "@/lib/tokens";
+import { generatePasswordResetToken } from "@/lib/tokens";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 
 export async function forgotPasswordAction(
   values: z.infer<typeof forgotPasswordFormSchema>,
 ) {
-  console.log(values);
   const validatedField = forgotPasswordFormSchema.safeParse({
     email: values.email,
   });
@@ -24,11 +25,11 @@ export async function forgotPasswordAction(
     return { error: "User doesn't exist with that email" };
   }
 
-  const verificationToken = await generateVerificationToken(email);
+  const passwordResetToken = await generatePasswordResetToken(email);
 
   await sendPasswordResetToken(
-    verificationToken.email,
-    verificationToken.token,
+    passwordResetToken.email,
+    passwordResetToken.token,
   );
 
   return { success: "Password reset token sent successfully" };

@@ -25,7 +25,7 @@ export default function PasswordResetForm() {
   const [success, setSuccess] = useState<string | undefined>("");
   const [isLoading, startTransition] = useTransition();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get("token") as string;
 
   const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
     resolver: zodResolver(ResetPasswordFormSchema),
@@ -35,11 +35,11 @@ export default function PasswordResetForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof ResetPasswordFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof ResetPasswordFormSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      resetPasswordAction(values, token!)
+      resetPasswordAction(values, token)
         .then((data) => {
           setSuccess(data.success);
           setError(data.error);

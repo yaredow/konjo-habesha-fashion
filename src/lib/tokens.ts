@@ -26,7 +26,7 @@ export const generateVerificationToken = async (email: string) => {
   return verificationToken;
 };
 
-export async function generatePasswordResetToken(email: string) {
+export const generatePasswordResetToken = async (email: string) => {
   const token = uuid4();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
@@ -40,11 +40,13 @@ export async function generatePasswordResetToken(email: string) {
     });
   }
 
-  await prisma.passwordResetToken.create({
+  const passwordResetToken = await prisma.passwordResetToken.create({
     data: {
       email,
       expires,
       token,
     },
   });
-}
+
+  return passwordResetToken;
+};

@@ -1,3 +1,5 @@
+"use server";
+
 import { ResetPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "./authenticate";
@@ -16,8 +18,10 @@ export async function resetPasswordAction(
 
   const validatedFields = ResetPasswordFormSchema.safeParse({
     newPassword: values.newPassword,
-    passwordCOnfirm: values.passwordConfirm,
+    passwordConfirm: values.passwordConfirm,
   });
+
+  console.log(!validatedFields.success);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };
@@ -31,10 +35,10 @@ export async function resetPasswordAction(
     return { error: "Token not found" };
   }
 
-  const isTokenExoired =
+  const isTokenExpired =
     new Date(existingResetPasswordToken.expires) < new Date();
 
-  if (isTokenExoired) {
+  if (isTokenExpired) {
     return { error: "Token expired" };
   }
 

@@ -42,10 +42,15 @@ export default function LoginForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      authenticate(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
-      });
+      authenticate(values)
+        .then((data) => {
+          setError(data.error);
+          setSuccess(data.success);
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("Something went wrong");
+        });
     });
   };
 
