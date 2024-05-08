@@ -33,6 +33,7 @@ export const UpdatePasswordFormSchema = z
 export const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(4),
+  twoFactor: z.optional(z.string()),
 });
 
 export const forgotPasswordFormSchema = z.object({

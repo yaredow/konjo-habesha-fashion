@@ -2,8 +2,11 @@
 
 import { signIn } from "@/auth";
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail } from "@/lib/mail";
-import { generateVerificationToken } from "@/lib/tokens";
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
+import {
+  generateTwoFactorConfirmationToken,
+  generateVerificationToken,
+} from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { loginFormSchema } from "@/utils/validators/form-validators";
 import { AuthError } from "next-auth";
@@ -12,6 +15,7 @@ import { z } from "zod";
 export type ErrorAndSuccessType = {
   error?: string;
   success?: string;
+  twoFactor?: boolean;
 };
 
 export async function authenticate(
@@ -39,6 +43,19 @@ export async function authenticate(
     );
 
     return { success: "Verification email sent" };
+  }
+
+  if (existingUser.isTwoFactorEnabled) {
+    const twoFactorConfirmation = await generateTwoFactorConfirmationToken(
+      existingUser.email,
+    );
+
+    await sendTwoFactorTokenEmail(
+      twoFactorConfirmation.email,
+      twoFactorConfirmation.token,
+    );
+
+    return { twoFactor: true };
   }
 
   try {

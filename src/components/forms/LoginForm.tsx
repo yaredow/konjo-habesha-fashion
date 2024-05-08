@@ -21,6 +21,7 @@ import { useSearchParams } from "next/navigation";
 import CardWrapper from "../auth/CardWrapper";
 
 export default function LoginForm() {
+  const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -44,8 +45,17 @@ export default function LoginForm() {
     startTransition(() => {
       authenticate(values)
         .then((data) => {
-          setError(data.error);
-          setSuccess(data.success);
+          if (data?.error) {
+            form.reset();
+            setError(data.error);
+          }
+          if (data?.success) {
+            form.reset();
+            setSuccess(data.success);
+          }
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -69,45 +79,70 @@ export default function LoginForm() {
           className="w-full flex-grow items-center justify-center gap-4"
         >
           <div className=" flex flex-col space-y-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        disabled={isPending}
-                        {...field}
-                        placeholder="email"
-                        type="text"
-                      />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
+            {!showTwoFactor && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            disabled={isPending}
+                            {...field}
+                            placeholder="email"
+                            type="text"
+                          />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        disabled={isPending}
-                        {...field}
-                        placeholder="password"
-                        type="password"
-                      />
-                    </FormControl>
-                    <FormMessage className=" mx-2" />
-                  </FormItem>
-                );
-              }}
-            />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            disabled={isPending}
+                            {...field}
+                            placeholder="password"
+                            type="password"
+                          />
+                        </FormControl>
+                        <FormMessage className=" mx-2" />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </>
+            )}
+
+            {showTwoFactor && (
+              <FormField
+                control={form.control}
+                name="twoFactor"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          {...field}
+                          placeholder="Two Factor code"
+                        />
+                      </FormControl>
+                      <FormMessage className=" mx-2" />
+                    </FormItem>
+                  );
+                }}
+              />
+            )}
             <FormError message={error || urlError} />
             <FormSuccess message={success} />
             <SubmitButton isPending={isPending} />
