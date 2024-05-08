@@ -145,7 +145,7 @@ export default function LoginForm() {
             )}
             <FormError message={error || urlError} />
             <FormSuccess message={success} />
-            <SubmitButton isPending={isPending} />
+            <SubmitButton showTwoFactor={true} isPending={isPending} />
           </div>
         </form>
       </Form>

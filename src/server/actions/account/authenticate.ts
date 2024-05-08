@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { getTwoFactorConfirmationTokenWithUserId } from "@/data/twoFactorConfirmationToken";
 import { getUserByEmail } from "@/data/user";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import {
@@ -26,7 +27,7 @@ export async function authenticate(
     return { error: "Invalid data" };
   }
 
-  const { email, password } = validatedFields.data;
+  const { email, password, twoFactor } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
 
@@ -45,17 +46,36 @@ export async function authenticate(
     return { success: "Verification email sent" };
   }
 
-  if (existingUser.isTwoFactorEnabled) {
-    const twoFactorConfirmation = await generateTwoFactorConfirmationToken(
-      existingUser.email,
-    );
+  if (existingUser.isTwoFactorEnabled && existingUser.email) {
+    if (twoFactor) {
+      const twoFactorCode = await getTwoFactorConfirmationTokenWithUserId(
+        existingUser.id,
+      );
+      if (!twoFactorCode) {
+        return { error: "Invalid code" };
+      }
 
-    await sendTwoFactorTokenEmail(
-      twoFactorConfirmation.email,
-      twoFactorConfirmation.token,
-    );
+      if (twoFactorCode.token !== twoFactor) {
+        return { error: "Invalid code" };
+      }
 
-    return { twoFactor: true };
+      const twoFactorCodeExpires = new Date(twoFactorCode.expires) < new Date();
+
+      if (twoFactorCodeExpires) {
+        return { error: "The code has expired" };
+      }
+    } else {
+      const twoFactorConfirmation = await generateTwoFactorConfirmationToken(
+        existingUser.email,
+      );
+
+      await sendTwoFactorTokenEmail(
+        twoFactorConfirmation.email,
+        twoFactorConfirmation.token,
+      );
+
+      return { twoFactor: true };
+    }
   }
 
   try {

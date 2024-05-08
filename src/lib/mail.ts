@@ -8,10 +8,9 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     from: "onboarding@resend.dev",
     to: email,
     subject: "Your 2fa code:",
-    html: `Here <p><a href="${token}">Here</a></p>`,
+    html: `Here is your 2fa code: <p>${token}"></p>`,
   });
 };
-
 export const sendPasswordResetToken = async (email: string, token: string) => {
   const resetLink = `http://localhost:3000/auth/reset-password?token=${token}`;
 
