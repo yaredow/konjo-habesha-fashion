@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import CardWrapper from "../auth/CardWrapper";
 import { z } from "zod";
-import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -14,8 +13,12 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
-import { useCallback, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
+import { ResetPasswordFormSchema } from "@/utils/validators/form-validators";
+import { resetPasswordAction } from "@/server/actions/account/resetPasswordAction";
+import { FormSuccess } from "../FormSuccess";
+import { FormError } from "../FormError";
 
 export default function PasswordResetForm() {
   const [error, setError] = useState<string | undefined>("");
@@ -23,23 +26,29 @@ export default function PasswordResetForm() {
   const [isLoading, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  console.log(token);
 
-  const form = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
-    resolver: zodResolver(UpdatePasswordFormSchema),
+  const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
+    resolver: zodResolver(ResetPasswordFormSchema),
     defaultValues: {
-      currentPassword: "",
       newPassword: "",
       passwordConfirm: "",
     },
   });
 
-  const handlePassowrdReset = useCallback(() => {}, []);
-
-  const onSubmit = async () => {
+  const onSubmit = async (values: z.infer<typeof ResetPasswordFormSchema>) => {
     setError("");
     setSuccess("");
-    startTransition(() => {});
+    startTransition(() => {
+      resetPasswordAction(values, token!)
+        .then((data) => {
+          setSuccess(data.success);
+          setError(data.error);
+        })
+        .then((error) => {
+          console.error(error);
+          setError("Something went wrong");
+        });
+    });
   };
 
   return (
@@ -54,25 +63,6 @@ export default function PasswordResetForm() {
           className=" grid gap-4 py-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <FormField
-            control={form.control}
-            name="currentPassword"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Current Password"
-                      type="password"
-                    />
-                  </FormControl>
-                  <FormMessage className=" mx-2" />
-                </FormItem>
-              );
-            }}
-          />
-
           <FormField
             control={form.control}
             name="newPassword"
@@ -110,7 +100,8 @@ export default function PasswordResetForm() {
               );
             }}
           />
-
+          <FormSuccess message={success} />
+          <FormError message={error} />
           <SubmitButton isPending={isLoading} />
         </form>
       </Form>

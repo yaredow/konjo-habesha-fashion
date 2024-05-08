@@ -18,7 +18,7 @@ export async function forgotPasswordAction(
 
   const { email } = validatedField.data;
 
-  const user = await getUserByEmail(values.email);
+  const user = await getUserByEmail(email);
 
   if (!user) {
     return { error: "User doesn't exist with that email" };

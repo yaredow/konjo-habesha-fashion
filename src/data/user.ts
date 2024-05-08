@@ -1,24 +1,25 @@
 import prisma from "@/lib/prisma";
-import { User } from "@prisma/client";
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: { email },
     });
-    return user as User;
-  } catch {
+    return user;
+  } catch (error) {
+    console.error(error);
     return null;
   }
 };
 
 export const getUserById = async (id: string) => {
   try {
-    const user = (await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id },
-    })) as User;
+    });
     return user;
-  } catch {
+  } catch (error) {
+    console.error(error);
     return null;
   }
 };

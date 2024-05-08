@@ -5,7 +5,7 @@ export default function page() {
   return (
     <main className="my-auto flex items-center justify-center">
       <CardWrapper
-        title="Reset your password"
+        title="Forgot your password"
         description="We will send you an email to reset your password."
         isLogin={false}
         showSocial={false}
