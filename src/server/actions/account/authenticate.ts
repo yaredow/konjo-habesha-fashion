@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { getTwoFactorConfirmationTokenWithUserId } from "@/data/twoFactorConfirmationToken";
 import { getUserByEmail } from "@/data/user";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import {
