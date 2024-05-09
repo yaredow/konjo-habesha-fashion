@@ -31,7 +31,6 @@ import useGetProducts from "@/utils/hook/useGetProducts";
 import { Product } from "../../../../types/product";
 
 export default function Dashboard() {
-  const [isClient, setIsClient] = useState<boolean>(false);
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [activeProducts, setActiveProducts] = useState<number>(0);
   const [totalNumberOfSales, setTotalNumberOfSales] = useState<number>(0);
@@ -49,7 +48,6 @@ export default function Dashboard() {
   }: { products: Product[]; isFetched: boolean } = useGetProducts();
 
   useEffect(() => {
-    setIsClient(true);
     if (isProductsFetched) {
       const numberOfProducts = products.length;
       setActiveProducts(numberOfProducts);
@@ -68,8 +66,6 @@ export default function Dashboard() {
       setTotalRevenue(revenue);
     }
   }, [orders, products]);
-
-  if (!isClient) return null;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">

@@ -5,6 +5,7 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
+  adminRoutes,
 } from "@/routes";
 import { NextResponse } from "next/server";
 
@@ -13,12 +14,21 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const userRole = req.auth?.user.role;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isAdminRoute = adminRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
+    return NextResponse.next();
+  }
+
+  if (isAdminRoute) {
+    if (!isLoggedIn) {
+      return Response.redirect(new URL("/auth/signin", nextUrl));
+    }
     return NextResponse.next();
   }
 

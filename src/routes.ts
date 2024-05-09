@@ -14,6 +14,13 @@ export const authRoutes = [
   "/auth/reset-password",
 ];
 
+export const adminRoutes = [
+  "/admin",
+  "admin/dashboard",
+  "admin/dashboard/product",
+  "admin/dashboard/order",
+];
+
 export const apiAuthPrefix = "/api/auth";
 
 export const DEFAULT_LOGIN_REDIRECT = "/profile";
