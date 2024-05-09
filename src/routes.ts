@@ -4,6 +4,11 @@ export const publicRoutes = [
   "/cart",
   "/shop",
   "/auth/new-verification",
+  "/admin",
+  "/admin/dashboard",
+  "/admin/dashboard/product",
+  "/admin/dashboard/user",
+  "admin/dashboard/order",
 ];
 
 export const authRoutes = [
@@ -12,13 +17,6 @@ export const authRoutes = [
   "/auth/error",
   "/auth/forget-password",
   "/auth/reset-password",
-];
-
-export const adminRoutes = [
-  "/admin",
-  "admin/dashboard",
-  "admin/dashboard/product",
-  "admin/dashboard/order",
 ];
 
 export const apiAuthPrefix = "/api/auth";

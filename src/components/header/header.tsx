@@ -52,6 +52,11 @@ export default function Header() {
         <div className=" hidden font-nav md:flex">
           <ul className="flex gap-[1.3rem]">
             {NAV_LINKS.map((navLink, index) => {
+              const isAdmin = session?.user.role == "ADMIN";
+              const isAdminPath = navLink.path === "/admin/dashboard";
+              if (isAdminPath && !isAdmin) {
+                return null;
+              }
               return (
                 <li key={index}>
                   <NavLink href={navLink.path}>{navLink.name}</NavLink>
