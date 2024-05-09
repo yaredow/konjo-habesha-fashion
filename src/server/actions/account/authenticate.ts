@@ -1,8 +1,11 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { getTwoFactorConfirmationByUserId } from "@/data/twoFactorConfirmation";
+import { getTwoFactorTokenByEmail } from "@/data/twoFactorToken";
 import { getUserByEmail } from "@/data/user";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
+import prisma from "@/lib/prisma";
 import {
   generateTwoFactorConfirmationToken,
   generateVerificationToken,
@@ -47,9 +50,7 @@ export async function authenticate(
 
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
     if (twoFactor) {
-      const twoFactorCode = await getTwoFactorConfirmationTokenWithUserId(
-        existingUser.id,
-      );
+      const twoFactorCode = await getTwoFactorTokenByEmail(existingUser.email);
       if (!twoFactorCode) {
         return { error: "Invalid code" };
       }
@@ -63,6 +64,26 @@ export async function authenticate(
       if (twoFactorCodeExpires) {
         return { error: "The code has expired" };
       }
+
+      await prisma.twoFactorToken.delete({
+        where: { id: twoFactorCode.id },
+      });
+
+      const existingConfirmation = await getTwoFactorConfirmationByUserId(
+        existingUser.id,
+      );
+
+      if (existingConfirmation) {
+        await prisma.twoFactorConfirmation.delete({
+          where: { id: existingConfirmation.id },
+        });
+      }
+
+      await prisma.twoFactorConfirmation.create({
+        data: {
+          userId: existingUser.id,
+        },
+      });
     } else {
       const twoFactorConfirmation = await generateTwoFactorConfirmationToken(
         existingUser.email,
@@ -84,7 +105,7 @@ export async function authenticate(
       password,
     });
 
-    return { success: "Login successful " };
+    return { success: "Login successful" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
