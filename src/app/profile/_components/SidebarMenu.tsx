@@ -17,16 +17,18 @@ import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useTransition } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { uploadUserProfileImage } from "@/server/actions/account/uploadUserProfileImage";
+import { usePathname } from "next/navigation";
 
 export default function SideBarMenu() {
   const [isLoading, startTransition] = useTransition();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
   const user = session?.user;
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  console.log(user);
+  const path = usePathname();
+  const isSetting = path === "/profile/settings" ? true : false;
 
   // Trigger file input click when button is clicked
   const handleButtonClick = () => {
@@ -78,15 +80,17 @@ export default function SideBarMenu() {
                 style={{ display: "none" }}
               />
 
-              <Button
-                className="absolute bottom-0 right-0 -translate-x-1/2 translate-y-1/2 rounded-full border-2 border-white bg-white p-1 transition-colors dark:border-gray-950"
-                size="icon"
-                variant="outline"
-                onClick={handleButtonClick} // Trigger file input click when button is clicked
-              >
-                <CameraIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <span className="sr-only">Upload Avatar</span>
-              </Button>
+              {isSetting ? (
+                <Button
+                  className="absolute bottom-0 right-0 -translate-x-1/2 translate-y-1/2 rounded-full border-2 border-white bg-white p-1 transition-colors dark:border-gray-950"
+                  size="icon"
+                  variant="outline"
+                  onClick={handleButtonClick} // Trigger file input click when button is clicked
+                >
+                  <CameraIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="sr-only">Upload Avatar</span>
+                </Button>
+              ) : null}
             </div>
           </div>
 
