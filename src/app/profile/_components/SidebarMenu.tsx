@@ -15,12 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipProvider } from "@radix-ui/react-tooltip";
 import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";
 import { useRef, useTransition } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { uploadUserProfileImage } from "@/server/actions/account/uploadUserProfileImage";
 import { usePathname } from "next/navigation";
+import { cn } from "@/utils/cn";
 
 export default function SideBarMenu() {
   const [isLoading, startTransition] = useTransition();
@@ -29,6 +30,10 @@ export default function SideBarMenu() {
   const user = session?.user;
   const path = usePathname();
   const isSetting = path === "/profile/settings" ? true : false;
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/auth/signin" });
+  };
 
   // Trigger file input click when button is clicked
   const handleButtonClick = () => {
@@ -65,7 +70,11 @@ export default function SideBarMenu() {
         <nav className="flex flex-col items-center gap-8 px-2 sm:py-5">
           <div className=" flex flex-col items-center gap-4">
             <div className="relative h-[60px] w-[60px]">
-              <Avatar className="h-full w-full rounded-full">
+              <Avatar
+                className={cn("h-full w-full rounded-full", {
+                  "opacity-60": isLoading,
+                })}
+              >
                 <AvatarImage alt="User Avatar" src={user?.image || ""} />
                 <AvatarFallback className="text-2xl font-semibold">
                   {user ? getInitials(user.name as string) : ""}
@@ -123,7 +132,9 @@ export default function SideBarMenu() {
                   <LogOutIcon className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">Logout</TooltipContent>
+              <TooltipContent onClick={handleSignOut} side="right">
+                sign out
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </nav>

@@ -5,6 +5,7 @@ import { ErrorAndSuccessType } from "./authenticate";
 import prisma from "@/lib/prisma";
 import { UploadApiResponse } from "cloudinary";
 import cloudinary from "@/utils/cloudinary";
+import { revalidatePath } from "next/cache";
 
 export async function uploadUserProfileImage(
   formData: FormData,
@@ -51,5 +52,6 @@ export async function uploadUserProfileImage(
     },
   });
 
+  revalidatePath("/");
   return { success: "Image uploaded successfully" };
 }
