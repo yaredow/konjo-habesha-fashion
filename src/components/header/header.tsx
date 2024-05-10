@@ -121,7 +121,7 @@ export default function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <Link href="/profile">Profile</Link>
+                      <Link href="/profile/dashboard">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="/profile/settings">Settings</Link>

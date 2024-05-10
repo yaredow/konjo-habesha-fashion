@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function setting() {
   return (
-    <div>
+    <div className="mx-8 items-center justify-center md:mx-20 md:my-12">
       <Tabs defaultValue="account" className=" my-4">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="account">Account</TabsTrigger>
