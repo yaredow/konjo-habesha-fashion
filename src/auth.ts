@@ -51,12 +51,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: token.sub,
           role: token.role as string,
           email: token.email as string,
-          image: token.picture,
+          image: token.image as string,
         };
       }
       return session;
     },
-    jwt: async ({ token }) => {
+    jwt: async ({ token, account }) => {
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;

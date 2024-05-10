@@ -1,10 +1,7 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 import {
   LayoutDashboardIcon,
-  ViewIcon,
   DownloadIcon,
   LocateIcon,
   InboxIcon,
@@ -21,51 +18,43 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";
 import { useRef, useState, useTransition } from "react";
-import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
 import { toast } from "@/components/ui/use-toast";
 import { uploadUserProfileImage } from "@/server/actions/account/uploadUserProfileImage";
 
 export default function SideBarMenu() {
-  const [image, setImage] = useState<File | null>(null);
   const [isLoading, startTransition] = useTransition();
   const { data: session } = useSession();
   const user = session?.user;
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Handle the file upload
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; // Get the selected file
-    if (file) {
-      // Call your function to handle the file upload
-      // For example:
-      uploadUserProfileImage(file);
-    }
-  };
+  console.log(user);
 
   // Trigger file input click when button is clicked
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleImageUpload = async () => {
+  // Handle the file upload
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     const formData = new FormData();
-    formData.append("id", user?.id as string);
-    formData.append("image", image as File);
-
-    startTransition(() => {
-      uploadUserProfileImage(formData).then((data) => {
-        if (data.success) {
-          toast({
-            description: data.success,
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            description: data.error,
-          });
-        }
+    if (file) {
+      formData.append("image", file);
+      formData.append("userId", user?.id as string);
+      startTransition(() => {
+        uploadUserProfileImage(formData).then((data) => {
+          if (data.success) {
+            toast({
+              description: data.success,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              description: data.error,
+            });
+          }
+        });
       });
-    });
+    }
   };
 
   return (
@@ -100,6 +89,7 @@ export default function SideBarMenu() {
               </Button>
             </div>
           </div>
+
           <SideBarLinks
             name="Dashboard"
             Icon={LayoutDashboardIcon}
