@@ -12,8 +12,12 @@ import {
 
 import { SideBarLinks } from "@/components/dashboard/SideBar";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipProvider } from "@radix-ui/react-tooltip";
-import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";

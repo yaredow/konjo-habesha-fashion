@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import connectMongoDB from "@/utils/db/db";
 import { ProductFilterValidator } from "@/utils/validators/product-validators";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -46,6 +45,8 @@ export async function POST(request: NextRequest) {
     if (category !== "All") {
       filter.add("category", category);
     }
+
+    console.log(filter);
 
     let products;
 
