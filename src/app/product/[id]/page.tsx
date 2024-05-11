@@ -156,10 +156,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
             <div className="grid items-start gap-4 md:gap-10">
               <div className="items-start md:flex">
                 <div className="grid gap-4">
-                  <h1 className="text-3xl font-bold lg:text-4xl">
-                    {product.name}
+                  <h1 className="text-lg font-semibold md:text-xl ">
+                    {product.name.toUpperCase()}
                   </h1>
-                  <p className=" text-lg font-semibold">
+                  <Separator className=" w-full" />
+                  <p className=" text-lg font-normal">
                     {formatCurrency(product.price)}
                   </p>
                   <div className="flex items-center gap-4">
