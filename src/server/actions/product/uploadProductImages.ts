@@ -1,24 +1,25 @@
 "use server";
 
-import Product from "@/models/productModel";
+import prisma from "@/lib/prisma";
 import cloudinary from "@/utils/cloudinary";
-import connectMongoDB from "@/utils/db/db";
 import { UploadApiResponse } from "cloudinary";
+
+type ImageTypes = {
+  public_id: string;
+  url: string;
+};
 
 type ReturnType = {
   message: string;
   success: boolean;
-  uploadedImages?: {
-    public_id: string | undefined;
-    url: string | undefined;
-  }[];
+  uploadedImages?: ImageTypes[];
 };
 
 export async function uploadProductImagesAction(
   formData: FormData,
   productId?: string,
 ): Promise<ReturnType> {
-  const uploadedImages = [];
+  const uploadedImages = [] as ImageTypes[];
   const images = formData.getAll("images") as File[];
 
   try {
@@ -47,17 +48,24 @@ export async function uploadProductImagesAction(
       );
 
       uploadedImages.push({
-        public_id: uploadResult?.public_id,
-        url: uploadResult?.url,
+        public_id: uploadResult?.public_id as string,
+        url: uploadResult?.url as string,
       });
     }
 
     if (productId) {
-      await connectMongoDB();
-      const product = await Product.findById({ _id: productId });
-      product.images = [...product.images, ...uploadedImages];
+      const product = await prisma.product.findUnique({
+        where: { id: productId },
+      });
 
-      await product.save();
+      if (product) {
+        await prisma.product.update({
+          where: { id: product.id },
+          data: {
+            images: [...product.images, ...uploadedImages],
+          },
+        });
+      }
 
       return { success: true, message: "Images are updated successfully" };
     }

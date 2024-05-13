@@ -33,7 +33,6 @@ type OrdersShippingAddress {
 }
 
 type ProductsImages {
-  id        String @map("_id") @db.ObjectId
   public_id String
   url       String
 }

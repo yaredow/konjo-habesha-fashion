@@ -1,6 +1,6 @@
 "use server";
 
-import Product from "@/models/productModel";
+import prisma from "@/lib/prisma";
 import cloudinary from "@/utils/cloudinary";
 
 export async function deleteProductImageAction(
@@ -14,10 +14,24 @@ export async function deleteProductImageAction(
     console.log("cloudinary result:", cloudinaryResult);
 
     if (cloudinaryResult.result === "ok") {
-      await Product.updateOne(
-        { _id: product_id },
-        { $pull: { images: { public_id: public_id } } },
+      const product = await prisma.product.findUnique({
+        where: { id: product_id },
+      });
+
+      if (!product) {
+        return { error: "Product not found " };
+      }
+
+      const updatedImages = product.images.filter(
+        (image) => image.public_id !== public_id,
       );
+
+      await prisma.product.update({
+        where: { id: product_id },
+        data: {
+          images: updatedImages,
+        },
+      });
     }
 
     return { success: true, message: "Image deleted successfully" };
