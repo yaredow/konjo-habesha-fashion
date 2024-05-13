@@ -8,7 +8,7 @@ export async function getCheckoutSessionUrlAction(formData: FormData) {
   const user = JSON.parse(formData.get("user") as string);
 
   const cartData = cartItems.map((item: CartItem) => ({
-    productId: item._id,
+    productId: item.id,
     name: item.name,
     price: item.price,
     quantity: item.quantity,

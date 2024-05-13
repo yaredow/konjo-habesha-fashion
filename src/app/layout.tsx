@@ -12,6 +12,7 @@ import StoreProvider from "@/lib/providers/StoreProvider";
 import { ThemeProvider } from "@/lib/providers/ThemeProvider";
 import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
+import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
 
 const league_spartan = League_Spartan({
@@ -63,6 +64,7 @@ export default function RootLayout({
             <QueryProviders>
               <AuthProvider>
                 <div className=" flex flex-col">
+                  <NextTopLoader />
                   <Header />
                   <div className="flex min-h-[90vh] items-center justify-center">
                     {children}
