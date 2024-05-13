@@ -7,9 +7,6 @@ export async function GET(request: NextRequest) {
   try {
     const product = await prisma.product.findUnique({
       where: { id },
-      include: {
-        Review: true,
-      },
     });
 
     if (!product) {

@@ -134,9 +134,9 @@ export default function page({ params }: { params: { id: string } }) {
     });
   };
 
-  const handleEditProduct = async (id: string, productDetails: Product) => {
+  const handleEditProduct = async (productDetails: Product) => {
     startTransition(() => {
-      editProductAction(id, productDetails).then((data) => {
+      editProductAction(productDetails).then((data) => {
         if (data.success) {
           toast({
             description: data.success,
@@ -223,10 +223,7 @@ export default function page({ params }: { params: { id: string } }) {
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() =>
-                            handleEditProduct(
-                              product.id,
-                              productDetails as Product,
-                            )
+                            handleEditProduct(productDetails as Product)
                           }
                         >
                           Continue
@@ -571,7 +568,7 @@ export default function page({ params }: { params: { id: string } }) {
               </Button>
               <Button
                 onClick={() => {
-                  handleEditProduct(product.id, productDetails as Product);
+                  handleEditProduct(productDetails as Product);
                 }}
                 size="sm"
               >

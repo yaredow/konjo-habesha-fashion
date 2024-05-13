@@ -5,14 +5,16 @@ import { ErrorAndSuccessType } from "../account/authenticate";
 import { Product } from "@prisma/client";
 
 export async function editProductAction(
-  id: string,
   productDetails: Product,
 ): Promise<ErrorAndSuccessType> {
   try {
+    const { id, ...updateData } = productDetails;
+    console.log(updateData);
     const product = await prisma.product.update({
       where: { id },
       data: {
-        ...productDetails,
+        ...updateData,
+        Review: {},
       },
     });
 
