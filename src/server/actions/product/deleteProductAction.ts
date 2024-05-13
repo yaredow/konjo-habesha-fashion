@@ -1,24 +1,25 @@
 "use server";
 
-import Product from "@/models/productModel";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { ErrorAndSuccessType } from "../account/authenticate";
 
-export async function deleteProductAction(id: string) {
+export async function deleteProductAction(
+  id: string,
+): Promise<ErrorAndSuccessType> {
   try {
-    await connectMongoDB();
-    const product = await Product.findByIdAndDelete({ _id: id });
+    const product = await prisma.product.delete({ where: { id } });
 
     if (!product) {
       return {
-        message: "Product not found",
+        error: "Product not found",
       };
     }
 
     revalidatePath("/");
 
     return {
-      message: "success",
+      success: "Product deleted successfully",
     };
   } catch (err) {
     console.error(err);

@@ -38,6 +38,8 @@ export default function Header() {
     signOut({ callbackUrl: "http://localhost:3000" });
   };
 
+  console.log(session?.user);
+
   useEffect(() => {
     setCartQuantity(reduxCartQuantity);
   }, [reduxCartQuantity]);
@@ -98,6 +100,7 @@ export default function Header() {
                 </div>
               )}
             </div>
+
             <div className=" flex flex-row items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

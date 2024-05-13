@@ -35,10 +35,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useRouter } from "next/navigation";
-import { Product } from "../../../../../../types/product";
 import Spinner from "@/components/Spinner";
 import useGetProduct from "@/utils/hook/useGetProduct";
-import React from "react";
+import React, { useTransition } from "react";
 import {
   AVAILABLE_CATEGORIRES,
   AVAILABLE_SIZES,
@@ -63,6 +62,7 @@ import ImageUploader from "@/components/ImageUploader";
 import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
 import compareObject from "@/utils/compareObjects";
 import { cn } from "@/utils/cn";
+import { Product } from "@prisma/client";
 
 type EditProductType = {
   product: Product;
@@ -73,6 +73,7 @@ type EditProductType = {
 };
 
 export default function page({ params }: { params: { id: string } }) {
+  const [isLoading, startTransition] = useTransition();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [productDetails, setProductDetails] = React.useState<Product | null>(
     null,
@@ -88,23 +89,21 @@ export default function page({ params }: { params: { id: string } }) {
     public_id: string,
     product_id: string,
   ) => {
-    try {
-      const result = await deleteProductImageAction(public_id, product_id);
-
-      if (result.success === true) {
-        toast({
-          description: "Image deleted successfully",
-        });
-        refetch();
-      } else {
-        toast({
-          variant: "destructive",
-          description: "Failed to delete product image",
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    startTransition(() => {
+      deleteProductImageAction(public_id, product_id).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.message,
+          });
+          refetch();
+        } else {
+          toast({
+            variant: "destructive",
+            description: "Deleting image failed",
+          });
+        }
+      });
+    });
   };
 
   const handleUploadProductImages = async (
@@ -118,40 +117,39 @@ export default function page({ params }: { params: { id: string } }) {
         formData.append("images", file);
       }
     }
-
-    const result = await uploadProductImagesAction(formData, productId);
-
-    if (result.success === true) {
-      toast({
-        description: result.message,
+    startTransition(() => {
+      uploadProductImagesAction(files, productId).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.success,
+          });
+          refetch();
+        } else {
+          toast({
+            variant: "destructive",
+            description: data.error,
+          });
+        }
       });
-      refetch();
-    } else {
-      toast({
-        variant: "destructive",
-        description: "Uploading new images failed",
-      });
-    }
+    });
   };
 
   const handleEditProduct = async (id: string, productDetails: Product) => {
-    try {
-      const result = await editProductAction(id, productDetails);
-
-      if (result.success === true) {
-        toast({
-          description: "Product updated successfully",
-        });
-        refetch();
-      } else {
-        toast({
-          description: "Product update failed",
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+    startTransition(() => {
+      editProductAction(id, productDetails).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.success,
+          });
+          refetch();
+        } else {
+          toast({
+            variant: "destructive",
+            description: data.error,
+          });
+        }
+      });
+    });
   };
 
   React.useEffect(() => {
@@ -226,7 +224,7 @@ export default function page({ params }: { params: { id: string } }) {
                         <AlertDialogAction
                           onClick={() =>
                             handleEditProduct(
-                              product._id,
+                              product.id,
                               productDetails as Product,
                             )
                           }
@@ -507,7 +505,7 @@ export default function page({ params }: { params: { id: string } }) {
                                   onClick={() =>
                                     handleDeleteProductImage(
                                       image.public_id,
-                                      product._id,
+                                      product.id,
                                     )
                                   }
                                 >
@@ -524,7 +522,7 @@ export default function page({ params }: { params: { id: string } }) {
                           <Button
                             variant="outline"
                             onClick={() =>
-                              handleUploadProductImages(files, product._id)
+                              handleUploadProductImages(files, product.id)
                             }
                           >
                             Upload
@@ -573,8 +571,7 @@ export default function page({ params }: { params: { id: string } }) {
               </Button>
               <Button
                 onClick={() => {
-                  console.log("update button clicked");
-                  handleEditProduct(product._id, productDetails as Product);
+                  handleEditProduct(product.id, productDetails as Product);
                 }}
                 size="sm"
               >

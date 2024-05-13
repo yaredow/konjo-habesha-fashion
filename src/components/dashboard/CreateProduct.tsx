@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 
 import {
   Select,
@@ -36,10 +36,9 @@ import { PlusCircle } from "lucide-react";
 import ImageUploader from "../ImageUploader";
 import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
-import { useFormState, useFormStatus } from "react-dom";
 import { createProductAction } from "@/server/actions/product/createProducts";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
-import SubmitButton from "../LogoutButton";
+import SubmitButton from "../SubmitButton";
 
 const options = [
   { value: "XS", label: "Extra Small" },
@@ -50,15 +49,9 @@ const options = [
   { value: "XXL", label: "Double Extra Large" },
 ];
 
-const initialState = {
-  message: "",
-};
-
 export default function CreateProduct() {
   const [files, setFiles] = React.useState<File[] | null>(null);
-  const [state, formAction] = useFormState(createProductAction, initialState);
-
-  const { toast } = useToast();
+  const [isLoading, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateProductFormSchema>>({
     resolver: zodResolver(CreateProductFormSchema),
@@ -72,39 +65,42 @@ export default function CreateProduct() {
     },
   });
 
-  const handleProductCreate = async (
-    evt: React.MouseEvent<HTMLFormElement>,
-  ) => {
-    evt.preventDefault();
-
+  const onSubmit = async (values: z.infer<typeof CreateProductFormSchema>) => {
     const formData = new FormData();
-    const anotherformData = form.getValues();
-
-    Object.keys(anotherformData).forEach((key) => {
-      if (key in anotherformData) {
-        formData.append(key, anotherformData[key]);
-      }
-    });
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
 
     if (files) {
-      files.forEach((file) => {
+      for (const file of files) {
         formData.append("images", file);
-      });
+      }
     }
 
-    form.handleSubmit(() => {
-      formAction(formData);
-    })(evt);
+    startTransition(() => {
+      createProductAction(formData)
+        .then((data) => {
+          if (data.success) {
+            form.reset();
+            toast({
+              description: data.success,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              description: data.error,
+            });
+          }
+        })
+        .then((err) => {
+          console.error(err);
+          toast({
+            variant: "destructive",
+            description: "Something went wrong",
+          });
+        });
+    });
   };
-
-  React.useEffect(() => {
-    if (state?.message !== "" && state?.message === "success") {
-      toast({
-        description: "You have registered successfully",
-      });
-    }
-    form.reset();
-  }, [state?.message]);
 
   return (
     <Dialog>
@@ -122,12 +118,8 @@ export default function CreateProduct() {
         </DialogHeader>
         <div className="my-auto flex flex-col items-center justify-center">
           <Form {...form}>
-            {state?.message !== "" && state?.message !== "success" && (
-              <div className=" text-red-500">{state.message}</div>
-            )}
             <form
-              onSubmit={handleProductCreate}
-              action={formAction}
+              onSubmit={form.handleSubmit(onSubmit)}
               className=" w-full max-w-2xl items-center justify-center gap-4"
             >
               <div className=" flex flex-col space-y-8">
@@ -283,7 +275,7 @@ export default function CreateProduct() {
 
                 <ImageUploader files={files} setFiles={setFiles} />
 
-                <SubmitButton />
+                <SubmitButton isPending={isLoading} />
               </div>
             </form>
           </Form>

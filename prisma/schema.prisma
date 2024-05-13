@@ -148,7 +148,7 @@ model Order {
   products        OrdersProducts[]
   shipping        OrdersShipping
   subtotal        Int
-  updatedAt       DateTime         @db.Date
+  updatedAt       DateTime         @default(now()) @db.Date
   userId          String
   Review          Review[]
 
@@ -157,19 +157,19 @@ model Order {
 
 model Product {
   id               String           @id @default(auto()) @map("_id") @db.ObjectId
-  v                Int              @map("__v")
+  v                Int              @default(0) @map("__v")
   category         String
   description      String
   images           ProductsImages[]
-  inStock          Boolean
-  isFeatured       Boolean
+  inStock          Boolean          @default(true)
+  isFeatured       Boolean          @default(false)
   name             String
   price            Int
-  productAddedDate DateTime         @db.Date
+  productAddedDate DateTime         @default(now()) @db.Date
   sizes            String[]
-  status           String
+  status           String           @default("draft")
   stockQuantity    Int
-  unitsSold        Int
+  unitsSold        Int              @default(0)
   Review           Review[]
 
   @@map("products")

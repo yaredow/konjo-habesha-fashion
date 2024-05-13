@@ -1,38 +1,29 @@
 "use server";
 
-import Product from "@/models/productModel";
-import { Product as ProductType } from "../../../../types/product";
-import connectMongoDB from "@/utils/db/db";
+import prisma from "@/lib/prisma";
+import { ErrorAndSuccessType } from "../account/authenticate";
+import { Product } from "@prisma/client";
 
-type ReturnType = {
-  success: boolean;
-  message: string;
-};
 export async function editProductAction(
   id: string,
-  productDetails: ProductType,
-): Promise<ReturnType> {
+  productDetails: Product,
+): Promise<ErrorAndSuccessType> {
   try {
-    await connectMongoDB();
-    const product = await Product.findByIdAndUpdate(
-      { _id: id },
-      productDetails,
-      {
-        new: true,
-        runValidators: true,
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        ...productDetails,
       },
-    );
+    });
 
     if (!product) {
       return {
-        success: false,
-        message: "Product not found",
+        error: "Failed to update product",
       };
     }
 
     return {
-      success: true,
-      message: "Product successfully updated",
+      success: "Product successfully updated",
     };
   } catch (err) {
     console.error(err);

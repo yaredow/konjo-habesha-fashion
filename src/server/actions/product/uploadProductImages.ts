@@ -10,17 +10,16 @@ type ImageTypes = {
 };
 
 type ReturnType = {
-  message: string;
-  success: boolean;
+  error?: string;
+  success?: string;
   uploadedImages?: ImageTypes[];
 };
 
 export async function uploadProductImagesAction(
-  formData: FormData,
+  images: File[],
   productId?: string,
 ): Promise<ReturnType> {
   const uploadedImages = [] as ImageTypes[];
-  const images = formData.getAll("images") as File[];
 
   try {
     for (const image of images) {
@@ -67,13 +66,12 @@ export async function uploadProductImagesAction(
         });
       }
 
-      return { success: true, message: "Images are updated successfully" };
+      return { success: "Images are updated successfully" };
     }
 
     return {
-      success: true,
       uploadedImages,
-      message: "Images are uploaded successfully",
+      success: "Images are uploaded successfully",
     };
   } catch (err) {
     console.error(err);

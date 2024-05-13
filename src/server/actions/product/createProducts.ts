@@ -1,56 +1,55 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { FormState } from "../../../../types/product";
 
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import { uploadProductImagesAction } from "./uploadProductImages";
+import { ErrorAndSuccessType } from "../account/authenticate";
+import prisma from "@/lib/prisma";
 
 export async function createProductAction(
-  prevState: FormState,
   formData: FormData,
-): Promise<FormState> {
+): Promise<ErrorAndSuccessType> {
   let sizes: string[] = [];
   const sizesData = formData.get("sizes");
   const images = formData.getAll("images") as File[];
 
   if (typeof sizesData === "string") {
-    // Parse the string into an array
     sizes = sizesData.split(",").map((size) => size.trim());
   } else if (Array.isArray(sizesData)) {
     sizes = sizesData;
   }
 
   const validatedFields = CreateProductFormSchema.safeParse({
-    name: formData.get("name"),
-    price: formData.get("price"),
-    category: formData.get("category"),
-    sizes: sizes,
-    stockQuantity: formData.get("stockQuantity"),
-    description: formData.get("description"),
+    ...Object.fromEntries(formData.entries()),
+    sizes,
   });
 
   if (!validatedFields.success) {
     return {
-      message: "Invalid data",
+      error: "Invalid data",
     };
   }
 
+  console.log(validatedFields.data);
+
   try {
-    const uploadedImages = await uploadProductImagesAction(images);
+    const { uploadedImages } = await uploadProductImagesAction(images);
     console.log(uploadedImages);
 
-    const newProduct = await Product.create({
-      ...validatedFields.data,
-      images: uploadedImages,
+    const newProduct = await prisma.product.create({
+      data: {
+        ...validatedFields.data,
+        images: uploadedImages,
+      },
     });
 
     if (!newProduct) {
-      return { message: "New product creation failed" };
+      return { error: "New product creation failed" };
     }
 
     revalidatePath("/");
-    return { message: "success" };
+    return { success: "Product created successfully" };
   } catch (err) {
     throw err;
   }
