@@ -2,9 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { FormState } from "../../../../types/product";
-import Product from "@/models/productModel";
 
-import connectMongoDB from "@/utils/db/db";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import { uploadProductImagesAction } from "./uploadProductImages";
 
@@ -42,7 +40,6 @@ export async function createProductAction(
     const uploadedImages = await uploadProductImagesAction(images);
     console.log(uploadedImages);
 
-    await connectMongoDB();
     const newProduct = await Product.create({
       ...validatedFields.data,
       images: uploadedImages,
