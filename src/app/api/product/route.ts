@@ -2,29 +2,9 @@ import prisma from "@/lib/prisma";
 import { ProductFilterValidator } from "@/utils/validators/product-validators";
 import { NextRequest, NextResponse } from "next/server";
 
-class Filter {
-  private filters: Map<string, string[]> = new Map();
-
-  hasFilter() {
-    return this.filters.size > 0;
-  }
-
-  add(key: string, value: any) {
-    this.filters.set(key, value);
-  }
-
-  get() {
-    const filterObj: any = {};
-
-    this.filters.forEach((value, key) => {
-      filterObj[key] = value;
-    });
-    return filterObj;
-  }
-}
-
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  console.log(body);
 
   try {
     const { sort, price, size, category } = ProductFilterValidator.parse(
@@ -32,27 +12,35 @@ export async function POST(request: NextRequest) {
     );
 
     const [field, value] = sort.split("-");
+    console.log(sort);
 
     // Filtering
-    const filter = new Filter();
+    let filter: any = {};
 
-    if (size.length > 0) filter.add("sizes", { hasEvery: size });
+    if (size.length > 0) {
+      filter = {
+        ...filter,
+        sizes: {
+          has: size,
+        },
+      };
+    }
 
     if (price && Array.isArray(price)) {
-      filter.add("price", { gte: price[0], lte: price[1] });
+      filter = { ...filter, price: { gte: price[0], lte: price[1] } };
     }
 
     if (category !== "All") {
-      filter.add("category", category);
+      filter = { ...filter, category };
     }
 
     console.log(filter);
 
     let products;
 
-    if (filter.hasFilter()) {
+    if (Object.keys(filter).length > 0) {
       products = await prisma.product.findMany({
-        where: filter.hasFilter() ? filter.get() : {},
+        where: filter,
         orderBy: {
           [field]: value,
         },
