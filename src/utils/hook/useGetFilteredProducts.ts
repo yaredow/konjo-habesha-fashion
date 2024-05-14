@@ -11,17 +11,26 @@ async function fetchFilteredProducts(filter: ProductState) {
       category: filter.category,
     },
   });
-
+  console.log(data);
   return data;
 }
 
 export default function useGetFilteredProducts(filter: any) {
-  const { data: responseData, refetch } = useQuery({
+  const {
+    data: responseData,
+    refetch,
+    error,
+  } = useQuery({
     queryKey: ["products"],
     queryFn: () => fetchFilteredProducts(filter),
   });
 
-  const products = responseData?.sortedProducts;
+  if (error) {
+    console.error("Error fetching products:", error);
+  }
+
+  const products = responseData?.products;
+  console.log(products);
 
   return { products, refetch };
 }

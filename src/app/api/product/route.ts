@@ -4,15 +4,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  console.log(body);
 
   try {
     const { sort, price, size, category } = ProductFilterValidator.parse(
       body.filter,
     );
 
-    const [field, value] = sort.split("-");
-    console.log(sort);
+    let orderBy: any = {};
+
+    if (sort !== "none") {
+      const [field, value] = sort.split("-");
+      orderBy[field] = value;
+    } else {
+      orderBy.name = "asc";
+    }
 
     // Filtering
     let filter: any = {};
@@ -21,7 +26,7 @@ export async function POST(request: NextRequest) {
       filter = {
         ...filter,
         sizes: {
-          has: size,
+          hasSome: size,
         },
       };
     }
@@ -34,24 +39,20 @@ export async function POST(request: NextRequest) {
       filter = { ...filter, category };
     }
 
-    console.log(filter);
-
     let products;
 
     if (Object.keys(filter).length > 0) {
       products = await prisma.product.findMany({
         where: filter,
-        orderBy: {
-          [field]: value,
-        },
+        orderBy,
       });
+
+      console.log(products);
 
       return NextResponse.json({ products }, { status: 200 });
     } else {
       products = await prisma.product.findMany({
-        orderBy: {
-          [field]: value,
-        },
+        orderBy,
       });
 
       return NextResponse.json({ products }, { status: 200 });

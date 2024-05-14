@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/utils/cn";
 import EmptyState from "@/components/product/EmptyState";
-import { Product } from "../../../types/product";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
 import debounce from "lodash.debounce";
@@ -35,6 +34,7 @@ import {
   ITEMS_PERPAGE,
   SORT_OPTIONS,
 } from "@/utils/constants";
+import { Product } from "@prisma/client";
 
 function page() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,7 +51,8 @@ function page() {
   });
 
   const { products, refetch } = useGetFilteredProducts(filter);
-  const currentitems = products?.slice(firstItemIndex, lastItemIndex);
+  console.log(products);
+  const currentItems = products?.slice(firstItemIndex, lastItemIndex);
 
   const onSubmit = () => refetch();
 
@@ -138,7 +139,7 @@ function page() {
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
-              currentitems.map((product: Product) => (
+              currentItems.map((product: Product) => (
                 <ProductItem product={product} />
               ))
             ) : (

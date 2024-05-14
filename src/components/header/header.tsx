@@ -38,8 +38,6 @@ export default function Header() {
     signOut({ callbackUrl: "http://localhost:3000" });
   };
 
-  console.log(session?.user);
-
   useEffect(() => {
     setCartQuantity(reduxCartQuantity);
   }, [reduxCartQuantity]);
