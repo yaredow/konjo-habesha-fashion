@@ -1,20 +1,21 @@
 import prisma from "@/lib/prisma";
-import Filter from "@/utils/filter";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const data = await request.json();
+  let filter: any = {};
 
   try {
     const { delivery_status, time_range } = data.filter;
 
-    const filter = new Filter();
-
     if (delivery_status && delivery_status !== "all") {
-      filter.add("delivery_status", delivery_status);
+      filter.delivery_status = delivery_status;
+    } else {
+      filter.delivery_status = "all";
     }
 
-    let startDate, endDate;
+    let startDate: Date | undefined, endDate: Date | undefined;
+
     if (time_range === "week") {
       startDate = new Date();
       startDate.setDate(startDate.getDate() - 7);
@@ -30,12 +31,19 @@ export async function POST(request: NextRequest) {
     }
 
     if (startDate && endDate) {
-      filter.add("createdAt", { $gte: startDate, $lt: endDate });
+      filter.createdAt = {
+        gte: startDate,
+        lt: endDate,
+      };
     }
 
+    console.log(filter);
+
     const orders = await prisma.order.findMany({
-      where: filter.hasFilter() ? filter.get() : {},
+      where: filter,
     });
+
+    console.log(orders);
 
     if (!orders) {
       return NextResponse.json(
