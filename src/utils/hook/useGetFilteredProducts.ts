@@ -30,7 +30,5 @@ export default function useGetFilteredProducts(filter: any) {
   }
 
   const products = responseData?.products;
-  console.log(products);
-
   return { products, refetch };
 }

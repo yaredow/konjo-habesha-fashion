@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import { File, ListFilter, MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
-import React from "react";
+import React, { useTransition } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
 export type FetchProductstype = {
@@ -63,19 +63,26 @@ export type FetchProductstype = {
 
 export default function page() {
   const [isClient, setIsClient] = React.useState(false);
+  const [isLoading, startTransition] = useTransition();
   const { products = [], isFetched, refetch } = useGetProducts();
-  console.log(products);
   const router = useRouter();
 
   const handleProductDelete = async (id: string) => {
-    const responsse = await deleteProductAction(id);
-
-    if (responsse.message === "success") {
-      toast({
-        description: "Product deleted successfully",
+    startTransition(() => {
+      deleteProductAction(id).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.success,
+          });
+          refetch();
+        } else {
+          toast({
+            variant: "destructive",
+            description: data.error,
+          });
+        }
       });
-      refetch();
-    }
+    });
   };
 
   React.useEffect(() => {
@@ -85,7 +92,9 @@ export default function page() {
   if (!isClient) return null;
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div
+      className={`flex min-h-screen w-full flex-col bg-muted/40 ${isLoading && "opacity-75"}`}
+    >
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <Tabs defaultValue="all">
           <div className="flex items-center">
