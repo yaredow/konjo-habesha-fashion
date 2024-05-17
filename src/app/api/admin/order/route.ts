@@ -37,13 +37,9 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    console.log(filter);
-
     const orders = await prisma.order.findMany({
       where: filter,
     });
-
-    console.log(orders);
 
     if (!orders) {
       return NextResponse.json(

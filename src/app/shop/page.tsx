@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FaSortAlphaDown } from "react-icons/fa";
-import { ProductState } from "@/utils/validators/product-validators";
 import useGetFilteredProducts from "@/utils/hook/useGetFilteredProducts";
 import {
   DEFAULT_CUSTOM_PRICE,
@@ -36,11 +35,11 @@ import {
 } from "@/utils/constants";
 import { Product } from "@prisma/client";
 
-function page() {
+function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
-  const [filter, setFilter] = useState<ProductState>({
+  const [filter, setFilter] = useState({
     price: {
       isCustom: false,
       range: DEFAULT_CUSTOM_PRICE,
@@ -51,7 +50,6 @@ function page() {
   });
 
   const { products, refetch } = useGetFilteredProducts(filter);
-  console.log(products);
   const currentItems = products?.slice(firstItemIndex, lastItemIndex);
 
   const onSubmit = () => refetch();
@@ -60,13 +58,12 @@ function page() {
   const _debouncedSubmit = useCallback(debouncedSubmit, []);
 
   return (
-    <main className=" mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <main className="mx-auto min-h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="flex items-baseline justify-between border-b p-6">
         <h1 className="text-2xl font-semibold tracking-tight md:text-4xl md:font-bold">
           {filter.category}
         </h1>
-
-        <div className=" flex flex-row items-center gap-6">
+        <div className="flex flex-row items-center gap-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="h-8 gap-4">
@@ -81,16 +78,16 @@ function page() {
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  className={cn("block w-full px-4 py-2 text-left text-sm", {
-                    "bg-gray-200 text-gray-900": option.value === filter.sort,
-                    " text-secondary-foreground": option.value !== filter.sort,
-                  })}
+                  className={`block w-full px-4 py-2 text-left text-sm ${
+                    option.value === filter.sort
+                      ? "bg-gray-200 text-gray-900"
+                      : "text-secondary-foreground"
+                  }`}
                   onClick={() => {
                     setFilter((prev) => ({
                       ...prev,
                       sort: option.value,
                     }));
-
                     _debouncedSubmit();
                   }}
                 >
@@ -99,12 +96,11 @@ function page() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Mobile navigation  */}
-          <div className="sm block md:hidden">
+          {/* Mobile navigation */}
+          <div className="block md:hidden">
             <Sheet>
               <SheetTrigger>
-                <IoFilter className=" mt-2 text-xl" />
+                <IoFilter className="mt-2 text-xl" />
               </SheetTrigger>
               <SheetContent side="bottom">
                 <SheetHeader>
@@ -122,8 +118,7 @@ function page() {
           </div>
         </div>
       </div>
-
-      <section className=" flex min-w-[100vh] flex-col items-center justify-center">
+      <section className="flex min-w-[100vh] flex-col items-center justify-center">
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-4">
           {/* Desktop Filter */}
           <div className="hidden md:block">
@@ -133,23 +128,21 @@ function page() {
               _debouncedSubmit={_debouncedSubmit}
             />
           </div>
-
           {/* Product grid */}
-          <ul className="grid  grid-cols-1 gap-8 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3 ">
+          <ul className="grid grid-cols-1 gap-8 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:col-span-3 lg:grid-cols-3">
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
               currentItems.map((product: Product) => (
-                <ProductItem product={product} />
+                <ProductItem key={product.id} product={product} />
               ))
             ) : (
               new Array(12)
                 .fill(null)
                 .map((_, index) => <ProductSkeleton key={index} />)
             )}
-
             {products && products.length > ITEMS_PERPAGE && (
-              <div className=" col-span-full mt-6 flex items-center justify-center">
+              <div className="col-span-full mt-6 flex items-center justify-center">
                 <ProductPagination
                   totalItems={products?.length}
                   currentPage={currentPage}
@@ -164,4 +157,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

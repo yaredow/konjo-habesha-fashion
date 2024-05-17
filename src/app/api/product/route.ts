@@ -47,8 +47,6 @@ export async function POST(request: NextRequest) {
         orderBy,
       });
 
-      console.log(products);
-
       return NextResponse.json({ products }, { status: 200 });
     } else {
       products = await prisma.product.findMany({

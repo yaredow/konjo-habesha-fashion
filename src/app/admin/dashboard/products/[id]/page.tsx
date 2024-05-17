@@ -81,7 +81,6 @@ export default function page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { id } = params;
   const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
-  console.log(product);
 
   const hasNoChanges = compareObject(productDetails as Product, product);
 
@@ -558,7 +557,6 @@ export default function page({ params }: { params: { id: string } }) {
             <div className="flex items-center justify-center gap-2 md:hidden">
               <Button
                 onClick={() => {
-                  console.log("discard button clicked");
                   setProductDetails({ ...product });
                 }}
                 variant="outline"
