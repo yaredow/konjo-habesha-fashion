@@ -13,11 +13,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { SignupFormSchema } from "@/utils/validators/form-validators";
-import { register } from "@/server/actions/account/register";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
+import { registerAction } from "@/server/actions/account/registerAction";
 
 export default function SignupForm() {
   const [error, setError] = useState<string | undefined>("");
@@ -38,7 +37,7 @@ export default function SignupForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      register(values).then((data) => {
+      registerAction(values).then((data) => {
         setSuccess(data.success);
         setError(data.error);
       });

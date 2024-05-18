@@ -4,7 +4,6 @@ import { signIn } from "@/auth";
 import { getTwoFactorConfirmationByUserId } from "@/data/twoFactorConfirmation";
 import { getTwoFactorTokenByEmail } from "@/data/twoFactorToken";
 import { getUserByEmail } from "@/data/user";
-import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import prisma from "@/lib/prisma";
 import {
   generateTwoFactorConfirmationToken,
@@ -14,6 +13,10 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { loginFormSchema } from "@/utils/validators/form-validators";
 import { AuthError } from "next-auth";
 import { z } from "zod";
+import {
+  sendTwoFactorTokenEmail,
+  sendVerificationEmail,
+} from "../email/EmailAction";
 
 export type ErrorAndSuccessType = {
   error?: string;

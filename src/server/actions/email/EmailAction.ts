@@ -55,7 +55,7 @@ export const sendWelcomeEmail = async (name: string, email: string) => {
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,
-    subject: "Reset your password",
+    subject: "Welcome to Konjo habesha shop",
     react: WelcomeEmail({ firstName }),
   });
 };

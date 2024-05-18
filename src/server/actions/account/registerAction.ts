@@ -9,7 +9,7 @@ import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "../email/EmailAction";
 
-export async function register(
+export async function registerAction(
   values: z.infer<typeof SignupFormSchema>,
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = SignupFormSchema.safeParse(values);

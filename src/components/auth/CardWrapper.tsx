@@ -38,7 +38,7 @@ export default function CardWrapper({
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className=" items-center">
+      <CardContent className="">
         {children}
         {isLogin && <RegisterAndForgetPasswordLinks />}
       </CardContent>
