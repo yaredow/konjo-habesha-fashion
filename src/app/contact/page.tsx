@@ -3,7 +3,7 @@ import ContactUsForm from "@/components/forms/ContactUsForm";
 
 function page() {
   return (
-    <main className="my-auto  flex items-center justify-center">
+    <main className="my-auto flex min-h-[85vh] items-center justify-center">
       <CardWrapper
         title="Contact us"
         description="   Have a question or need assistance? Feel free to reach out to us
