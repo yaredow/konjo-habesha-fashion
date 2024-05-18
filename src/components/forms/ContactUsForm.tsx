@@ -13,11 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { contactFormSchema } from "@/utils/validators/form-validators";
 
 export default function ContactUsForm() {
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -25,11 +23,7 @@ export default function ContactUsForm() {
     },
   });
 
-  const onSubmit = () => {
-    toast({
-      description: "Your message has been sent successfully!",
-    });
-  };
+  const onSubmit = () => {};
   return (
     <Form {...form}>
       <form
