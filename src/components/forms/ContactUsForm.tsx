@@ -13,17 +13,53 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { contactFormSchema } from "@/utils/validators/form-validators";
+import {
+  ContactUsFromSchema,
+  contactFormSchema,
+} from "@/utils/validators/form-validators";
+import { useState, useTransition } from "react";
+import { contactUsAction } from "@/server/actions/contact-us/contactUsAction";
+import { toast } from "../ui/use-toast";
 
 export default function ContactUsForm() {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isLoading, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
+      name: "",
       email: "",
+      phone: "",
+      message: "",
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = (values: z.infer<typeof ContactUsFromSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      contactUsAction(values)
+        .then((data) => {
+          if (data.success) {
+            toast({
+              description: data.success,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              description: data.error,
+            });
+          }
+        })
+        .then((error) => {
+          console.error(error);
+          setError("Something went wrong");
+        });
+    });
+  };
+
   return (
     <Form {...form}>
       <form
@@ -35,7 +71,7 @@ export default function ContactUsForm() {
             <div className=" w-full md:w-1/2">
               <FormField
                 control={form.control}
-                name="fullName"
+                name="name"
                 render={({ field }) => {
                   return (
                     <FormItem>

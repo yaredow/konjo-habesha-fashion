@@ -21,15 +21,18 @@ function ContactUsEmail({ message, senderEmail }: ContactUsEmilProps) {
   return (
     <Html>
       <Head>
-        <Preview>New contact email</Preview>
+        <Preview>New Contact Email</Preview>
         <Tailwind>
           <Body>
-            <Container>
+            <Container className="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
               <Section>
-                <Heading>You recived a contact email</Heading>
-                <Text>{message}</Text>
-                <Hr />
-                <Text>{senderEmail}</Text>
+                <Heading className="mb-4 text-2xl font-bold">
+                  New Contact Email
+                </Heading>
+                <Text className="mb-4">{message}</Text>
+                <Hr className="my-4 border-t border-gray-300" />
+                <Text className="font-semibold">From:</Text>
+                <Text className="text-sm">{senderEmail}</Text>
               </Section>
             </Container>
           </Body>

@@ -99,12 +99,12 @@ export const SignupFormSchema = z
   );
 
 export const ContactUsFromSchema = z.object({
-  fullName: z
+  name: z
     .string()
     .min(1, "Full name is required")
     .max(100, "Full name cannot exceed 100 characters"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
-  phoneNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
   message: z
     .string()
     .min(1, "Message is required")
@@ -150,7 +150,7 @@ const phoneRegex = new RegExp(
 );
 
 export const contactFormSchema = z.object({
-  fullName: z.string().refine(
+  name: z.string().refine(
     (value) => {
       if (value !== "") {
         const names = value.trim().split(" ");

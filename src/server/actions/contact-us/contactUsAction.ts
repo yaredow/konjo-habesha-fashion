@@ -11,14 +11,13 @@ export async function contactUsAction(
     return { error: "Invalid data" };
   }
 
-  const { fullName, email, message } = validatedFields.data;
+  const { name, email, message } = validatedFields.data;
 
   try {
-    await sendContactUsEmail(fullName, email, message);
+    await sendContactUsEmail(name, email, message);
+    return { success: "Thank you for your contact" };
   } catch (error) {
     console.error(error);
     throw error;
   }
-
-  return { success: "Thank you for your contact" };
 }
