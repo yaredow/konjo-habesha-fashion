@@ -8,7 +8,7 @@ export async function contactUsAction(
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = ContactUsFromSchema.safeParse(values);
   if (!validatedFields.success) {
-    return { error: "Invalid data" };
+    return { error: validatedFields.error.message };
   }
 
   const { name, email, message } = validatedFields.data;

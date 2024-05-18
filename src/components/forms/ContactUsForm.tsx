@@ -20,11 +20,14 @@ import {
 import { useState, useTransition } from "react";
 import { contactUsAction } from "@/server/actions/contact-us/contactUsAction";
 import { toast } from "../ui/use-toast";
+import { FormSuccess } from "../FormSuccess";
+import { FormError } from "../FormError";
+import SubmitButton from "../SubmitButton";
 
 export default function ContactUsForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isLoading, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
@@ -135,9 +138,9 @@ export default function ContactUsForm() {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Submit
-          </Button>
+          <FormSuccess message={success} />
+          <FormError message={error} />
+          <SubmitButton isPending={isPending} />
         </div>
       </form>
     </Form>

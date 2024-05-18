@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 import ContactUsEmail from "@/emails/ContactUsEmail";
+import WelcomeEmail from "@/emails/welcomeEmail";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
@@ -42,8 +43,19 @@ export const sendContactUsEmail = async (
 ) => {
   await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: senderEmail,
+    to: process.env.HOST_PHONE_NUMBER as string,
     subject: "Reset your password",
+    reply_to: senderEmail,
     react: ContactUsEmail({ name, message, senderEmail }),
+  });
+};
+
+export const sendWelcomeEmail = async (name: string, email: string) => {
+  const firstName = name.split(" ")[0];
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "Reset your password",
+    react: WelcomeEmail({ firstName }),
   });
 };

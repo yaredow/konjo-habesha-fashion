@@ -4,6 +4,7 @@ import { getUserByEmail } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verification_token";
 import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "./authenticate";
+import { sendWelcomeEmail } from "../email/EmailAction";
 
 export async function tokenVerificationAction(
   token: string,
@@ -33,6 +34,8 @@ export async function tokenVerificationAction(
       email: existingVerification.email,
     },
   });
+
+  await sendWelcomeEmail(user.name!, user.email!);
 
   await prisma.verificationToken.delete({
     where: { id: existingVerification.id },
