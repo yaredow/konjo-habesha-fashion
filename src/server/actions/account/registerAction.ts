@@ -37,7 +37,11 @@ export async function registerAction(
 
   const verificationToken = await generateVerificationToken(email);
 
-  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  await sendVerificationEmail(
+    verificationToken.email,
+    verificationToken.token,
+    name,
+  );
 
   return { success: "Confirmation email sent" };
 }

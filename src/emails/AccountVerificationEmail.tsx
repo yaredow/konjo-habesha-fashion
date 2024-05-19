@@ -13,21 +13,19 @@ import {
 import * as React from "react";
 import { Tailwind } from "@react-email/tailwind";
 
-interface ContactUsEmailProps {
+interface VerificationEmailProps {
   firstName: string;
-  message: string;
-  replyToEmail: string;
+  verificationUrl: string;
 }
 
-export default function ContactUsEmail({
+export default function VerificationEmail({
   firstName,
-  message,
-  replyToEmail,
-}: ContactUsEmailProps) {
+  verificationUrl,
+}: VerificationEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Thank you for contacting Konjo Habesha Fashion</Preview>
+      <Preview>Verify your email for Konjo Habesha Fashion</Preview>
       <Tailwind>
         <Body className="bg-white font-sans">
           <Container className="items-center rounded-lg border border-gray-300 p-4 shadow-lg">
@@ -40,19 +38,21 @@ export default function ContactUsEmail({
             />
             <Text className="text-lg">Dear {firstName},</Text>
             <Text className="text-normal">
-              Thank you for reaching out to us at Konjo Habesha Fashion. We have
-              received your message and one of our team members will get back to
-              you as soon as possible. Below is a copy of your message for your
-              reference:
+              Thank you for signing up with Konjo Habesha Fashion! To complete
+              your registration, please verify your email address by clicking
+              the button below. This helps us ensure the security of your
+              account.
             </Text>
-            <Section className="my-4 rounded-lg bg-gray-100 p-4">
-              <Text className="text-normal italic">"{message}"</Text>
+            <Section className="text-center">
+              <Button
+                className="rounded-md bg-blue-500 px-4 py-[10px] text-white"
+                href={verificationUrl}
+              >
+                Verify Email
+              </Button>
             </Section>
             <Text className="text-normal">
-              If you have any additional information to provide or if you need
-              further assistance, please feel free to reply to this email or
-              contact us directly at{" "}
-              <a href={`mailto:${replyToEmail}`}>{replyToEmail}</a>.
+              If you did not sign up for an account, you can ignore this email.
             </Text>
             <Text className="text-lg">
               Best regards,
