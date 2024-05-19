@@ -7,6 +7,8 @@ export async function contactUsAction(
   values: z.infer<typeof ContactUsFromSchema>,
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = ContactUsFromSchema.safeParse(values);
+
+  console.log(validatedFields);
   if (!validatedFields.success) {
     return { error: validatedFields.error.message };
   }

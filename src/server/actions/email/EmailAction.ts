@@ -5,6 +5,7 @@ import ContactUsEmail from "@/emails/ContactUsEmail";
 import WelcomeEmail from "@/emails/welcomeEmail";
 import AccountVerificationEmail from "@/emails/AccountVerificationEmail";
 import PasswordResetEmail from "@/emails/PasswordResetEmail";
+import AdminNotificationEmail from "@/emails/AdminNotificationEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -51,18 +52,38 @@ export const sendVerificationEmail = async (
 
 export const sendContactUsEmail = async (
   name: string,
-  message: string,
   senderEmail: string,
+  message: string,
 ) => {
   const firstName = name.split(" ")[0];
 
   console.log(firstName);
   await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: process.env.HOST_PHONE_NUMBER as string,
+    to: senderEmail,
     subject: "Reset your password",
     reply_to: senderEmail,
     react: ContactUsEmail({ firstName, message, replyToEmail: senderEmail }),
+  });
+};
+
+export const sendAdminContactUsEmail = async (
+  name: string,
+  email: string,
+  message: string,
+  phone: string,
+) => {
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: process.env.HOST_EMAIL_ADDRESS as string,
+    subject: "Reset your password",
+    reply_to: email,
+    react: AdminNotificationEmail({
+      name,
+      message,
+      email,
+      phone,
+    }),
   });
 };
 
