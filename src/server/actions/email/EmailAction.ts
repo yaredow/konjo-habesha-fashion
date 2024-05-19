@@ -57,17 +57,20 @@ export const sendContactUsEmail = async (
 ) => {
   const firstName = name.split(" ")[0];
 
-  console.log(firstName);
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: senderEmail,
-    subject: "Reset your password",
-    reply_to: senderEmail,
-    react: ContactUsEmail({ firstName, message, replyToEmail: senderEmail }),
+    subject: "Thank you for your feedback",
+    reply_to: process.env.HOST_EMAIL_ADDRESS as string,
+    react: ContactUsEmail({
+      firstName,
+      message,
+      replyToEmail: process.env.HOST_EMAIL_ADDRESS as string,
+    }),
   });
 };
 
-export const sendAdminContactUsEmail = async (
+export const sendAdminNotificationEmail = async (
   name: string,
   email: string,
   message: string,
@@ -76,7 +79,7 @@ export const sendAdminContactUsEmail = async (
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: process.env.HOST_EMAIL_ADDRESS as string,
-    subject: "Reset your password",
+    subject: "New contact email",
     reply_to: email,
     react: AdminNotificationEmail({
       name,

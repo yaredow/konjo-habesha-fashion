@@ -1,7 +1,10 @@
 import { ContactUsFromSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "../account/authenticate";
-import { sendContactUsEmail } from "../email/EmailAction";
+import {
+  sendAdminNotificationEmail,
+  sendContactUsEmail,
+} from "../email/EmailAction";
 
 export async function contactUsAction(
   values: z.infer<typeof ContactUsFromSchema>,
@@ -10,13 +13,16 @@ export async function contactUsAction(
 
   console.log(validatedFields);
   if (!validatedFields.success) {
-    return { error: validatedFields.error.message };
+    return { error: "Invalid data" };
   }
 
-  const { name, email, message } = validatedFields.data;
+  const { name, email, phone, message } = validatedFields.data;
 
   try {
     await sendContactUsEmail(name, email, message);
+
+    await sendAdminNotificationEmail(name, email, message, phone);
+
     return { success: "Thank you for your contact" };
   } catch (error) {
     console.error(error);
