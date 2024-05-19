@@ -47,7 +47,6 @@ import useGetOrders from "@/utils/hook/useGetOrders";
 import React, { useCallback } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
-import { Order } from "../../../../../types/order";
 import _ from "lodash";
 import {
   AlertDialog,
@@ -67,6 +66,7 @@ import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
 import { debounce } from "lodash";
 import Spinner from "@/components/Spinner";
 import { calculateTotalSales } from "@/utils/hook/calculateTotalSales";
+import { Order } from "@prisma/client";
 
 export type FetchOrderType = {
   orders: Order[];
@@ -289,7 +289,7 @@ function page() {
                           onClick={() => handleOrderClick(order)}
                           className={cn({
                             "bg-accent":
-                              selectedOrder && selectedOrder._id === order._id,
+                              selectedOrder && selectedOrder.id === order.id,
                           })}
                         >
                           <TableCell>
@@ -334,7 +334,7 @@ function page() {
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                {`Order ${selectedOrder?._id}`}
+                {`Order ${selectedOrder?.id}`}
                 <Button
                   size="icon"
                   variant="outline"
@@ -385,9 +385,7 @@ function page() {
                           disabled={isDeleting}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeleteOrderClick(
-                              selectedOrder?._id as string,
-                            );
+                            handleDeleteOrderClick(selectedOrder?.id as string);
                           }}
                         >
                           {isDeleting ? "Deleting..." : "Delete"}

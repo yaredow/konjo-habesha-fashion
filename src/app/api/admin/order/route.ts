@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
 
     if (delivery_status && delivery_status !== "all") {
       filter.delivery_status = delivery_status;
-    } else {
-      filter.delivery_status = "all";
     }
 
     let startDate: Date | undefined, endDate: Date | undefined;
@@ -36,6 +34,8 @@ export async function POST(request: NextRequest) {
         lt: endDate,
       };
     }
+
+    console.log(filter);
 
     const orders = await prisma.order.findMany({
       where: filter,

@@ -10,6 +10,8 @@ async function fetchOrder(filter: FilterType) {
     },
   });
 
+  console.log(data);
+
   return data;
 }
 
