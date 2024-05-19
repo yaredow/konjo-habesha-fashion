@@ -1,4 +1,4 @@
-import Order from "@/models/orderModel";
+import prisma from "@/lib/prisma";
 
 export async function createOrder(formData: FormData) {
   const customer = JSON.parse(formData.get("customer") as string);
@@ -15,7 +15,7 @@ export async function createOrder(formData: FormData) {
     };
   });
 
-  const newOrder = await Order.create({
+  const newOrder = await prisma.order.create({
     userId: customer?.metadata.userId,
     customerId: data?.customer,
     paymentIntentId: data.payment_intent,

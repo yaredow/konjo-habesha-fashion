@@ -67,6 +67,7 @@ import { debounce } from "lodash";
 import Spinner from "@/components/Spinner";
 import { calculateTotalSales } from "@/utils/hook/calculateTotalSales";
 import { Order } from "@prisma/client";
+import { formatName } from "@/utils/formatName";
 
 export type FetchOrderType = {
   orders: Order[];
@@ -294,7 +295,7 @@ function page() {
                         >
                           <TableCell>
                             <div className="font-medium">
-                              {order.shipping.name}
+                              {formatName(order.shipping.name)}
                             </div>
                             <div className="hidden text-sm text-muted-foreground md:inline">
                               {order.shipping.email}
@@ -429,6 +430,7 @@ function page() {
                 </li>
               </ul>
             </div>
+
             <Separator className="my-4" />
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-3">
@@ -446,6 +448,7 @@ function page() {
                 </div>
               </div>
             </div>
+
             <Separator className="my-4" />
             <div className="grid gap-3">
               <div className="font-semibold">Customer Information</div>

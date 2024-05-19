@@ -29,8 +29,10 @@ import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
 import useGetProducts from "@/utils/hook/useGetProducts";
 import { Product } from "../../../../types/product";
+import { formatName, getInitials } from "@/utils/formatName";
 
 export default function Dashboard() {
+  const [isClient, setIsClient] = useState<boolean>(false);
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [activeProducts, setActiveProducts] = useState<number>(0);
   const [totalNumberOfSales, setTotalNumberOfSales] = useState<number>(0);
@@ -48,6 +50,7 @@ export default function Dashboard() {
   }: { products: Product[]; isFetched: boolean } = useGetProducts();
 
   useEffect(() => {
+    setIsClient(true);
     if (isProductsFetched) {
       const numberOfProducts = products.length;
       setActiveProducts(numberOfProducts);
@@ -66,6 +69,8 @@ export default function Dashboard() {
       setTotalRevenue(revenue);
     }
   }, [orders, products]);
+
+  if (!isClient) return null;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -150,10 +155,10 @@ export default function Dashboard() {
                     <Spinner />
                   ) : (
                     orders.map((order) => (
-                      <TableRow key={order._id}>
+                      <TableRow key={order.id}>
                         <TableCell>
                           <div className="font-medium">
-                            {order.shipping.name}
+                            {formatName(order.shipping.name)}
                           </div>
                           <div className="hidden text-sm text-muted-foreground md:inline">
                             {order.shipping.email}
@@ -189,20 +194,22 @@ export default function Dashboard() {
                 <Spinner />
               ) : (
                 orders.map((order) => (
-                  <div key={order._id} className="flex items-center gap-4">
+                  <div key={order.id} className="flex items-center gap-4">
                     <Avatar className="hidden h-9 w-9 sm:flex">
                       <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                      <AvatarFallback>OM</AvatarFallback>
+                      <AvatarFallback>
+                        {getInitials(order.shipping.name)}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="grid gap-1">
                       <p className="text-sm font-medium leading-none">
-                        {order.shipping.name}
+                        {formatName(order.shipping.name)}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {order.shipping.email}
                       </p>
                     </div>
-                    <div className="ml-auto font-medium">+$1,999.00</div>
+                    <div className="ml-auto font-medium">{`+${formatCurrency(order.subtotal)}`}</div>
                   </div>
                 ))
               )}
