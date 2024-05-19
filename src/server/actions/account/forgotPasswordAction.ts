@@ -1,11 +1,11 @@
 "use server";
 
 import { getUserByEmail } from "@/data/user";
-import { sendPasswordResetToken } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "./authenticate";
+import { sendPasswordResetToken } from "../email/EmailAction";
 
 export async function forgotPasswordAction(
   values: z.infer<typeof forgotPasswordFormSchema>,
@@ -31,6 +31,7 @@ export async function forgotPasswordAction(
   await sendPasswordResetToken(
     passwordResetToken.email,
     passwordResetToken.token,
+    user.name as string,
   );
 
   return { success: "Password reset token sent successfully" };

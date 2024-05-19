@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import ContactUsEmail from "@/emails/ContactUsEmail";
 import WelcomeEmail from "@/emails/welcomeEmail";
 import AccountVerificationEmail from "@/emails/AccountVerificationEmail";
+import PasswordResetEmail from "@/emails/PasswordResetEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -16,14 +17,19 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
   });
 };
 
-export const sendPasswordResetToken = async (email: string, token: string) => {
-  const resetLink = `http://localhost:3000/auth/reset-password?token=${token}`;
+export const sendPasswordResetToken = async (
+  email: string,
+  token: string,
+  name: string,
+) => {
+  const firstName = name.split(" ")[0];
+  const resetUrl = `http://localhost:3000/auth/reset-password?token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,
-    subject: "Confirm your email",
-    html: `Here <p><a href="${resetLink}">Here</a></p>`,
+    subject: "Reset your password",
+    react: PasswordResetEmail({ firstName, resetUrl }),
   });
 };
 
