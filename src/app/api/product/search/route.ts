@@ -1,4 +1,4 @@
-import Product from "@/models/productModel";
+import prisma from "@/lib/prisma";
 import connectMongoDB from "@/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,8 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    await connectMongoDB();
-    const result = await Product.aggregate([
+    const result = await prisma.product.aggregate([
       {
         $search: {
           index: "Search-text",

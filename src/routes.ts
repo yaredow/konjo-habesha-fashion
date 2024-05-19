@@ -8,7 +8,8 @@ export const publicRoutes = [
   "/admin/dashboard",
   "/admin/dashboard/product",
   "/admin/dashboard/user",
-  "admin/dashboard/order",
+  "/admin/dashboard/order",
+  "/api/stripe/webhook",
 ];
 
 export const authRoutes = [

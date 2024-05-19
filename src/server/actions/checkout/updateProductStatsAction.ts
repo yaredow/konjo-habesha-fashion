@@ -1,7 +1,7 @@
 "use server";
 
-import Product from "@/models/productModel";
-import { CartItem, Product as ProductType } from "../../../../types/product";
+import prisma from "@/lib/prisma";
+import { CartItem } from "@/../types/product";
 
 export async function updateProductStats(formData: FormData) {
   const customer = JSON.parse(formData.get("customer") as string);
@@ -12,11 +12,21 @@ export async function updateProductStats(formData: FormData) {
   await Promise.all(
     items.map(async (item: CartItem) => {
       try {
-        const product = await Product.findOne({ name: item.name });
+        const product = await prisma.product.findFirst({
+          where: { name: item.name },
+        });
 
         if (!product) {
           throw new Error("Product not found");
         }
+
+        await prisma.product.update({
+          where: { id: product.id },
+          data: {
+            unitsSold: product.unitsSold + item.quantity,
+            stockQuantity: product.stockQuantity - item.quantity,
+          },
+        });
 
         product.unitsSold += item.quantity;
         product.stockQuantity -= item.quantity;
@@ -24,9 +34,6 @@ export async function updateProductStats(formData: FormData) {
         if (product.stockQuantity === 0) {
           product.inStock = false;
         }
-
-        // Save the updated product
-        await product.save();
       } catch (err) {
         console.error(err);
         throw err;

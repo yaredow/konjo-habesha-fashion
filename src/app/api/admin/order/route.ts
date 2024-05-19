@@ -35,8 +35,6 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    console.log(filter);
-
     const orders = await prisma.order.findMany({
       where: filter,
     });

@@ -7,8 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type ProductsImages {
+  public_id String
+  url       String
+}
+
 type OrdersProducts {
-  id        String @map("_id") @db.ObjectId
   name      String
   productId String
   quantity  Int
@@ -27,14 +31,9 @@ type OrdersShippingAddress {
   city        String
   country     String
   line1       String
-  line2       String
+  line2       String?
   postal_code String
-  state       String @default("")
-}
-
-type ProductsImages {
-  public_id String
-  url       String
+  state       String?
 }
 
 enum UserRole {
@@ -139,10 +138,10 @@ model TwoFactorConfirmation {
 
 model Order {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  v               Int              @map("__v")
-  createdAt       DateTime         @db.Date
+  v               Int              @default(0) @map("__v")
+  createdAt       DateTime         @default(now()) @db.Date
   customerId      String
-  delivery_status String
+  delivery_status String           @default("pending")
   paymentIntentId String
   payment_status  String
   products        OrdersProducts[]

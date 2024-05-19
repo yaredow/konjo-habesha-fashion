@@ -1,11 +1,14 @@
 "use server";
 
+import { auth } from "@/auth";
 import { CartItem } from "../../../../types/product";
 import { stripe } from "@/utils/stripe";
+import { User } from "@prisma/client";
 
 export async function getCheckoutSessionUrlAction(formData: FormData) {
   const cartItems = JSON.parse(formData.get("cartItems") as string);
-  const user = JSON.parse(formData.get("user") as string);
+  const userSession = await auth();
+  const user = userSession?.user as User;
 
   const cartData = cartItems.map((item: CartItem) => ({
     productId: item.id,
@@ -15,9 +18,9 @@ export async function getCheckoutSessionUrlAction(formData: FormData) {
   }));
 
   const customer = await stripe.customers.create({
-    email: user.email,
+    email: user.email!,
     metadata: {
-      userId: user._id,
+      userId: user.id,
       cart: JSON.stringify(cartData),
     },
   });

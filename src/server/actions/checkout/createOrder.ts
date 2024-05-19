@@ -1,6 +1,10 @@
 import prisma from "@/lib/prisma";
+import { ErrorAndSuccessType } from "../account/authenticate";
+import { auth } from "@/auth";
 
-export async function createOrder(formData: FormData) {
+export async function createOrder(
+  formData: FormData,
+): Promise<ErrorAndSuccessType> {
   const customer = JSON.parse(formData.get("customer") as string);
   const data = JSON.parse(formData.get("data") as string);
 
@@ -15,28 +19,27 @@ export async function createOrder(formData: FormData) {
     };
   });
 
-  const newOrder = await prisma.order.create({
-    userId: customer?.metadata.userId,
-    customerId: data?.customer,
-    paymentIntentId: data.payment_intent,
-    products,
-    subtotal: data?.amount_subtotal / 100,
-    total: data?.amount_total,
-    shipping: data?.customer_details,
-    payment_status: data?.payment_status,
-  });
-
-  if (!newOrder) {
-    return { success: false, message: "Unable t crate an order" };
-  }
-
   try {
-    const result = await newOrder.save();
+    const newOrder = await prisma.order.create({
+      data: {
+        userId: customer?.metadata.userId,
+        customerId: data?.customer,
+        paymentIntentId: data.payment_intent,
+        subtotal: data?.amount_subtotal / 100,
+        shipping: data?.customer_details,
+        payment_status: data?.payment_status,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
 
-    if (result) {
-      return { success: true, message: "product created successfully" };
+    if (!newOrder) {
+      return { error: "Unable t crate an order" };
     }
-  } catch (err) {
-    console.error(err);
+
+    return { success: "Order created successfully" };
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
