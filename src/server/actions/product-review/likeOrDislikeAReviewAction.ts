@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "../account/authenticate";
 export async function likeOrDislikeAReviewAction(
   userId: string,
-  productId: string,
+  reviewId: string,
   action: "like" | "dislike",
 ): Promise<ErrorAndSuccessType> {
   try {
@@ -12,7 +12,7 @@ export async function likeOrDislikeAReviewAction(
 
     if (action === "like") {
       const existingLike = await prisma.like.findFirst({
-        where: { userId },
+        where: { userId, reviewId },
       });
 
       if (existingLike) {
@@ -31,7 +31,7 @@ export async function likeOrDislikeAReviewAction(
       }
     } else if (action === "dislike") {
       const existingDislike = await prisma.dislike.findFirst({
-        where: { userId },
+        where: { userId, reviewId },
       });
 
       if (existingDislike) {
@@ -53,7 +53,7 @@ export async function likeOrDislikeAReviewAction(
     }
 
     const review = await prisma.review.update({
-      where: { id: productId },
+      where: { id: reviewId },
       data: update,
       include: {
         likes: true,

@@ -45,14 +45,14 @@ export default function UserReview({ review, refetch }: ReviewProps) {
   const [isPending, startTransition] = useTransition();
   const { data: session } = useSession();
   const router = useRouter();
-  const userId = session?.user?.id as string;
+  const user = session?.user;
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
   const _debouncedSubmit = React.useCallback(debouncedSubmit, []);
 
   const handleReviewLikeOrDislike = async (action: "like" | "dislike") => {
-    if (!userId) {
+    if (!user) {
       toast({
         variant: "destructive",
         description: "Please login to like a review",
@@ -62,7 +62,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
     }
 
     startTransition(() => {
-      likeOrDislikeAReviewAction(userId, review.product.id, action)
+      likeOrDislikeAReviewAction(user.id!, review.id, action)
         .then((data) => {
           if (data.success) {
             toast({
@@ -112,7 +112,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
       <div className="flex flex-col items-start gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 border">
-            <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
+            <AvatarImage alt="@shadcn" src={user?.image || ""} />
             <AvatarFallback>{getInitials(review.user.name!)}</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
@@ -150,7 +150,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
           >
             <ThumbsUpIcon
               className={cn("h-5 w-5", {
-                "fill-primary": review.likes.includes(userId),
+                "fill-primary": review.likes.includes(user?.id!),
               })}
             />
           </Button>
@@ -164,7 +164,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
           >
             <ThumbsDownIcon
               className={cn("h-5 w-5", {
-                "fill-primary": review.dislikes.includes(userId),
+                "fill-primary": review.dislikes.includes(user?.id!),
               })}
             />
           </Button>
@@ -207,7 +207,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
                       <AlertDialogAction
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteReview(review.id, userId);
+                          handleDeleteReview(review.id, user?.id!);
                         }}
                       >
                         Continue
