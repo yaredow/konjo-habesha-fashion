@@ -1,26 +1,10 @@
 import mongoose from "mongoose";
+import { Dislike, Like, Order, Product, Review, User } from "@prisma/client";
 
-export interface Review {
-  _id: string;
-  review: string;
-  title: string;
-  rating: number;
-  product: {
-    _id: string;
-    name: string;
-  };
-  user: {
-    _id: string;
-    fullName: string;
-  };
-  order: {
-    id: string;
-  };
-  likes: string[];
-  dislikes: string[];
-  createdAt: {
-    $date: string;
-  };
-  images: string[];
-  __v: number;
-}
+export type ProductReviewType = Review & {
+  product: Product;
+  user: User;
+  order: Order;
+  likes: Like[];
+  dislikes: Dislike[];
+};

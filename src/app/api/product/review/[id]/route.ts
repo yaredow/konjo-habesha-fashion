@@ -1,6 +1,4 @@
 import prisma from "@/lib/prisma";
-import connectMongoDB from "@/utils/db/db";
-import { includes } from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -12,6 +10,9 @@ export async function GET(request: NextRequest) {
       include: {
         product: true,
         user: true,
+        order: true,
+        likes: true,
+        dislikes: true,
       },
     });
 

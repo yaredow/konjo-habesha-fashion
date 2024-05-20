@@ -1,8 +1,12 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { ErrorAndSuccessType } from "../account/authenticate";
 
-export async function deleteReviewAction(reviewId: string, userId: string) {
+export async function deleteReviewAction(
+  reviewId: string,
+  userId: string,
+): Promise<ErrorAndSuccessType> {
   try {
     const review = await prisma.review.delete({
       where: {
@@ -12,10 +16,10 @@ export async function deleteReviewAction(reviewId: string, userId: string) {
     });
 
     if (!review) {
-      throw new Error("Review not found");
+      return { error: "Review not found" };
     }
 
-    return { success: true, message: "Review deleted successfully" };
+    return { success: "Review deleted successfully" };
   } catch (err) {
     console.error(err);
     throw err;

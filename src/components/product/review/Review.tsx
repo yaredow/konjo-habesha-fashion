@@ -7,10 +7,9 @@ import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Review as ReviewTypes } from "../../../../types/review";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import React from "react";
+import React, { useTransition } from "react";
 import { cn } from "@/utils/cn";
 import {
   DropdownMenu,
@@ -33,15 +32,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-type ReviewType = {
-  review: ReviewTypes;
+import { ProductReviewType } from "../../../../types/review";
+
+type ReviewProps = {
+  review: ProductReviewType;
   refetch: (
     options?: RefetchOptions | undefined,
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export default function UserReview({ review, refetch }: ReviewType) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+export default function UserReview({ review, refetch }: ReviewProps) {
+  const [isPending, startTransition] = useTransition();
   const { data: session } = useSession();
   const router = useRouter();
   const userId = session?.user?.id as string;
@@ -60,57 +61,50 @@ export default function UserReview({ review, refetch }: ReviewType) {
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const response = await likeOrDislikeAReviewAction(
-        userId,
-        review.product._id,
-        action,
-      );
-
-      if (response?.success === true) {
-        setIsLoading(false);
-        _debouncedSubmit();
-      } else {
-        console.error("Error updating review likes/dislikes", response);
-        toast({
-          variant: "destructive",
-          description: "Failed to update review",
+    startTransition(() => {
+      likeOrDislikeAReviewAction(userId, review.product.id, action)
+        .then((data) => {
+          if (data.success) {
+            toast({
+              description: data.success,
+            });
+            _debouncedSubmit();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          toast({
+            variant: "destructive",
+            description: "Something went wrong",
+          });
         });
-      }
-    } catch (error) {
-      console.error("Error handling like/dislike action:", error);
-      toast({
-        variant: "destructive",
-        description: "An unexpected error occurred",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   const handleDeleteReview = async (reviewId: string, userId: string) => {
-    setIsLoading(true);
-    try {
-      const response = await deleteReviewAction(reviewId, userId);
-
-      if (response.success === true) {
-        toast({
-          description: response.message,
+    startTransition(() => {
+      deleteReviewAction(reviewId, userId)
+        .then((data) => {
+          if (data.success) {
+            toast({
+              description: data.success,
+            });
+            _debouncedSubmit();
+          } else {
+            toast({
+              variant: "destructive",
+              description: data.error,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          toast({
+            variant: "destructive",
+            description: "Something went wrong",
+          });
         });
-        setIsLoading(false);
-        _debouncedSubmit();
-      }
-    } catch (error) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        description: "An unexpected error occurred",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   return (
@@ -119,14 +113,12 @@ export default function UserReview({ review, refetch }: ReviewType) {
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 border">
             <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-            <AvatarFallback>{getInitials(review.user.fullName)}</AvatarFallback>
+            <AvatarFallback>{getInitials(review.user.name!)}</AvatarFallback>
           </Avatar>
           <div className="grid gap-1">
-            <h3 className="font-semibold">
-              {formatName(review.user.fullName)}
-            </h3>
+            <h3 className="font-semibold">{formatName(review.user.name!)}</h3>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              {`Order #${review.order}`}
+              {`Order #${review.order.id}`}
             </div>
           </div>
         </div>
@@ -166,7 +158,6 @@ export default function UserReview({ review, refetch }: ReviewType) {
             {review.likes.length > 0 ? review.likes.length : null}
           </span>
           <Button
-            disabled={isLoading}
             onClick={() => handleReviewLikeOrDislike("dislike")}
             size="icon"
             variant="ghost"
@@ -192,6 +183,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem
+                      disabled={isPending}
                       className=" w-full text-red-500"
                       onSelect={(e) => {
                         e.preventDefault();
@@ -215,7 +207,7 @@ export default function UserReview({ review, refetch }: ReviewType) {
                       <AlertDialogAction
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteReview(review._id, userId);
+                          handleDeleteReview(review.id, userId);
                         }}
                       >
                         Continue

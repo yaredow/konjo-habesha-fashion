@@ -23,7 +23,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
 import { toast } from "@/components/ui/use-toast";
 import ProductReview from "@/components/product/review/ProductReview";
-import { Review } from "../../../../types/review";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import useGetReviews from "@/utils/hook/useGetReviews";
 import UserReview from "@/components/product/review/Review";
@@ -31,9 +30,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
 import RatingBreakdown from "@/components/product/review/RatingBreakdown";
+import { ProductReviewType } from "../../../../types/review";
 
 type UserReviewsType = {
-  reviews: Review[];
+  reviews: ProductReviewType[];
   isFetched: boolean;
   refetch: (
     options?: RefetchOptions | undefined,
@@ -64,8 +64,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
     (acc, review) => (acc + review.rating) / reviews.length,
     0,
   );
-
-  console.log(reviews);
 
   const {
     product,
@@ -113,7 +111,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
   if (!isFetched) return <Spinner />;
 
   return (
-    <section className="mx-12">
+    <section className="md:mx-12">
       <div>
         <div className=" mb-4">
           <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
@@ -287,33 +285,39 @@ function ProductDetail({ params }: { params: { id: string } }) {
             </div>
 
             <div className="grid gap-4 pt-4">
-              <div className="mx-auto mb-4 grid w-full max-w-2xl gap-12 md:grid-cols-2">
-                <Card className="grid gap-6 p-6">
-                  <CardHeader>
-                    <CardTitle>Overal Rating</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex flex-col items-center justify-center gap-4">
-                    <div className="text-8xl font-bold">
-                      {avgRating}
-                      <span className="text-5xl text-gray-500 dark:text-gray-400">
-                        / 5
-                      </span>
-                    </div>
-                    <div className="flex items-center rounded-full bg-gray-100 px-3 py-2 dark:bg-gray-800">
-                      <CommentRatings fixed={true} rating={avgRating} />
-                      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                        {`out of ${reviews.length} ${reviews.length === 1 ? "review" : "reviews"}`}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="grid gap-6 p-6">
-                  <CardHeader>
-                    <CardTitle>Rating Breakdown</CardTitle>
-                  </CardHeader>
-                  <RatingBreakdown reviews={reviews} />
-                </Card>
-              </div>
+              {reviews.length > 0 ? (
+                <div className="mx-auto mb-4 grid w-full max-w-2xl gap-12 md:grid-cols-2">
+                  <Card className="grid gap-6 p-6">
+                    <CardHeader>
+                      <CardTitle>Overal Rating</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center justify-center gap-4">
+                      <div className="text-8xl font-bold">
+                        {avgRating}
+                        <span className="text-5xl text-gray-500 dark:text-gray-400">
+                          / 5
+                        </span>
+                      </div>
+                      <div className="flex items-center rounded-full bg-gray-100 px-3 py-2 dark:bg-gray-800">
+                        <CommentRatings fixed={true} rating={avgRating} />
+                        <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                          {`out of ${reviews.length} ${reviews.length === 1 ? "review" : "reviews"}`}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="grid gap-6 p-6">
+                    <CardHeader>
+                      <CardTitle>Rating Breakdown</CardTitle>
+                    </CardHeader>
+                    <RatingBreakdown reviews={reviews} />
+                  </Card>
+                </div>
+              ) : (
+                <p className=" text-center">
+                  Be the first to review this product
+                </p>
+              )}
 
               <Separator />
 

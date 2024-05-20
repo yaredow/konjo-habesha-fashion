@@ -1,11 +1,12 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { ErrorAndSuccessType } from "../account/authenticate";
 export async function likeOrDislikeAReviewAction(
   userId: string,
   productId: string,
   action: "like" | "dislike",
-) {
+): Promise<ErrorAndSuccessType> {
   try {
     let update: Record<string, any> = {};
 
@@ -64,7 +65,7 @@ export async function likeOrDislikeAReviewAction(
       throw new Error("Review not found");
     }
 
-    return { success: true, message: "Action performed successfully" };
+    return { success: "Action performed successfully" };
   } catch (error) {
     console.error(error);
     throw error;

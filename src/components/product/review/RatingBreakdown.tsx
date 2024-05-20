@@ -1,6 +1,6 @@
 import { CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Review } from "../../../../types/review";
+import { Review } from "@prisma/client";
 import { StarIcon } from "lucide-react";
 
 export default function RatingBreakdown({ reviews }: { reviews: Review[] }) {
