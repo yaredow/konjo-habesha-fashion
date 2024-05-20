@@ -10,12 +10,19 @@ import {
   getTotalCartPrice,
   getTotalCartQuantity,
 } from "@/store/slices/cartSlice";
+import { formatCurrency } from "@/utils/helpers";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 
 const Cart = () => {
+  const [totalCartQuantity, setTotalCartQuantity] = useState<number>(0);
   const cart = useAppSelector(getCart);
   const totalPrice = useAppSelector(getTotalCartPrice);
-  const totalCartQuantity = useAppSelector(getTotalCartQuantity);
+  const reduxTotalCartQuantity = useAppSelector(getTotalCartQuantity);
+
+  useEffect(() => {
+    setTotalCartQuantity(reduxTotalCartQuantity);
+  }, []);
 
   if (totalCartQuantity === 0) return <EmptyCart />;
 
@@ -32,8 +39,8 @@ const Cart = () => {
         {/* Sub total */}
         <div className="sticky top-28 mb-6 mt-6 h-full rounded-lg border p-4 shadow-md md:mt-0 md:h-64 md:w-1/3">
           <div className="mb-2 flex justify-between">
-            <p>{totalPrice}</p>
-            <p>$200</p>
+            <p>Total</p>
+            <p>{formatCurrency(totalPrice)}</p>
           </div>
           <div className="flex justify-between">
             <p>Shipping</p>
@@ -43,7 +50,9 @@ const Cart = () => {
           <div className="flex justify-between">
             <p className="text-lg font-bold ">Total</p>
             <div className=" mb-2">
-              <p className="mb-1 text-lg font-bold ">$500</p>
+              <p className="mb-1 text-lg font-bold ">
+                {formatCurrency(totalPrice + 4.99)}
+              </p>
               <p className="text-sm">includin g VAT</p>
             </div>
           </div>

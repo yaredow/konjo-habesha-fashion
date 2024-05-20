@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { ArrowRight, Search as SearchIcon } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { UseMutateFunction } from "@tanstack/react-query";
 import Spinner from "./Spinner";
@@ -84,10 +84,10 @@ export default function Search() {
             ) : (
               results?.slice(0, 6).map((result) => (
                 <CommandItem
-                  onSelect={() => handleSearchItemSelect(result._id)}
+                  onSelect={() => handleSearchItemSelect(result.id)}
                   className=" flex flex-row gap-4"
-                  value={result._id}
-                  key={result._id}
+                  value={result.id}
+                  key={result.id}
                 >
                   <Image
                     height={40}

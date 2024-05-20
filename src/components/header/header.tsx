@@ -29,13 +29,18 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [cartQuantity, setCartQuantity] = useState<number>(0);
   const { data: session, status } = useSession();
   const router = useRouter();
-  const cartQuantity = useAppSelector(getTotalCartQuantity);
+  const reduxCartQuantity = useAppSelector(getTotalCartQuantity);
 
   const handleLogout = () => {
     signOut({ callbackUrl: "http://localhost:3000" });
   };
+
+  useEffect(() => {
+    setCartQuantity(reduxCartQuantity);
+  }, [reduxCartQuantity]);
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
@@ -88,9 +93,9 @@ export default function Header() {
               </Button>
 
               {cartQuantity > 0 && (
-                <div className=" absolute bottom-[26px] left-[26px] flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
+                <span className=" absolute bottom-[26px] left-[26px] flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
                   {cartQuantity}
-                </div>
+                </span>
               )}
             </div>
 
