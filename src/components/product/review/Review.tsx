@@ -65,9 +65,6 @@ export default function UserReview({ review, refetch }: ReviewProps) {
       likeOrDislikeAReviewAction(user.id!, review.id, action)
         .then((data) => {
           if (data.success) {
-            toast({
-              description: data.success,
-            });
             _debouncedSubmit();
           }
         })
@@ -150,7 +147,9 @@ export default function UserReview({ review, refetch }: ReviewProps) {
           >
             <ThumbsUpIcon
               className={cn("h-5 w-5", {
-                "fill-primary": review.likes.includes(user?.id!),
+                "fill-primary": review.likes.some(
+                  (like) => like.userId === user?.id,
+                ),
               })}
             />
           </Button>
@@ -164,7 +163,9 @@ export default function UserReview({ review, refetch }: ReviewProps) {
           >
             <ThumbsDownIcon
               className={cn("h-5 w-5", {
-                "fill-primary": review.dislikes.includes(user?.id!),
+                "fill-primary": review.dislikes.some(
+                  (dislike) => dislike.userId === user?.id,
+                ),
               })}
             />
           </Button>

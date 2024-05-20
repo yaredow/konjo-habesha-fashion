@@ -8,26 +8,25 @@ export async function likeOrDislikeAReviewAction(
   action: "like" | "dislike",
 ): Promise<ErrorAndSuccessType> {
   try {
-    let update: Record<string, any> = {};
-
     if (action === "like") {
       const existingLike = await prisma.like.findFirst({
         where: { userId, reviewId },
       });
 
       if (existingLike) {
-        update = {
-          likes: { disconnect: [{ id: existingLike.id }] },
-        };
+        await prisma.like.delete({
+          where: { id: existingLike.id },
+        });
       } else {
-        update = {
-          likes: {
-            connect: [{ id: userId }],
+        await prisma.like.create({
+          data: {
+            userId,
+            reviewId,
           },
-          dislikes: {
-            disconnect: [{ id: userId }],
-          },
-        };
+        });
+        await prisma.dislike.deleteMany({
+          where: { userId, reviewId },
+        });
       }
     } else if (action === "dislike") {
       const existingDislike = await prisma.dislike.findFirst({
@@ -35,26 +34,24 @@ export async function likeOrDislikeAReviewAction(
       });
 
       if (existingDislike) {
-        update = {
-          dislikes: {
-            disconnect: [{ id: existingDislike.id }],
-          },
-        };
+        await prisma.dislike.delete({
+          where: { id: existingDislike.id },
+        });
       } else {
-        update = {
-          dislikes: {
-            connect: [{ id: userId }],
+        await prisma.dislike.create({
+          data: {
+            userId,
+            reviewId,
           },
-          likes: {
-            disconnect: [{ id: userId }],
-          },
-        };
+        });
+        await prisma.like.deleteMany({
+          where: { userId, reviewId },
+        });
       }
     }
 
-    const review = await prisma.review.update({
+    const review = await prisma.review.findUnique({
       where: { id: reviewId },
-      data: update,
       include: {
         likes: true,
         dislikes: true,
@@ -62,7 +59,9 @@ export async function likeOrDislikeAReviewAction(
     });
 
     if (!review) {
-      throw new Error("Review not found");
+      return {
+        error: "Review not found",
+      };
     }
 
     return { success: "Action performed successfully" };
