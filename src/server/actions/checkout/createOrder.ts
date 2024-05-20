@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "../account/authenticate";
-import { auth } from "@/auth";
+import { sendOrderConfirmationEmail } from "../email/EmailAction";
 
 export async function createOrder(
   formData: FormData,
@@ -14,8 +14,8 @@ export async function createOrder(
     return {
       productId: item.productId,
       name: item.name,
-      images: item.images,
       quantity: item.quantity,
+      price: item.price,
     };
   });
 
@@ -25,17 +25,25 @@ export async function createOrder(
         userId: customer?.metadata.userId,
         customerId: data?.customer,
         paymentIntentId: data.payment_intent,
+        products,
         subtotal: data?.amount_subtotal / 100,
         shipping: data?.customer_details,
         payment_status: data?.payment_status,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     });
 
     if (!newOrder) {
       return { error: "Unable t crate an order" };
     }
+
+    await sendOrderConfirmationEmail(
+      customer?.metadata.name,
+      newOrder?.id,
+      newOrder?.createdAt.toISOString(),
+      newOrder?.products,
+      newOrder?.subtotal,
+      customer?.metadata.email,
+    );
 
     return { success: "Order created successfully" };
   } catch (error) {

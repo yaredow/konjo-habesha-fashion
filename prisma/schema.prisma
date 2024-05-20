@@ -16,6 +16,7 @@ type OrdersProducts {
   name      String
   productId String
   quantity  Int
+  price     Int
 }
 
 type OrdersShipping {

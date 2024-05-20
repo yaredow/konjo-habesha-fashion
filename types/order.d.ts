@@ -37,3 +37,9 @@ type Order = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+type OrderItemsType = {
+  name: string;
+  quantity: number;
+  price: number;
+};

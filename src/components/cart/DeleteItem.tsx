@@ -7,7 +7,9 @@ function DeleteItem({ id }: { id: string }) {
   return (
     <div className="flex">
       <button
-        onClick={() => dispatch(deleteItem(id))}
+        onClick={() => {
+          dispatch(deleteItem(id));
+        }}
         type="button"
         className="font-medium text-blue-500 hover:text-blue-600"
       >

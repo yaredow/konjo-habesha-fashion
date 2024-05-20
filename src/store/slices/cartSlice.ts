@@ -26,12 +26,12 @@ export const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     deleteItem: (state, action: PayloadAction<string>) => {
-      state.cart = state.cart.filter((item) => item._id !== action.payload);
+      state.cart = state.cart.filter((item) => item.id !== action.payload);
       // Update local storage whenever the cart items change
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     increaseItemQuantity: (state, action: PayloadAction<string>) => {
-      const item = state.cart.find((item) => item._id === action.payload);
+      const item = state.cart.find((item) => item.id === action.payload);
       if (item) {
         item.quantity++;
         item.totalPrice = item.price * item.quantity;
@@ -40,11 +40,11 @@ export const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     decreaseItemQuantity: (state, action: PayloadAction<string>) => {
-      const item = state.cart.find((item) => item._id === action.payload);
+      const item = state.cart.find((item) => item.id === action.payload);
       if (item) {
         if (item.quantity === 1) {
           const index = state.cart.findIndex(
-            (cartItem) => cartItem._id === action.payload,
+            (cartItem) => cartItem.id === action.payload,
           );
           if (index !== -1) {
             state.cart.splice(index, 1);
@@ -79,6 +79,6 @@ export const getTotalCartQuantity = (state: RootState) =>
 export const getTotalCartPrice = (state: RootState) =>
   state.cart.cart.reduce((sum, item) => sum + item.totalPrice!, 0);
 export const getCurrentQuantityById = (id: string) => (state: RootState) =>
-  state.cart.cart.find((item) => item._id === id)?.quantity ?? 0;
+  state.cart.cart.find((item) => item.id === id)?.quantity ?? 0;
 
 export default cartSlice.reducer;

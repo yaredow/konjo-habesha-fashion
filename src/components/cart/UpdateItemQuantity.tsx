@@ -3,8 +3,6 @@ import {
   decreaseItemQuantity,
   increaseItemQuantity,
 } from "@/store/slices/cartSlice";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 function UpdateItemQuantity({
   id,
