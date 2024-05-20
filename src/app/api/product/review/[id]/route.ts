@@ -8,11 +8,23 @@ export async function GET(request: NextRequest) {
     const reviews = await prisma.review.findMany({
       where: { productId: id },
       include: {
-        product: true,
-        user: true,
-        order: true,
-        likes: true,
-        dislikes: true,
+        product: {
+          select: {
+            id: true,
+          },
+        },
+        user: {
+          select: { name: true },
+        },
+        order: {
+          select: { id: true },
+        },
+        likes: {
+          select: { userId: true },
+        },
+        dislikes: {
+          select: { userId: true },
+        },
       },
     });
 
