@@ -8,7 +8,9 @@ async function fetchSearchProducts(query: string) {
     `http://localhost:3000/api/product/search?text=${query}`,
   );
 
-  return data.result;
+  console.log(data);
+
+  return data;
 }
 
 export default function useGetProductSearch(query: string) {

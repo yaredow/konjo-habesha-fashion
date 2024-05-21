@@ -58,8 +58,9 @@ export default function Search() {
       <div className="relative ml-auto hidden flex-1 md:block md:grow-0">
         <Button
           variant="outline"
+          size="icon"
           onClick={() => setOpen(true)}
-          className="h-10 w-10 rounded-full"
+          className="overflow-hidden rounded-full"
         >
             <SearchIcon  strokeWidth={1.5} className="h-[20px] w-[20px]" />
         </Button>

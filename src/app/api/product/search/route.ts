@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import connectMongoDB from "@/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -13,19 +12,19 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const result = await prisma.product.aggregate([
+    const result = await prisma.$queryRaw`[
       {
         $search: {
           index: "Search-text",
           text: {
-            query: text,
+            query: ${text},
             path: {
-              wildcard: "*",
-            },
-          },
-        },
-      },
-    ]);
+              wildcard: "*"
+            }
+          }
+        }
+      }
+    ]`;
 
     if (!result) {
       return NextResponse.json(

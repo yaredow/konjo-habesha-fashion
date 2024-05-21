@@ -47,7 +47,7 @@ export default async function Header() {
         </div>
 
         <div className="hidden gap-6 md:flex md:justify-end">
-          <div className=" flex flex-row gap-[1.3rem]">
+          <div className=" flex flex-row items-center gap-[1.3rem]">
             <Search />
             <div className=" mt-[4px]">
               <ModeToggle />
