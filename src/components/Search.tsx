@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -19,6 +18,7 @@ import Image from "next/image";
 import { debounce } from "lodash";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 type SearchType = {
   results: Product[] | null;
@@ -27,14 +27,14 @@ type SearchType = {
 };
 
 export default function Search() {
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [query, setQuery] = React.useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>("");
   const router = useRouter();
 
   const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
   const debouncedSearch = debounce(search, 400);
-  const _debouncedSearch = React.useCallback(debouncedSearch, []);
+  const _debouncedSearch = useCallback(debouncedSearch, []);
 
   const handleValueChange = (value: string) => {
     setQuery(value);
@@ -47,7 +47,7 @@ export default function Search() {
     setOpen(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (query.trim()) {
       _debouncedSearch();
     }
@@ -59,12 +59,9 @@ export default function Search() {
         <Button
           variant="outline"
           onClick={() => setOpen(true)}
-          className="w-full rounded-lg pl-8 text-muted-foreground md:w-[200px] lg:w-[300px]"
+          className="h-10 w-10 rounded-full"
         >
-          <span>
-            <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4" />
-          </span>{" "}
-          Search for products...
+            <SearchIcon  strokeWidth={1.5} className="h-[20px] w-[20px]" />
         </Button>
       </div>
 

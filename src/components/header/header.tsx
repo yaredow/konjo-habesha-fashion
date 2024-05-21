@@ -1,46 +1,20 @@
-"use client";
 
-import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
-import { useAppSelector } from "@/store/hooks";
-import { getTotalCartQuantity } from "@/store/slices/cartSlice";
 import Search from "../Search";
 import { NAV_LINKS } from "@/utils/constants";
-import AvatarPlaceholder from "@/assets/User-Profile-PNG (1).png";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { HomeIcon, MenuIcon, Phone, ShoppingBag } from "lucide-react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import UserMenu from "../UserMenu";
+import { auth } from "@/auth";
+import ToggleCart from "../cart/ToggleCart";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-
-export default function Header() {
-  const [cartQuantity, setCartQuantity] = useState<number>(0);
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const reduxCartQuantity = useAppSelector(getTotalCartQuantity);
-
-  const handleLogout = () => {
-    signOut({ callbackUrl: "http://localhost:3000" });
-  };
-
-  useEffect(() => {
-    setCartQuantity(reduxCartQuantity);
-  }, [reduxCartQuantity]);
+export default async function Header() {
+  const session = await auth()
 
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
@@ -78,68 +52,11 @@ export default function Header() {
             <div className=" mt-[4px]">
               <ModeToggle />
             </div>
-            <div className=" relative flex items-center">
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <Link href="/cart">
-                  <ShoppingCart
-                    strokeWidth={1.5}
-                    className=" h-[20px] w-[20px]"
-                  />
-                </Link>
-              </Button>
 
-              {cartQuantity > 0 && (
-                <span className=" absolute bottom-[26px] left-[26px] flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md">
-                  {cartQuantity}
-                </span>
-              )}
-            </div>
+            <ToggleCart />
 
             <div className=" flex flex-row items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    onClick={() => {
-                      if (status === "unauthenticated") {
-                        router.replace("/auth/signin");
-                      }
-                    }}
-                    variant="outline"
-                    size="icon"
-                    className="overflow-hidden rounded-full"
-                  >
-                    <Image
-                      src={session?.user.image || AvatarPlaceholder}
-                      alt="User profile picture"
-                      width={50}
-                      height={50}
-                      className="aspect-square rounded-full bg-background object-cover"
-                    />
-                  </Button>
-                </DropdownMenuTrigger>
-                {status === "authenticated" ? (
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>
-                      {session.user ? session.user?.name : "Your Account"}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Link href="/profile/dashboard">Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link href="/profile/settings">Settings</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                ) : null}
-              </DropdownMenu>
+              <UserMenu />
             </div>
           </div>
         </div>
