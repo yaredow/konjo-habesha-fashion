@@ -4,11 +4,13 @@ import axios from "axios";
 import { useState } from "react";
 
 async function fetchSearchProducts(query: string) {
-  const { data } = await axios.get(`/api/product/search?text=${query}`);
+  const { data } = await axios.get(
+    `http://localhost:3000/api/product/search?text=${query}`,
+  );
 
-  console.log(data);
+  console.log(data.results);
 
-  return data;
+  return data.results;
 }
 
 export default function useGetProductSearch(query: string) {

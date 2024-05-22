@@ -1,8 +1,10 @@
 import prisma from "@/lib/prisma";
+import { Product } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const text = request.nextUrl.searchParams.get("text");
+  console.log(text);
 
   if (!text || text.trim() === "") {
     return NextResponse.json(
@@ -12,8 +14,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const result = await prisma.$runCommandRaw({
-      aggregate: "Product",
+    const response = await prisma.$runCommandRaw({
+      aggregate: "products",
       pipeline: [
         {
           $search: {
@@ -27,18 +29,27 @@ export async function GET(request: NextRequest) {
           },
         },
       ],
+      cursor: {},
     });
 
-    console.log(result);
+    const { firstBatch } = response.cursor;
 
-    if (!result) {
+    if (!response) {
       return NextResponse.json(
         { message: "No results found" },
         { status: 404 },
       );
     }
 
-    return NextResponse.json({ result }, { status: 200 });
+    const results = firstBatch.map((item: any) => {
+      return {
+        ...item,
+        id: item._id.$oid,
+        _id: undefined,
+      };
+    });
+
+    return NextResponse.json({ results: results }, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

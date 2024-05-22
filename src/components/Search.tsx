@@ -13,12 +13,12 @@ import { Search as SearchIcon } from "lucide-react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { UseMutateFunction } from "@tanstack/react-query";
 import Spinner from "./Spinner";
-import { Product } from "../../types/product";
 import Image from "next/image";
 import { debounce } from "lodash";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Product } from "@prisma/client";
 
 type SearchType = {
   results: Product[] | null;
@@ -33,13 +33,17 @@ export default function Search() {
 
   const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
-  const debouncedSearch = debounce(search, 400);
-  const _debouncedSearch = useCallback(debouncedSearch, []);
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      search(query);
+    }, 400),
+    [],
+  );
 
   const handleValueChange = (value: string) => {
     setQuery(value);
-    setOpen(!!value);
-    _debouncedSearch();
+    setOpen(true);
+    debouncedSearch(value);
   };
 
   const handleSearchItemSelect = (id: string) => {
@@ -49,9 +53,9 @@ export default function Search() {
 
   useEffect(() => {
     if (query.trim()) {
-      _debouncedSearch();
+      debouncedSearch(query);
     }
-  }, [query]);
+  }, [query, debouncedSearch]);
 
   return (
     <>
@@ -62,7 +66,7 @@ export default function Search() {
           onClick={() => setOpen(true)}
           className="overflow-hidden rounded-full"
         >
-            <SearchIcon  strokeWidth={1.5} className="h-[20px] w-[20px]" />
+          <SearchIcon strokeWidth={1.5} className="h-[20px] w-[20px]" />
         </Button>
       </div>
 
