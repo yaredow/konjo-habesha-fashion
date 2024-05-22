@@ -12,19 +12,24 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const result = await prisma.$queryRaw`[
-      {
-        $search: {
-          index: "Search-text",
-          text: {
-            query: ${text},
-            path: {
-              wildcard: "*"
-            }
-          }
-        }
-      }
-    ]`;
+    const result = await prisma.$runCommandRaw({
+      aggregate: "Product",
+      pipeline: [
+        {
+          $search: {
+            index: "Search-text",
+            text: {
+              query: text,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    console.log(result);
 
     if (!result) {
       return NextResponse.json(

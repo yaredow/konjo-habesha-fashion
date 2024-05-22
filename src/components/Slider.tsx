@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 
 const slides = [
@@ -48,10 +48,10 @@ const Slider = () => {
           >
             {/* TEXT CONTAINER */}
             <div className="flex h-1/2 flex-col items-center justify-center gap-8 text-center xl:h-full xl:w-1/2 2xl:gap-12">
-              <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
+              <h2 className="text-xl dark:text-black lg:text-3xl 2xl:text-5xl">
                 {slide.description}
               </h2>
-              <h1 className="text-5xl font-semibold lg:text-6xl 2xl:text-8xl">
+              <h1 className="text-5xl font-semibold dark:text-black lg:text-6xl 2xl:text-8xl">
                 {slide.title}
               </h1>
               <Link href={slide.url}>

@@ -20,6 +20,6 @@ export const authRoutes = [
   "/auth/reset-password",
 ];
 
-export const apiAuthPrefix = "/api/auth";
+export const apiAuthPrefix = ["/api/auth", "/api/product"];
 
 export const DEFAULT_LOGIN_REDIRECT = "/profile/dashboard";
