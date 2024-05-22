@@ -1,4 +1,4 @@
-import { Product } from "../../../types/product";
+import { Product } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";

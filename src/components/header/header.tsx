@@ -3,7 +3,6 @@ import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
-import Search from "../Search";
 import { NAV_LINKS } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { HomeIcon, MenuIcon, Phone, ShoppingBag } from "lucide-react";
@@ -11,7 +10,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import UserMenu from "../UserMenu";
 import { auth } from "@/auth";
 import ToggleCart from "../cart/ToggleCart";
-import SearchBar from "../SearchBar";
+import Search from "../Search";
 
 export default async function Header() {
   const session = await auth();
