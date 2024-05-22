@@ -1,6 +1,4 @@
 import prisma from "@/lib/prisma";
-import { GROUP_OBJECTS } from "@/utils/constants";
-import connectMongoDB from "@/utils/db/db";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {

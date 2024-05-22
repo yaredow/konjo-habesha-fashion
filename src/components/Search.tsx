@@ -7,7 +7,7 @@ import Spinner from "./Spinner";
 import Image from "next/image";
 import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Product } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
@@ -15,14 +15,14 @@ type SearchType = {
   results: Product[] | null;
   isPending: boolean;
   search: UseMutateFunction<any, Error, void, unknown>;
-}; // Adjust the import paths
+}; // Adjust
 
 const SearchBar = () => {
   const router = useRouter();
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
-  const { search, isPending, results } = useGetProductSearch(query);
+  const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
   const debouncedSearch = useCallback(
     debounce((query) => {
