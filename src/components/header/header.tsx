@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
@@ -12,12 +11,13 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import UserMenu from "../UserMenu";
 import { auth } from "@/auth";
 import ToggleCart from "../cart/ToggleCart";
+import SearchBar from "../SearchBar";
 
 export default async function Header() {
-  const session = await auth()
+  const session = await auth();
 
   return (
-    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-md md:px-12 ">
+    <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-sm md:px-12 ">
       <div className="flex items-center justify-between">
         <Link href="/" className="hidden p-1.5 md:flex">
           <Image
@@ -48,7 +48,7 @@ export default async function Header() {
 
         <div className="hidden gap-6 md:flex md:justify-end">
           <div className=" flex flex-row items-center gap-[1.3rem]">
-            <Search />
+            <SearchBar />
             <div className=" mt-[4px]">
               <ModeToggle />
             </div>

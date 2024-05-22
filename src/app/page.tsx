@@ -1,3 +1,4 @@
+import Slider from "@/components/Slider";
 import FeaturedProducts from "@/components/product/categories/FeaturedProducts";
 import NewArrivedProducts from "@/components/product/categories/NewArrivedProducts";
 import NewCollection from "@/components/product/categories/NewCollection";
@@ -8,7 +9,8 @@ export default function page() {
   return (
     <div className=" flex flex-col md:gap-16">
       <div>
-        <NewCollection />
+        <Slider />
+        {/* <NewCollection /> */}
         <NewArrivedProducts />
         <FeaturedProducts />
       </div>
