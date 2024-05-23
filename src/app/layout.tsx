@@ -6,7 +6,6 @@ import {
   Plus_Jakarta_Sans,
 } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import StoreProvider from "@/lib/providers/StoreProvider";
 import { ThemeProvider } from "@/lib/providers/ThemeProvider";
@@ -14,6 +13,7 @@ import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
+import Header from "@/components/header/Header";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
