@@ -185,7 +185,7 @@ export default function page() {
                             {product.name}
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline">Draft</Badge>
+                            <Badge variant="outline">{product.status}</Badge>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {formatCurrency(product.price)}
