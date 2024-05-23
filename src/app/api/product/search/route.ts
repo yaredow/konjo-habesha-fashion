@@ -1,6 +1,4 @@
 import prisma from "@/lib/prisma";
-import { Product } from "@prisma/client";
-import { result } from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
