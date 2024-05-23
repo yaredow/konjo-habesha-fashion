@@ -11,7 +11,7 @@ import { useCallback, useState } from "react";
 import { Product } from "@prisma/client";
 import { Input } from "./ui/input";
 
-type SearchType = {
+export type SearchType = {
   results: Product[] | null;
   isPending: boolean;
   search: UseMutateFunction<any, Error, void, unknown>;
@@ -22,7 +22,11 @@ export default function Search() {
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
-  const { search, isPending, results }: SearchType = useGetProductSearch(query);
+  const {
+    search,
+    isPending,
+    results = [],
+  }: SearchType = useGetProductSearch(query);
 
   const debouncedSearch = useCallback(debounce(search, 400), [search]);
 
@@ -42,6 +46,11 @@ export default function Search() {
     setOpen(false);
   };
 
+  const handleViewAllResults = () => {
+    router.push(`/search?query=${query}`);
+    setOpen(false);
+  };
+
   return (
     <div className="relative w-full">
       <div className="relative ml-auto flex-1 md:grow-0">
@@ -58,7 +67,7 @@ export default function Search() {
         <div className=" absolute left-0 right-0 mt-2 w-full rounded-lg border  bg-background p-4 shadow-md">
           {isPending && <Spinner />}
           {!isPending && results?.length === 0 && <div>No results found.</div>}
-          {results?.length > 0 && (
+          {results?.length! > 0 && (
             <div>
               {results?.slice(0, 6).map((result) => (
                 <div
@@ -76,8 +85,11 @@ export default function Search() {
                 </div>
               ))}
 
-              {results?.length > 6 && (
-                <div className="mt-4 flex cursor-pointer items-center justify-between p-2 text-sm hover:bg-gray-100 ">
+              {results?.length! > 6 && (
+                <div
+                  onClick={handleViewAllResults}
+                  className="mt-4 flex cursor-pointer items-center justify-between p-2 text-sm hover:bg-gray-100 "
+                >
                   <p>
                     Search for <span className="italic">{query}</span>
                   </p>
