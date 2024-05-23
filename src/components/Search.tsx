@@ -9,36 +9,28 @@ import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Product } from "@prisma/client";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 type SearchType = {
   results: Product[] | null;
   isPending: boolean;
   search: UseMutateFunction<any, Error, void, unknown>;
-}; // Adjust
+};
 
-const SearchBar = () => {
+export default function Search() {
   const router = useRouter();
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
-  const debouncedSearch = useCallback(
-    debounce((query) => {
-      search(query);
-    }, 400),
-    [search],
-  );
+  const debouncedSearch = useCallback(debounce(search, 400), [search]);
 
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleValueChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const value = evt.target.value;
     setQuery(value);
     if (value) {
       setOpen(true);
-      debouncedSearch(value);
-    } else {
-      setOpen(false);
+      debouncedSearch();
     }
   };
 
@@ -47,37 +39,22 @@ const SearchBar = () => {
     setOpen(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (query) {
-      router.push(`/list?name=${query}`);
-    }
-  };
-
   return (
     <div className="relative w-full">
-      <form
-        className="flex flex-1 items-center justify-between gap-4 rounded-md bg-gray-100 p-2"
-        onSubmit={handleSubmit}
-      >
+      <div className="flex flex-1 items-center justify-between gap-4 rounded-md bg-gray-100 p-2">
         <input
           type="text"
           name="name"
           placeholder="Search"
           value={query}
           onChange={handleValueChange}
-          className="flex-1 rounded-md bg-transparent outline-none focus:w-full"
+          className="flex-1 rounded-md bg-transparent outline-none"
         />
-        <button type="submit" className="cursor-pointer">
-          <SearchIcon className="h-[20px] w-[20px]" />
-        </button>
-      </form>
+        <SearchIcon className="h-[20px] w-[20px] cursor-pointer" />
+      </div>
 
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div />
-        </PopoverTrigger>
-        <PopoverContent className="mt-2 w-full rounded-lg border border-gray-200 bg-white p-4 shadow-md">
+      {open && (
+        <div className="absolute left-0 right-0 mt-2 w-full rounded-lg border border-gray-200 bg-white p-4 shadow-md">
           {isPending && <Spinner />}
           {!isPending && results?.length === 0 && <div>No results found.</div>}
           {results?.length > 0 && (
@@ -99,10 +76,8 @@ const SearchBar = () => {
               ))}
             </div>
           )}
-        </PopoverContent>
-      </Popover>
+        </div>
+      )}
     </div>
   );
-};
-
-export default SearchBar;
+}

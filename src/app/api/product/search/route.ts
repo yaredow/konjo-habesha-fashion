@@ -1,10 +1,10 @@
 import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
+import { result } from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const text = request.nextUrl.searchParams.get("text");
-  console.log(text);
 
   if (!text || text.trim() === "") {
     return NextResponse.json(
@@ -49,7 +49,9 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    return NextResponse.json({ results: results }, { status: 200 });
+    console.log(results);
+
+    return NextResponse.json({ results }, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

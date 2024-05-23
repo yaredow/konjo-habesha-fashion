@@ -9,7 +9,6 @@ async function fetchSearchProducts(query: string) {
   );
 
   console.log(data.results);
-
   return data.results;
 }
 

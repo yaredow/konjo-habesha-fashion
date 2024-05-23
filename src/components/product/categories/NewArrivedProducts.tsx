@@ -1,10 +1,9 @@
 import { fetchProductsWithCategory } from "@/server/actions/product/fetchProductsWithCatagory";
 import ProductItem from "../ProductItem";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
-import { Product } from "@prisma/client";
 
 export default async function NewArrivedProducts() {
-  const data = await fetchProductsWithCategory("new-arrival");
+  const data = await fetchProductsWithCategory("trending");
 
   return (
     <div className="mt-[5rem]">
