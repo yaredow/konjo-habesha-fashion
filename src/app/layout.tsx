@@ -13,7 +13,7 @@ import { AuthProvider } from "@/lib/providers/AuthProvider";
 import QueryProviders from "@/lib/providers/QueryProvider";
 import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
-import Header from "@/components/header/Header";
+import Header from "@/components/header";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
