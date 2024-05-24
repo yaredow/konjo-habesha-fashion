@@ -40,12 +40,13 @@ export async function authenticate(
     return { error: "Email is not available" };
   }
 
-  if (!existingUser.emailVerified) {
+  if (!existingUser.emailVerified && existingUser.name) {
     const verificationToken = await generateVerificationToken(email);
 
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token,
+      existingUser.name,
     );
 
     return { success: "Verification email sent" };
