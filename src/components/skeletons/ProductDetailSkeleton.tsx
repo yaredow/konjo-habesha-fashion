@@ -33,7 +33,6 @@ function ProductDetailSkeleton() {
             <div className="h-4 w-full bg-gray-200" />
           </div>
 
-          {/* Category */}
           <div className=" flex flex-col gap-4">
             <div className="h-4 w-full bg-gray-200" />
             <div className="h-4 w-full bg-gray-200" />{" "}
