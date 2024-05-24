@@ -3,10 +3,10 @@
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { SORT_OPTIONS } from "@/lib/utils/constants";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
+import { SORT_OPTIONS } from "@/utils/constants";
 
 function SortBy() {
   const [filter, setFilter] = useState({
