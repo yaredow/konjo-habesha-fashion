@@ -10,7 +10,7 @@ const nextConfig = {
   transpilePackages: ["lucid-react"],
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
 };
 
 export default nextConfig;
