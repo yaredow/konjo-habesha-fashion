@@ -30,14 +30,14 @@ export async function GET(request: NextRequest) {
       cursor: {},
     });
 
-    const { firstBatch } = response.cursor;
-
-    if (!response) {
+    if (!response || !response.cursor) {
       return NextResponse.json(
         { message: "No results found" },
         { status: 404 },
       );
     }
+
+    const { firstBatch }: any = response.cursor;
 
     const results = firstBatch.map((item: any) => {
       return {
@@ -46,8 +46,6 @@ export async function GET(request: NextRequest) {
         _id: undefined,
       };
     });
-
-    console.log(results);
 
     return NextResponse.json({ results }, { status: 200 });
   } catch (err) {
