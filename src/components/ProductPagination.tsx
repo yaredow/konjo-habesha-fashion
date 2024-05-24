@@ -42,8 +42,8 @@ function ProductPagination({
           <PaginationItem>
             <PaginationPrevious href="#" onClick={handleClickPrev} />
           </PaginationItem>
-          {pages.map((page) => (
-            <PaginationItem>
+          {pages.map((page, index) => (
+            <PaginationItem key={index}>
               <PaginationLink
                 href="#"
                 className={`${currentPage === page ? " rounded-m" : null}`}

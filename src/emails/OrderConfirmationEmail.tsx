@@ -49,7 +49,7 @@ export default function OrderConfirmationEmail({
             <Text className="text-lg">Order Confirmation</Text>
             <Text className="text-normal">Dear {customerName},</Text>
             <Text className="text-normal">
-              Thank you for your order! We&aposre excited to let you know that
+              Thank you for your order! We&apos;re excited to let you know that
               your order has been successfully placed. Here are the details of
               your purchase:
             </Text>

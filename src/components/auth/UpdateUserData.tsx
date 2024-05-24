@@ -13,7 +13,7 @@ export default async function UpdateUserData() {
       <CardHeader>
         <CardTitle className=" tracking-normal">Account</CardTitle>
         <CardDescription>
-          Make changes to your account here. Click save when you're done.
+          Make changes to your account here. Click save when you&apos;re done.
         </CardDescription>
         <CardContent>
           <div className="grid gap-4">
