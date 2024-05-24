@@ -43,7 +43,7 @@ const options = [
   { value: "XXL", label: "Double Extra Large" },
 ];
 
-function page() {
+export default function CreateProduct() {
   const [images, setImages] = useState([]);
   console.log(images);
 
@@ -210,5 +210,3 @@ function page() {
     </main>
   );
 }
-
-export default page;

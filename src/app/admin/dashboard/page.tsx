@@ -68,7 +68,7 @@ export default function Dashboard() {
       );
       setTotalRevenue(revenue);
     }
-  }, [orders, products]);
+  }, [orders, products, isOrdersFetched, isProductsFetched]);
 
   if (!isClient) return null;
 

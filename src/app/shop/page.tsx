@@ -12,7 +12,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/utils/cn";
 import EmptyState from "@/components/product/EmptyState";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 
@@ -35,7 +34,7 @@ import {
 } from "@/utils/constants";
 import { Product } from "@prisma/client";
 
-function Page() {
+export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
@@ -55,7 +54,7 @@ function Page() {
   const onSubmit = () => refetch();
 
   const debouncedSubmit = debounce(onSubmit, 400);
-  const _debouncedSubmit = useCallback(debouncedSubmit, []);
+  const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-4">
@@ -156,5 +155,3 @@ function Page() {
     </main>
   );
 }
-
-export default Page;

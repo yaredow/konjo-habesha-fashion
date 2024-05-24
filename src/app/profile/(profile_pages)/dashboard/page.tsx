@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { formatName } from "@/utils/formatName";
 
-export default async function page() {
+export default async function Page() {
   const session = await auth();
   const user = session?.user;
   return (

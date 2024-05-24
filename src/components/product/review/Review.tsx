@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import React, { useTransition } from "react";
+import { useCallback, useTransition } from "react";
 import { cn } from "@/utils/cn";
 import {
   DropdownMenu,
@@ -49,7 +49,7 @@ export default function UserReview({ review, refetch }: ReviewProps) {
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
-  const _debouncedSubmit = React.useCallback(debouncedSubmit, []);
+  const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   const handleReviewLikeOrDislike = async (action: "like" | "dislike") => {
     if (!user) {

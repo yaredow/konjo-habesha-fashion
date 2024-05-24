@@ -10,7 +10,7 @@ import { SearchIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function page() {
+export default function Page() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("query");
   const [query, setQuery] = useState<string>(initialQuery || "");

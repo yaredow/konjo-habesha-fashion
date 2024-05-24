@@ -48,7 +48,7 @@ type ProductType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-function ProductDetail({ params }: { params: { id: string } }) {
+export default function ProductDetail({ params }: { params: { id: string } }) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [cartFilter, setCartFilter] = React.useState<CartItem | null>(null);
   const { id } = params;
@@ -236,7 +236,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     </SelectTrigger>
                     <SelectContent className="">
                       {Array.from({ length: 8 }).map((_, index) => (
-                        <SelectItem value={(index + 1).toString()}>
+                        <SelectItem key={index} value={(index + 1).toString()}>
                           {index + 1}
                         </SelectItem>
                       ))}
@@ -330,7 +330,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     <Spinner />
                   ) : (
                     reviews.map((review) => (
-                      <li>
+                      <li key={review.id}>
                         <UserReview refetch={refetchReviews} review={review} />
                       </li>
                     ))
@@ -344,5 +344,3 @@ function ProductDetail({ params }: { params: { id: string } }) {
     </section>
   );
 }
-
-export default ProductDetail;

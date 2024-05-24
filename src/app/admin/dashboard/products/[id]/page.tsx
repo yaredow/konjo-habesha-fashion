@@ -72,7 +72,7 @@ type EditProductType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export default function page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const [isLoading, startTransition] = useTransition();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [productDetails, setProductDetails] = React.useState<Product | null>(
@@ -157,7 +157,7 @@ export default function page({ params }: { params: { id: string } }) {
         ...product,
       });
     }
-  }, [!isFetched, product]);
+  }, [isFetched, product]);
 
   if (!isFetched) return <Spinner />;
 
@@ -469,7 +469,7 @@ export default function page({ params }: { params: { id: string } }) {
                       />
                       <div className="grid grid-cols-3 gap-2">
                         {product.images.map((image, index) => (
-                          <AlertDialog>
+                          <AlertDialog key={index}>
                             <AlertDialogTrigger>
                               <button
                                 key={index}

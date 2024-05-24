@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect } from "react";
 
-function error({
+export default function Page({
   error,
   reset,
 }: {
@@ -33,5 +33,3 @@ function error({
     </div>
   );
 }
-
-export default error;

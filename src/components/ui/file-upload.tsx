@@ -148,7 +148,7 @@ export const FileUploader = forwardRef<
           setActiveIndex(-1);
         }
       },
-      [value, activeIndex, removeFileFromSet],
+      [value, activeIndex, removeFileFromSet, direction],
     );
 
     const onDrop = useCallback(

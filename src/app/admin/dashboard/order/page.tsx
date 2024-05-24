@@ -44,7 +44,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useGetOrders from "@/utils/hook/useGetOrders";
-import React, { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { cn } from "@/utils/cn";
 import _ from "lodash";
@@ -82,18 +82,18 @@ export type FilterType = {
   time_range: string;
 };
 
-function page() {
-  const [isClient, setIsClient] = React.useState<boolean>(false);
-  const [isSelected, setIsSelected] = React.useState<boolean>(false);
-  const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
-  const [monthlyTotalSales, setMonthlyTotalSales] = React.useState<number>(0);
-  const [weeklyTotalSales, setWeeklyTotalSales] = React.useState<number>(0);
-  const [filter, setFilter] = React.useState<FilterType | null>({
+export default function Page() {
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [monthlyTotalSales, setMonthlyTotalSales] = useState<number>(0);
+  const [weeklyTotalSales, setWeeklyTotalSales] = useState<number>(0);
+  const [filter, setFilter] = useState<FilterType | null>({
     delivery_status: "all",
     time_range: "week",
   });
 
-  const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const {
     orders = [],
@@ -127,10 +127,10 @@ function page() {
   // Limiting the request that will be send to the server
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
-  const _debouncedSubmit = useCallback(debouncedSubmit, []);
+  const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   // hydration error handling effetct and more
-  React.useEffect(() => {
+  useEffect(() => {
     if (isFetched && orders.length > 0) {
       setSelectedOrder(orders[0]);
     }
@@ -145,7 +145,7 @@ function page() {
 
     displayTotalSales();
     setIsClient(true);
-  }, [orders, isSelected]);
+  }, [orders, isSelected, isFetched]);
 
   if (!isClient) return null;
 
@@ -287,6 +287,7 @@ function page() {
                     ) : (
                       orders.map((order: Order) => (
                         <TableRow
+                          key={order.id}
                           onClick={() => handleOrderClick(order)}
                           className={cn({
                             "bg-accent":
@@ -514,5 +515,3 @@ function page() {
     </main>
   );
 }
-
-export default page;

@@ -61,7 +61,7 @@ export type FetchProductstype = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export default function page() {
+export default function Page() {
   const [isClient, setIsClient] = React.useState(false);
   const [isLoading, startTransition] = useTransition();
   const { products = [], isFetched, refetch } = useGetProducts();

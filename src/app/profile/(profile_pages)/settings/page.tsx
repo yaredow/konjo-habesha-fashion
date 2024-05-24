@@ -3,7 +3,7 @@ import UpdatePasswordForm from "@/components/forms/UpdatePasswordForm";
 import UpdateUserDataForm from "@/components/forms/UpdateUserDataForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default async function setting() {
+export default async function Page() {
   return (
     <div className="mx-8 items-center justify-center md:mx-20 md:my-12">
       <Tabs defaultValue="account" className=" my-4">

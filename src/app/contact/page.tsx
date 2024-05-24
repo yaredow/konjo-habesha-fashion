@@ -1,7 +1,7 @@
 import CardWrapper from "@/components/auth/CardWrapper";
 import ContactUsForm from "@/components/forms/ContactUsForm";
 
-function page() {
+export default function Page() {
   return (
     <main className="my-auto flex min-h-[85vh] items-center justify-center">
       <CardWrapper
@@ -18,5 +18,3 @@ function page() {
     </main>
   );
 }
-
-export default page;

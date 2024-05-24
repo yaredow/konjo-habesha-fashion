@@ -31,7 +31,7 @@ export default function VerifiyEmailForm() {
         console.error(err);
         setError("Something went wrong");
       });
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     onSubmit();

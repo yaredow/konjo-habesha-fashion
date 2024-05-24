@@ -46,7 +46,7 @@ export default function ContactUsEmail({
               reference:
             </Text>
             <Section className="my-4 rounded-lg bg-gray-100 p-4">
-              <Text className="text-normal italic">"{message}"</Text>
+              <Text className="text-normal italic">{message}</Text>
             </Section>
             <Text className="text-normal">
               If you have any additional information to provide or if you need
