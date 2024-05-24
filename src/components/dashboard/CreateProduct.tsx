@@ -67,9 +67,10 @@ export default function CreateProduct() {
 
   const onSubmit = async (values: z.infer<typeof CreateProductFormSchema>) => {
     const formData = new FormData();
-    for (const key in values) {
-      formData.append(key, values[key]);
-    }
+
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value as string | Blob);
+    });
 
     if (files) {
       for (const file of files) {

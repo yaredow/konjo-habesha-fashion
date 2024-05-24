@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DebouncedFunc } from "lodash";
 
 import { SetStateAction } from "react";
 import { QueryObserverResult } from "@tanstack/react-query";
