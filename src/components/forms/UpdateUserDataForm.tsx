@@ -19,10 +19,7 @@ import SubmitButton from "../SubmitButton";
 import { useSession } from "next-auth/react";
 import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
-
-const initialState = {
-  message: "",
-};
+import { toast } from "@/components/ui/use-toast";
 
 export default function UpdateUserDataForm() {
   const [isLoading, startTransition] = useTransition();
@@ -43,7 +40,18 @@ export default function UpdateUserDataForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      updateUserData(values);
+      updateUserData(values).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.success,
+          });
+        } else {
+          toast({
+            description: data.error,
+            variant: "destructive",
+          });
+        }
+      });
     });
   };
 

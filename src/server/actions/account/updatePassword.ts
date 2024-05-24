@@ -1,25 +1,20 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { revalidatePath } from "next/cache";
-import { FormState } from "../../../../types/product";
 import { UpdatePasswordFormSchema } from "@/utils/validators/form-validators";
 import prisma from "@/lib/prisma";
-import { auth } from "@/auth";
+import { z } from "zod";
+import { ErrorAndSuccessType } from "./authenticate";
 
 export async function updatePasswordAction(
-  prevState: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const validatedFields = UpdatePasswordFormSchema.safeParse({
-    currentPassword: formData.get("currentPassword"),
-    newPassword: formData.get("newPassword"),
-    passwordConfirm: formData.get("passwordConfirm"),
-  });
+  values: z.infer<typeof UpdatePasswordFormSchema>,
+  userId: string,
+): Promise<ErrorAndSuccessType> {
+  const validatedFields = UpdatePasswordFormSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return {
-      message: "invalid form data",
+      error: "invalid form data",
     };
   }
 
@@ -27,27 +22,33 @@ export async function updatePasswordAction(
     validatedFields.data;
 
   try {
-    const session = await auth();
-    const user = session?.user;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
 
-    if (!user) {
-      throw new Error("Unauthorized access");
+    if (!user || !user.password) {
+      return { error: "Unauthorized access" };
     }
 
-    const isCorrectPasswod = await bcrypt.compare(
-      currentPassword as string,
-      user.email,
+    const isCorrectPassword = await bcrypt.compare(
+      currentPassword,
+      user.password,
     );
 
-    if (!isCorrectPasswod) {
-      return {
-        message: "Passwords do not match",
-      };
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    if (isCorrectPassword) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          password: hashedPassword,
+        },
+      });
     }
 
-    revalidatePath("/");
-    return { message: "success" };
+    return { success: "Password updated successfully" };
   } catch (err) {
-    return { message: "Changing user password failed" };
+    console.error(err);
+    throw err;
   }
 }
