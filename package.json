@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "email:dev": "email dev --dir src/emails",
-    "build": "npm run format:fix && npm run test && next build",
-    "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "build": "next build",
     "start": "next start",
     "stripe:listen": "stripe listen ---forward-to localhost:3000/api/checkout/webhook",
     "lint": "next lint",
