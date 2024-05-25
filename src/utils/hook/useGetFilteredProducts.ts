@@ -12,8 +12,6 @@ async function fetchFilteredProducts(filter: ProductFilter) {
     },
   });
 
-  console.log(data);
-
   return data;
 }
 
