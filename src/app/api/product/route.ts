@@ -4,11 +4,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  console.log(body.filter);
 
   try {
-    const { sort, price, size, category } = ProductFilterValidator.parse(
-      body.filter,
-    );
+    const validatedFields = ProductFilterValidator.safeParse({
+      ...body.filter,
+    });
+
+    if (!validatedFields.success) {
+      return NextResponse.json({
+        Message: validatedFields.error.flatten().fieldErrors,
+      });
+    }
+
+    const { size, sort, category, price } = validatedFields.data;
 
     let orderBy: any = {};
 

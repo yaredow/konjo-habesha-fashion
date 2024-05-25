@@ -1,19 +1,19 @@
 import { z } from "zod";
-import {
-  AVAILABLE_CATEGORY,
-  AVAILABLE_SIZES,
-  AVAILABLE_SORT,
-} from "../constants";
 
-const SizeEnum = z.enum(AVAILABLE_SIZES);
-const SortEnum = z.enum(AVAILABLE_SORT);
-const CategoryEnum = z.enum(AVAILABLE_CATEGORY);
+const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"] as const;
+const AVAILABLE_SORT = [
+  "none",
+  "price-asc",
+  "price-desc",
+  "name-asc",
+  "name-desc",
+] as const;
+const AVAILABLE_CATEGORY = ["All", "Male", "Female", "Kids"] as const;
 
-// Define the validator using the created enums
 export const ProductFilterValidator = z.object({
-  size: z.array(SizeEnum),
-  sort: SortEnum,
-  category: CategoryEnum,
+  size: z.array(z.enum(AVAILABLE_SIZES)),
+  sort: z.enum(AVAILABLE_SORT),
+  category: z.enum(AVAILABLE_CATEGORY),
   price: z.object({
     isCustom: z.boolean(),
     range: z.tuple([z.number(), z.number()]),

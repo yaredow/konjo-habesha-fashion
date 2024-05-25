@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import EmptyState from "@/components/product/EmptyState";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
-
 import debounce from "lodash.debounce";
 import ProductFilter from "@/components/product/shop/ProductFilter";
 import {
@@ -27,12 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FaSortAlphaDown } from "react-icons/fa";
 import useGetFilteredProducts from "@/utils/hook/useGetFilteredProducts";
-import {
-  AVAILABLE_SIZES,
-  DEFAULT_CUSTOM_PRICE,
-  ITEMS_PERPAGE,
-  SORT_OPTIONS,
-} from "@/utils/constants";
+import { ITEMS_PERPAGE, SORT_OPTIONS } from "@/utils/constants";
 import { Product } from "@prisma/client";
 import { ProductFilter as ProductFilterType } from "@/utils/validators/product-validators";
 
@@ -48,6 +42,7 @@ export default function Page() {
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
   const [filter, setFilter] = useState(initialFilter);
+  console.log(filter);
 
   const { products, refetch } = useGetFilteredProducts(filter);
   const currentItems = products?.slice(firstItemIndex, lastItemIndex);
