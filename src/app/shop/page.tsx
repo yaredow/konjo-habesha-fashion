@@ -28,25 +28,26 @@ import { Button } from "@/components/ui/button";
 import { FaSortAlphaDown } from "react-icons/fa";
 import useGetFilteredProducts from "@/utils/hook/useGetFilteredProducts";
 import {
+  AVAILABLE_SIZES,
   DEFAULT_CUSTOM_PRICE,
   ITEMS_PERPAGE,
   SORT_OPTIONS,
 } from "@/utils/constants";
 import { Product } from "@prisma/client";
+import { ProductFilter as ProductFilterType } from "@/utils/validators/product-validators";
+
+const initialFilter: ProductFilterType = {
+  size: ["S", "L", "M", "XL", "XXL"],
+  sort: "none",
+  category: "All",
+  price: { isCustom: false, range: [0, 100] },
+};
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
-  const [filter, setFilter] = useState({
-    price: {
-      isCustom: false,
-      range: DEFAULT_CUSTOM_PRICE,
-    },
-    size: ["L", "M", "S", "XL", "XXL"],
-    category: "All",
-    sort: "none",
-  });
+  const [filter, setFilter] = useState(initialFilter);
 
   const { products, refetch } = useGetFilteredProducts(filter);
   const currentItems = products?.slice(firstItemIndex, lastItemIndex);

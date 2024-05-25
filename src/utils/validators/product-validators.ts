@@ -4,18 +4,25 @@ import {
   AVAILABLE_SIZES,
   AVAILABLE_SORT,
 } from "../constants";
-import Product from "../../../types/product";
 
+const SizeEnum = z.enum(AVAILABLE_SIZES);
+const SortEnum = z.enum(AVAILABLE_SORT);
+const CategoryEnum = z.enum(AVAILABLE_CATEGORY);
+
+// Define the validator using the created enums
 export const ProductFilterValidator = z.object({
-  size: z.array(z.enum(AVAILABLE_SIZES)),
-  sort: z.enum(AVAILABLE_SORT),
-  category: z.enum(AVAILABLE_CATEGORY),
-  price: z.tuple([z.number(), z.number()]),
+  size: z.array(SizeEnum),
+  sort: SortEnum,
+  category: CategoryEnum,
+  price: z.object({
+    isCustom: z.boolean(),
+    range: z.tuple([z.number(), z.number()]),
+  }),
 });
 
-export type ProductState = Omit<
-  z.infer<typeof ProductFilterValidator>,
-  "price"
-> & {
-  price: { isCustom: boolean; range: [number, number] };
-};
+export type ProductFilter = z.infer<typeof ProductFilterValidator>;
+
+export type FilterOptions = keyof Omit<
+  ProductFilter,
+  "price" | "sort" | "category"
+>;

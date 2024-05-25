@@ -10,20 +10,22 @@ import { DebouncedFunc } from "lodash";
 
 import { SetStateAction } from "react";
 import { QueryObserverResult } from "@tanstack/react-query";
-import { ProductState } from "@/utils/validators/product-validators";
 import {
+  AVAILABLE_SIZES,
   DEFAULT_CUSTOM_PRICE,
   FILTER_OPTIONS,
   PRICE_FILTERS,
   SIZE_FILTERS,
 } from "@/utils/constants";
+import {
+  FilterOptions,
+  ProductFilter as ProductFilterType,
+} from "@/utils/validators/product-validators";
 
 interface ProductFilterProps {
-  filter: ProductState;
-  setFilter: React.Dispatch<SetStateAction<ProductState>>;
-  _debouncedSubmit: DebouncedFunc<
-    () => Promise<QueryObserverResult<any, Error>>
-  >;
+  filter: ProductFilterType;
+  setFilter: React.Dispatch<React.SetStateAction<ProductFilterType>>;
+  _debouncedSubmit: () => void;
 }
 
 function ProductFilter({
@@ -38,23 +40,29 @@ function ProductFilter({
     category,
     value,
   }: {
-    category: keyof Omit<typeof filter, "price" | "sort" | "category">;
-    value: string;
+    category: FilterOptions;
+    value: (typeof AVAILABLE_SIZES)[number];
   }) => {
-    const isFilterApplied = filter[category].includes(value as never);
+    const isFilterApplied = (
+      filter[category] as (typeof AVAILABLE_SIZES)[number][]
+    ).includes(value);
 
     if (isFilterApplied) {
       setFilter((prev) => ({
         ...prev,
-        [category]: prev[category].filter((v) => v !== value),
+        [category]: (
+          prev[category] as (typeof AVAILABLE_SIZES)[number][]
+        ).filter((v) => v !== value),
       }));
     } else {
       setFilter((prev) => ({
         ...prev,
-        [category]: [...prev[category], value],
+        [category]: [
+          ...(prev[category] as (typeof AVAILABLE_SIZES)[number][]),
+          value,
+        ],
       }));
     }
-
     _debouncedSubmit();
   };
   return (

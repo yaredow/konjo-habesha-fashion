@@ -94,15 +94,15 @@ export const PRICE_FILTERS = {
   ],
 } as const;
 
-export const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"];
-export const AVAILABLE_CATEGORY = ["All", "Male", "Female", "Kids"];
+export const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"] as const;
+export const AVAILABLE_CATEGORY = ["All", "Male", "Female", "Kids"] as const;
 export const AVAILABLE_SORT = [
   "none",
   "price-asc",
   "price-desc",
   "name-asc",
   "name-desc",
-];
+] as const;
 export const DEFAULT_CUSTOM_PRICE = [0, 600] as [number, number];
 
 export const PRODUCT_STATUS_OPTIONS = [

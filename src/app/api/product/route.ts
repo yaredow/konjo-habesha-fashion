@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
       filter = { ...filter, category };
     }
 
+    console.log(filter);
     let products;
 
     if (Object.keys(filter).length > 0) {
