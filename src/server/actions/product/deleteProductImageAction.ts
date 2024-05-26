@@ -7,11 +7,8 @@ export async function deleteProductImageAction(
   public_id: string,
   product_id: string,
 ) {
-  console.log("public_id:", public_id);
   try {
     const cloudinaryResult = await cloudinary.uploader.destroy(public_id);
-
-    console.log("cloudinary result:", cloudinaryResult);
 
     if (cloudinaryResult.result === "ok") {
       const product = await prisma.product.findUnique({

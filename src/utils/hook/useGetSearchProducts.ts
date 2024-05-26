@@ -8,7 +8,6 @@ async function fetchSearchProducts(query: string) {
     `https://konjo-habesha-fashion.vercel.app/api/product/search?text=${query}`,
   );
 
-  console.log(data.results);
   return data.results;
 }
 

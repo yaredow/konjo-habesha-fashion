@@ -45,7 +45,6 @@ const options = [
 
 export default function CreateProduct() {
   const [images, setImages] = useState([]);
-  console.log(images);
 
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,7 +77,6 @@ export default function CreateProduct() {
         description: data.message,
       });
     } else {
-      console.log(data.message);
     }
   };
 

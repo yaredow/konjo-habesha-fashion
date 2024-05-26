@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  console.log(body.filter);
 
   try {
     const validatedFields = ProductFilterValidator.safeParse({
@@ -48,7 +47,6 @@ export async function POST(request: NextRequest) {
       filter = { ...filter, category };
     }
 
-    console.log(filter);
     let products;
 
     if (Object.keys(filter).length > 0) {

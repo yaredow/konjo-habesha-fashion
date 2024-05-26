@@ -9,7 +9,6 @@ export async function editProductAction(
 ): Promise<ErrorAndSuccessType> {
   try {
     const { id, ...updateData } = productDetails;
-    console.log(updateData);
     const product = await prisma.product.update({
       where: { id },
       data: {

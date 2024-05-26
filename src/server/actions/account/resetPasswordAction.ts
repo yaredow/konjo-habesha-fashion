@@ -18,8 +18,6 @@ export async function resetPasswordAction(
 
   const validatedFields = ResetPasswordFormSchema.safeParse(values);
 
-  console.log(validatedFields.success);
-
   if (!validatedFields.success) {
     return { error: "Invalid data" };
   }

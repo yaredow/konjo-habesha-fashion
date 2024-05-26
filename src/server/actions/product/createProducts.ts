@@ -31,11 +31,8 @@ export async function createProductAction(
     };
   }
 
-  console.log(validatedFields.data);
-
   try {
     const { uploadedImages } = await uploadProductImagesAction(images);
-    console.log(uploadedImages);
 
     const newProduct = await prisma.product.create({
       data: {

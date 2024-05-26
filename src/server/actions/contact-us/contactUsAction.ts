@@ -11,7 +11,6 @@ export async function contactUsAction(
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = ContactUsFromSchema.safeParse(values);
 
-  console.log(validatedFields);
   if (!validatedFields.success) {
     return { error: "Invalid data" };
   }

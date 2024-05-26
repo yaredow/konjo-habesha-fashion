@@ -28,8 +28,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(reviews);
-
     if (!reviews) {
       return NextResponse.json(
         { message: "There are no reviews" },

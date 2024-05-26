@@ -7,7 +7,6 @@ export async function updateProductStats(formData: FormData) {
   const customer = JSON.parse(formData.get("customer") as string);
 
   const items = JSON.parse(customer.metadata.cart);
-  console.log(items);
 
   await Promise.all(
     items.map(async (item: CartItem) => {
