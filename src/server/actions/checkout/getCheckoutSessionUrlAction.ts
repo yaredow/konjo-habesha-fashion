@@ -91,8 +91,9 @@ export async function getCheckoutSessionUrlAction(formData: FormData) {
     line_items: lineItems,
     mode: "payment",
     customer: customer.id,
-    success_url: `${process.env.HOST}/checkout/checkout-success`,
-    cancel_url: `${process.env.HOST}/cart`,
+    success_url:
+      "https://konjo-habesha-fashion.vercel.app/checkout/checkout-success",
+    cancel_url: "https://konjo-habesha-fashion.vercel.app/cart",
   });
 
   const { url } = session;
