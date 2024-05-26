@@ -42,7 +42,6 @@ export default function Page() {
   const lastItemIndex = currentPage * ITEMS_PERPAGE;
   const firstItemIndex = lastItemIndex - ITEMS_PERPAGE;
   const [filter, setFilter] = useState(initialFilter);
-  console.log(filter);
 
   const { products, refetch } = useGetFilteredProducts(filter);
   const currentItems = products?.slice(firstItemIndex, lastItemIndex);

@@ -3,6 +3,7 @@ export const publicRoutes = [
   "/contact",
   "/cart",
   "/shop",
+  "/product*",
   "/auth/new-verification",
   "/admin",
   "/admin/dashboard",
@@ -10,6 +11,7 @@ export const publicRoutes = [
   "/admin/dashboard/user",
   "/admin/dashboard/order",
   "/api/stripe/webhook",
+  "/",
 ];
 
 export const authRoutes = [
