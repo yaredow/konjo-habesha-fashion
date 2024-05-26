@@ -18,14 +18,17 @@ export default auth((req) => {
     nextUrl.pathname.startsWith(apiPrefix),
   );
 
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.some((publicRoute) => {
+    if (publicRoute.endsWith("*")) {
+      const baseRoute = publicRoute.slice(0, -1);
+      return nextUrl.pathname.startsWith(baseRoute);
+    }
+    return nextUrl.pathname === publicRoute;
+  });
+
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
-    return NextResponse.next();
-  }
-
-  if (isPublicRoute) {
     return NextResponse.next();
   }
 
