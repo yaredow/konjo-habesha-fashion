@@ -4,11 +4,14 @@ import axios from "axios";
 export async function calculateTotalSales(timeRange: string) {
   const fetchOrders = async (timeRange: string) => {
     try {
-      const response = await axios.post("http://localhost:3000/api/order", {
-        filter: {
-          time_range: timeRange,
+      const response = await axios.post(
+        "https://konjo-habesha-fashion.vercel.app/api/order",
+        {
+          filter: {
+            time_range: timeRange,
+          },
         },
-      });
+      );
       return response.data.orders;
     } catch (err) {
       console.error("Error fetching orders:", err);

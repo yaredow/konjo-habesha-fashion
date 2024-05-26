@@ -3,12 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 async function fetchOrder(filter: FilterType) {
-  const { data } = await axios.post("http://localhost:3000/api/admin/order", {
-    filter: {
-      delivery_status: filter.delivery_status || null,
-      time_range: filter.time_range,
+  const { data } = await axios.post(
+    "https://konjo-habesha-fashion.vercel.app/api/admin/order",
+    {
+      filter: {
+        delivery_status: filter.delivery_status || null,
+        time_range: filter.time_range,
+      },
     },
-  });
+  );
 
   return data;
 }

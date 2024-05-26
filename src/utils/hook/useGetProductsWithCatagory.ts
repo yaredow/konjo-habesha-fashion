@@ -3,7 +3,7 @@ import axios from "axios";
 
 async function fetchProductWithCategory(type: string) {
   const { data } = await axios.get(
-    `http://localhost:3000/api/product/categories/${type}`,
+    `https://konjo-habesha-fashion.vercel.app/api/product/categories/${type}`,
   );
 
   return data;
