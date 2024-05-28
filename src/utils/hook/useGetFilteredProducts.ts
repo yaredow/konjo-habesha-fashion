@@ -3,17 +3,14 @@ import axios from "axios";
 import { ProductFilter } from "../validators/product-validators";
 
 async function fetchFilteredProducts(filter: ProductFilter) {
-  const { data } = await axios.post(
-    "https://konjo-habesha-fashion.vercel.app/api/product",
-    {
-      filter: {
-        sort: filter.sort,
-        price: filter.price,
-        size: filter.size,
-        category: filter.category,
-      },
+  const { data } = await axios.post("http://localhost:3000/api/product", {
+    filter: {
+      sort: filter.sort,
+      price: filter.price,
+      size: filter.size,
+      category: filter.category,
     },
-  );
+  });
 
   return data;
 }

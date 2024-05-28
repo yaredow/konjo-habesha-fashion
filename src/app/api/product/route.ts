@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { size, sort, category, price } = validatedFields.data;
-
+    console.log(price);
+    const { range: priceRange } = price;
     let orderBy: any = {};
 
     if (sort !== "none") {
@@ -39,8 +40,8 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    if (price && Array.isArray(price)) {
-      filter = { ...filter, price: { gte: price[0], lte: price[1] } };
+    if (price && Array.isArray(priceRange)) {
+      filter = { ...filter, price: { gte: priceRange[0], lte: priceRange[1] } };
     }
 
     if (category !== "All") {

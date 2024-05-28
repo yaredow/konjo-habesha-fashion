@@ -34,7 +34,7 @@ const initialFilter: ProductFilterType = {
   size: ["S", "L", "M", "XL", "XXL"],
   sort: "none",
   category: "All",
-  price: { isCustom: false, range: [0, 100] },
+  price: { isCustom: false, range: [0, 600] },
 };
 
 export default function Page() {
