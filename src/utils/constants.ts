@@ -125,3 +125,10 @@ export const ORDER_DURATION = [
   { label: "Month", value: "month" },
   { label: "Year", value: "year" },
 ];
+
+export const AVAILABLE_ADMIN_PRODUCT_CATEGORIES = [
+  { value: "all", label: "All" },
+  { value: "active", label: "Active" },
+  { value: "draft", label: "Draft" },
+  { value: "archived", label: "Archived" },
+];

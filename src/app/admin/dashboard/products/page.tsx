@@ -15,11 +15,9 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -34,7 +32,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import CreateProduct from "@/components/dashboard/CreateProduct";
 import { Product } from "../../../../../types/product";
-import useGetProducts from "@/utils/hook/useGetProducts";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { deleteProductAction } from "@/server/actions/product/deleteProductAction";
 import Spinner from "@/components/Spinner";
@@ -50,8 +47,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
-import React, { useTransition } from "react";
+import React, { useCallback, useState, useTransition } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import { AVAILABLE_ADMIN_PRODUCT_CATEGORIES } from "@/utils/constants";
+import useGetAdminFilteredProducts from "@/utils/hook/useGetAdminFilteredProducts";
+import { debounce } from "lodash";
+import { ProductFilterType } from "@/utils/validators/product-validators";
 
 export type FetchProductstype = {
   products: Product[];
@@ -64,8 +65,20 @@ export type FetchProductstype = {
 export default function Page() {
   const [isClient, setIsClient] = React.useState(false);
   const [isLoading, startTransition] = useTransition();
-  const { products = [], isFetched, refetch } = useGetProducts();
+  const [filter, setFilter] = useState<ProductFilterType>({
+    status: "all",
+  });
+  const {
+    products = [],
+    isFetched,
+    refetch,
+  } = useGetAdminFilteredProducts(filter);
   const router = useRouter();
+  console.log(filter);
+
+  const onSubmit = () => refetch();
+  const debouncedSubmit = debounce(onSubmit, 400);
+  const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   const handleProductDelete = async (id: string) => {
     startTransition(() => {
@@ -96,46 +109,28 @@ export default function Page() {
       className={`flex min-h-screen w-full flex-col bg-muted/40 ${isLoading && "opacity-75"}`}
     >
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <Tabs defaultValue="all">
+        <Tabs
+          onValueChange={(value) => {
+            setFilter({
+              status: value,
+            });
+            _debouncedSubmit();
+          }}
+          defaultValue={filter.status}
+        >
           <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="draft">Draft</TabsTrigger>
-              <TabsTrigger value="archived" className="hidden sm:flex">
-                Archived
-              </TabsTrigger>
+            <TabsList className=" flex flex-row gap-2">
+              {AVAILABLE_ADMIN_PRODUCT_CATEGORIES.map((category, index) => (
+                <TabsTrigger key={index} value={category.value}>
+                  {category.label}
+                </TabsTrigger>
+              ))}
             </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8 gap-1">
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Filter
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Active
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-8 gap-1">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Export
-                </span>
-              </Button>
+            <div className="ml-auto flex items-center gap-6">
               <CreateProduct />
             </div>
           </div>
-          <TabsContent value="all">
+          <TabsContent value={filter.status}>
             <Card x-chunk="dashboard-06-chunk-0">
               <CardHeader>
                 <CardTitle>Products</CardTitle>
@@ -168,7 +163,7 @@ export default function Page() {
                   </TableHeader>
                   <TableBody>
                     {!isFetched ? (
-                      <Spinner className=" flex items-center justify-center" />
+                      <Spinner className="flex items-center justify-center" />
                     ) : (
                       products.map((product: Product) => (
                         <TableRow key={product.id}>
@@ -265,11 +260,17 @@ export default function Page() {
                 </Table>
               </CardContent>
               <CardFooter className={`${!isFetched && "hidden"}`}>
-                <div className="text-xs text-muted-foreground">
-                  Showing <strong>1-10</strong> of{" "}
-                  <strong>{products.length > 0 && products.length}</strong>{" "}
-                  products
-                </div>
+                {products.length > 0 ? (
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of{" "}
+                    <strong>{products.length > 0 && products.length}</strong>{" "}
+                    products
+                  </div>
+                ) : (
+                  <h1 className=" mx-auto items-center font-semibold">
+                    No product found
+                  </h1>
+                )}
               </CardFooter>
             </Card>
           </TabsContent>

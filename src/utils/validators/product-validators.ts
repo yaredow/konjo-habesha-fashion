@@ -26,3 +26,7 @@ export type FilterOptions = keyof Omit<
   ProductFilter,
   "price" | "sort" | "category"
 >;
+
+export type ProductFilterType = {
+  status: string;
+};
