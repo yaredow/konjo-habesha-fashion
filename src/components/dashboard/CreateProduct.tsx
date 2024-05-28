@@ -93,7 +93,7 @@ export default function CreateProduct() {
             });
           }
         })
-        .then((err) => {
+        .catch((err) => {
           console.error(err);
           toast({
             variant: "destructive",

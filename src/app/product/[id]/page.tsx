@@ -31,6 +31,7 @@ import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
 import RatingBreakdown from "@/components/product/review/RatingBreakdown";
 import { ProductReviewType } from "../../../../types/review";
+import Image from "next/image";
 
 type UserReviewsType = {
   reviews: ProductReviewType[];
@@ -128,7 +129,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                       },
                     )}
                   >
-                    <img
+                    <Image
                       alt={image.public_id}
                       className="object-cover"
                       height="120"
@@ -141,7 +142,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
               </div>
 
               <div className="order-first w-full md:order-last md:col-span-4">
-                <img
+                <Image
                   src={product.images[selectedPhotoIndex].url}
                   alt={product.images[selectedPhotoIndex].public_id}
                   className="w-full overflow-hidden rounded-lg border object-cover"
