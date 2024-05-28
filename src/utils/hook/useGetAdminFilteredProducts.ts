@@ -1,4 +1,3 @@
-import { Body } from "@react-email/components";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ProductFilterType } from "../validators/product-validators";
