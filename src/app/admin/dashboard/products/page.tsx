@@ -134,9 +134,7 @@ export default function Page() {
             <Card x-chunk="dashboard-06-chunk-0">
               <CardHeader>
                 <CardTitle>Products</CardTitle>
-                <CardDescription>
-                  Manage your products and view their sales performance.
-                </CardDescription>
+                <CardDescription>Products available for order</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table className={`${!isFetched && "overflow-hidden"}`}>
