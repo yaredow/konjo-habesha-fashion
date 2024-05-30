@@ -55,7 +55,7 @@ export default function UserMenu() {
           <DropdownMenuItem>
             <Link href="/profile/settings">Settings</Link>
           </DropdownMenuItem>
-          {session?.user?.role === "Admin" ? (
+          {session?.user?.role === "ADMIN" ? (
             <DropdownMenuItem>
               <Link href="/admin/dashboard">Dashboard</Link>
             </DropdownMenuItem>
