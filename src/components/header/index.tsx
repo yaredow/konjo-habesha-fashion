@@ -48,7 +48,7 @@ export default async function Header() {
               <DropdownMenuContent>
                 <DropdownMenuSeparator />
                 {AVAILABLE_CATEGORIRES.map((category, index) => (
-                  <DropdownMenuItem key={index}>
+                  <DropdownMenuItem key={index} asChild>
                     <Link href="/shop">{category}</Link>
                   </DropdownMenuItem>
                 ))}
