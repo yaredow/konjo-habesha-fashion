@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
-import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { HomeIcon, MenuIcon, Phone, ShoppingBag } from "lucide-react";
@@ -56,6 +55,7 @@ export default async function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
           <Suspense fallback={<Spinner />}>
             <Search />
           </Suspense>

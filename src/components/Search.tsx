@@ -28,14 +28,16 @@ export default function Search() {
     results = [],
   }: SearchType = useGetProductSearch(query);
 
-  const debouncedSearch = useCallback(debounce(search, 400), [search]);
+  const onSubmit = () => search();
+  const debouncedSearch = debounce(onSubmit, 400);
+  const _debouncedSearch = useCallback(debouncedSearch, [debouncedSearch]);
 
   const handleValueChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setQuery(value);
     if (value) {
       setOpen(true);
-      debouncedSearch();
+      _debouncedSearch();
     } else {
       setOpen(false);
     }
