@@ -15,6 +15,8 @@ import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
 import Header from "@/components/header";
 import BreadCrumb from "@/components/BreadCrumbs";
+import { Suspense } from "react";
+import Spinner from "@/components/Spinner";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
@@ -67,7 +69,9 @@ export default function RootLayout({
                 <div className=" flex flex-col">
                   <NextTopLoader />
                   <Header />
-                  <BreadCrumb />
+                  <Suspense fallback={<Spinner />}>
+                    <BreadCrumb />
+                  </Suspense>
                   <div className="items-center justify-center">{children}</div>
                   <Footer />
                   <Toaster />
