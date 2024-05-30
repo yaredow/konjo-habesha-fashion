@@ -55,7 +55,7 @@ export default function ContactUsForm() {
             });
           }
         })
-        .then((error) => {
+        .catch((error) => {
           console.error(error);
           setError("Something went wrong");
         });

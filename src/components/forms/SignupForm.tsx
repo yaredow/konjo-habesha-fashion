@@ -37,10 +37,15 @@ export default function SignupForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      registerAction(values).then((data) => {
-        setSuccess(data.success);
-        setError(data.error);
-      });
+      registerAction(values)
+        .then((data) => {
+          setSuccess(data.success);
+          setError(data.error);
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("Something went wrong");
+        });
     });
   };
 

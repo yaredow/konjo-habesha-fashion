@@ -44,8 +44,8 @@ export default function PasswordResetForm() {
           setSuccess(data.success);
           setError(data.error);
         })
-        .then((error) => {
-          console.error("Error in password reset action:", error);
+        .catch((error) => {
+          console.error(error);
           setError("Something went wrong");
         });
     });
