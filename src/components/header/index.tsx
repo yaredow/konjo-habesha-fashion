@@ -18,6 +18,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { AVAILABLE_CATEGORIRES } from "@/utils/constants";
+import { Suspense } from "react";
+import Spinner from "../Spinner";
 
 export default async function Header() {
   return (
@@ -54,7 +56,9 @@ export default async function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <Search />
+          <Suspense fallback={<Spinner />}>
+            <Search />
+          </Suspense>
         </div>
 
         <div className="hidden gap-6 md:flex md:justify-end">
