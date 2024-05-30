@@ -23,7 +23,7 @@ import {
 export default function SideBar() {
   return (
     <div className="m flex w-full flex-col bg-muted/40">
-      <aside className="fixed left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <aside className="fixed left-0 z-10 hidden w-14 flex-col bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <SideBarLinks name="Dashboard" Icon={Home} href="/admin/dashboard" />
           <SideBarLinks
