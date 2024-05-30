@@ -3,51 +3,62 @@ import Image from "next/image";
 import Logo from "../../../public/images/logo/logo.png";
 import NavLink from "./NavLink";
 import { ModeToggle } from "../DarkModeToggle";
-import { NAV_LINKS } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { HomeIcon, MenuIcon, Phone, ShoppingBag } from "lucide-react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import UserMenu from "../UserMenu";
-import { auth } from "@/auth";
 import ToggleCart from "../cart/ToggleCart";
 import Search from "../Search";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { AVAILABLE_CATEGORIRES } from "@/utils/constants";
 
 export default async function Header() {
-  const session = await auth();
-
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-sm md:px-12 ">
-      <div className="flex items-center justify-between">
-        <Link href="/" className="hidden p-1.5 md:flex">
+      <div className="flex flex-row items-center justify-between">
+        <Link href="/" className="hidden flex-col items-center p-1.5 md:flex">
           <Image
             src={Logo}
             alt="An animated habesha women wearing traditiona cloth"
-            width={64}
-            height={64}
+            width={80}
+            height={80}
             priority
           />
         </Link>
 
-        <div className=" hidden font-nav md:flex">
-          <ul className="flex gap-[1.3rem]">
-            {NAV_LINKS.map((navLink, index) => {
-              const isAdmin = session?.user.role == "ADMIN";
-              const isAdminPath = navLink.path === "/admin/dashboard";
-              if (isAdminPath && !isAdmin) {
-                return null;
-              }
-              return (
-                <li key={index}>
-                  <NavLink href={navLink.path}>{navLink.name}</NavLink>
-                </li>
-              );
-            })}
-          </ul>
+        <div className=" hidden flex-row items-center justify-center gap-4 md:flex">
+          <div className=" hidden font-nav md:flex">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  className=" text-sm text-foreground/65"
+                  variant="outline"
+                >
+                  Categories
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuSeparator />
+                {AVAILABLE_CATEGORIRES.map((category, index) => (
+                  <DropdownMenuItem key={index}>
+                    <Link href="/shop">{category}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Search />
         </div>
 
         <div className="hidden gap-6 md:flex md:justify-end">
           <div className=" flex flex-row items-center gap-[1.3rem]">
-            <Search />
             <div className=" mt-[4px]">
               <ModeToggle />
             </div>

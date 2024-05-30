@@ -28,7 +28,7 @@ const Cart = () => {
   if (totalCartQuantity === 0) return <EmptyCart />;
 
   return (
-    <div className="h-auto">
+    <main className="my h-auto md:m-12">
       <h1 className="mb-10 text-center text-2xl font-bold">
         Your Cart({totalCartQuantity})
       </h1>
@@ -69,7 +69,7 @@ const Cart = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

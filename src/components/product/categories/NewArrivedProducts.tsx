@@ -6,7 +6,7 @@ export default async function NewArrivedProducts() {
   const data = await fetchProductsWithCategory("trending");
 
   return (
-    <div className="mt-[5rem]">
+    <section className="mx-12 mt-[5rem]">
       <h1 className=" items-center text-2xl font-semibold md:items-start">
         Trending Products
       </h1>
@@ -19,6 +19,6 @@ export default async function NewArrivedProducts() {
               <ProductSkeleton key={index} />
             ))}
       </div>
-    </div>
+    </section>
   );
 }

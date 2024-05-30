@@ -52,7 +52,7 @@ export default function Page() {
   const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-7xl px-4">
+    <main className="mx-auto min-h-screen max-w-7xl md:m-12">
       <div className="flex items-baseline justify-between border-b p-6">
         <h1 className="text-2xl font-semibold tracking-tight md:text-4xl md:font-bold">
           {filter.category}

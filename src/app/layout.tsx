@@ -14,6 +14,7 @@ import QueryProviders from "@/lib/providers/QueryProvider";
 import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
 import Header from "@/components/header";
+import BreadCrumb from "@/components/BreadCrumbs";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
@@ -66,9 +67,8 @@ export default function RootLayout({
                 <div className=" flex flex-col">
                   <NextTopLoader />
                   <Header />
-                  <div className="m mx-8 my-12 items-center justify-center">
-                    {children}
-                  </div>
+                  <BreadCrumb />
+                  <div className="items-center justify-center">{children}</div>
                   <Footer />
                   <Toaster />
                 </div>
