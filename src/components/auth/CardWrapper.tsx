@@ -33,7 +33,7 @@ export default function CardWrapper({
   backButtonLabel,
 }: CardWrapperProps) {
   return (
-    <Card className=" w-[500px] shadow-md">
+    <Card className=" mx-4 w-[350px] shadow-md md:w-[500px]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

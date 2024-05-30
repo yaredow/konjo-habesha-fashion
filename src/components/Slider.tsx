@@ -51,7 +51,7 @@ const Slider = () => {
               <h2 className="text-xl dark:text-black lg:text-3xl 2xl:text-5xl">
                 {slide.description}
               </h2>
-              <h1 className="text-5xl font-semibold dark:text-black lg:text-6xl 2xl:text-8xl">
+              <h1 className="text-center text-2xl font-semibold dark:text-black md:text-5xl lg:text-6xl 2xl:text-8xl">
                 {slide.title}
               </h1>
               <Link href={slide.url}>

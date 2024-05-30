@@ -46,89 +46,94 @@ export default function SignupForm() {
 
   return (
     <Form {...form}>
-      <form className=" grid gap-4 py-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Name"
-                    type="text"
-                  />
-                </FormControl>
-                <FormMessage className=" mx-2" />
-              </FormItem>
-            );
-          }}
-        />
+      <form
+        className="flex w-full flex-grow items-center justify-center gap-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="flex w-full flex-col space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="Name"
+                      type="text"
+                    />
+                  </FormControl>
+                  <FormMessage className=" mx-2" />
+                </FormItem>
+              );
+            }}
+          />
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Email"
-                    type="email"
-                  />
-                </FormControl>
-                <FormMessage className=" mx-2" />
-              </FormItem>
-            );
-          }}
-        />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="Email"
+                      type="email"
+                    />
+                  </FormControl>
+                  <FormMessage className=" mx-2" />
+                </FormItem>
+              );
+            }}
+          />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="password"
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage className=" mx-2" />
-              </FormItem>
-            );
-          }}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="password"
+                      type="password"
+                    />
+                  </FormControl>
+                  <FormMessage className=" mx-2" />
+                </FormItem>
+              );
+            }}
+          />
 
-        <FormField
-          control={form.control}
-          name="passwordConfirm"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Confirm Password"
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage className=" mx-2" />
-              </FormItem>
-            );
-          }}
-        />
-        <FormSuccess message={success} />
-        <FormError message={error} />
-        <SubmitButton isPending={isPending} />
+          <FormField
+            control={form.control}
+            name="passwordConfirm"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="Confirm Password"
+                      type="password"
+                    />
+                  </FormControl>
+                  <FormMessage className=" mx-2" />
+                </FormItem>
+              );
+            }}
+          />
+          <FormSuccess message={success} />
+          <FormError message={error} />
+          <SubmitButton isPending={isPending} />
+        </div>
       </form>
     </Form>
   );

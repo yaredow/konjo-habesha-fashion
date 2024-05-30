@@ -48,7 +48,7 @@ export default function ForgetPasswordForm() {
   return (
     <Form {...form}>
       <form
-        className=" grid w-full max-w-2xl gap-6 py-4"
+        className="flex w-full max-w-2xl gap-6 py-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField

@@ -18,7 +18,6 @@ import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
-import CardWrapper from "../auth/CardWrapper";
 
 export default function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
@@ -65,68 +64,17 @@ export default function LoginForm() {
   };
 
   return (
-    <CardWrapper
-      title="Login"
-      description="Provide your credentials to log in"
-      isLogin={true}
-      showSocial={true}
-      backButtonHref="/"
-      backButtonLabel="Go back to home"
-    >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex-grow items-center justify-center gap-4"
-        >
-          <div className=" flex flex-col space-y-6">
-            {!showTwoFactor && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            disabled={isPending}
-                            {...field}
-                            placeholder="email"
-                            type="text"
-                          />
-                        </FormControl>
-                        <FormMessage className=" mx-2" />
-                      </FormItem>
-                    );
-                  }}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            disabled={isPending}
-                            {...field}
-                            placeholder="password"
-                            type="password"
-                          />
-                        </FormControl>
-                        <FormMessage className=" mx-2" />
-                      </FormItem>
-                    );
-                  }}
-                />
-              </>
-            )}
-
-            {showTwoFactor && (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full flex-grow items-center justify-center gap-4"
+      >
+        <div className=" flex flex-col space-y-6">
+          {!showTwoFactor && (
+            <>
               <FormField
                 control={form.control}
-                name="twoFactor"
+                name="email"
                 render={({ field }) => {
                   return (
                     <FormItem>
@@ -134,7 +82,8 @@ export default function LoginForm() {
                         <Input
                           disabled={isPending}
                           {...field}
-                          placeholder="Two Factor code"
+                          placeholder="email"
+                          type="text"
                         />
                       </FormControl>
                       <FormMessage className=" mx-2" />
@@ -142,13 +91,54 @@ export default function LoginForm() {
                   );
                 }}
               />
-            )}
-            <FormError message={error || urlError} />
-            <FormSuccess message={success} />
-            <SubmitButton showTwoFactor={true} isPending={isPending} />
-          </div>
-        </form>
-      </Form>
-    </CardWrapper>
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          {...field}
+                          placeholder="password"
+                          type="password"
+                        />
+                      </FormControl>
+                      <FormMessage className=" mx-2" />
+                    </FormItem>
+                  );
+                }}
+              />
+            </>
+          )}
+
+          {showTwoFactor && (
+            <FormField
+              control={form.control}
+              name="twoFactor"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Two Factor code"
+                      />
+                    </FormControl>
+                    <FormMessage className=" mx-2" />
+                  </FormItem>
+                );
+              }}
+            />
+          )}
+          <FormError message={error || urlError} />
+          <FormSuccess message={success} />
+          <SubmitButton showTwoFactor={true} isPending={isPending} />
+        </div>
+      </form>
+    </Form>
   );
 }

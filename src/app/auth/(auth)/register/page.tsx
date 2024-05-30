@@ -1,7 +1,7 @@
 import CardWrapper from "@/components/auth/CardWrapper";
 import SignupForm from "@/components/forms/SignupForm";
 
-export default function page() {
+export default function Page() {
   return (
     <main className="my-auto flex items-center justify-center">
       <CardWrapper

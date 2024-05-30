@@ -258,16 +258,16 @@ export default function Page() {
                 </Table>
               </CardContent>
               <CardFooter className={`${!isFetched && "hidden"}`}>
-                {products.length > 0 ? (
+                {isFetched && products.length === 0 ? (
+                  <h1 className=" mx-auto items-center font-semibold">
+                    No product found
+                  </h1>
+                ) : (
                   <div className="text-xs text-muted-foreground">
                     Showing <strong>1-10</strong> of{" "}
                     <strong>{products.length > 0 && products.length}</strong>{" "}
                     products
                   </div>
-                ) : (
-                  <h1 className=" mx-auto items-center font-semibold">
-                    No product found
-                  </h1>
                 )}
               </CardFooter>
             </Card>
