@@ -14,7 +14,6 @@ import QueryProviders from "@/lib/providers/QueryProvider";
 import NextTopLoader from "nextjs-toploader";
 import { cn } from "@/utils/cn";
 import Header from "@/components/header";
-import BreadCrumb from "@/components/BreadCrumbs";
 
 const league_spartan = League_Spartan({
   subsets: ["latin"],
