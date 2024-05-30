@@ -31,7 +31,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import CreateProduct from "@/components/dashboard/CreateProduct";
-import { Product } from "../../../../../types/product";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { deleteProductAction } from "@/server/actions/product/deleteProductAction";
 import Spinner from "@/components/Spinner";
@@ -53,6 +52,7 @@ import { AVAILABLE_ADMIN_PRODUCT_CATEGORIES } from "@/utils/constants";
 import useGetAdminFilteredProducts from "@/utils/hook/useGetAdminFilteredProducts";
 import { debounce } from "lodash";
 import { ProductFilterType } from "@/utils/validators/product-validators";
+import { Product } from "@prisma/client";
 
 export type FetchProductstype = {
   products: Product[];

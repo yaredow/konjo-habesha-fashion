@@ -57,7 +57,7 @@ export default function UserMenu() {
           </DropdownMenuItem>
           {session?.user?.role === "ADMIN" ? (
             <DropdownMenuItem>
-              <Link href="/admin/dashboard">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </DropdownMenuItem>
           ) : null}
           <DropdownMenuSeparator />

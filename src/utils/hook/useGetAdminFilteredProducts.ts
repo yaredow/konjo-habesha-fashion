@@ -4,7 +4,7 @@ import { ProductFilterType } from "../validators/product-validators";
 
 async function fetchProduct(filter: ProductFilterType) {
   const { data } = await axios.post(
-    "https://konjo-habesha-fashion.vercel.app/api/admin/product",
+    "https://konjo-habesha-fashion.vercel.app/api/dashboard/product",
     {
       filter,
     },

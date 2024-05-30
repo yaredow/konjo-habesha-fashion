@@ -1,10 +1,10 @@
-import { FilterType } from "@/app/admin/dashboard/order/page";
+import { FilterType } from "@/app/dashboard/order/page";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 async function fetchOrder(filter: FilterType) {
   const { data } = await axios.post(
-    "https://konjo-habesha-fashion.vercel.app/api/admin/order",
+    "https://konjo-habesha-fashion.vercel.app/api/dashboard/order",
     {
       filter: {
         delivery_status: filter.delivery_status || null,

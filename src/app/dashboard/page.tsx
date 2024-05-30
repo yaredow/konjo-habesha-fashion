@@ -28,7 +28,7 @@ import { FetchOrderType } from "./order/page";
 import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
 import useGetProducts from "@/utils/hook/useGetProducts";
-import { Product } from "../../../../types/product";
+import { Product } from "../../../types/product";
 import { formatName, getInitials } from "@/utils/formatName";
 
 export default function Dashboard() {

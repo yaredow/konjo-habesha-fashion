@@ -25,16 +25,16 @@ export default function SideBar() {
     <div className="m flex w-full flex-col bg-muted/40">
       <aside className="fixed left-0 z-10 hidden w-14 flex-col bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <SideBarLinks name="Dashboard" Icon={Home} href="/admin/dashboard" />
+          <SideBarLinks name="Dashboard" Icon={Home} href="/dashboard" />
           <SideBarLinks
             name="Order"
             Icon={ShoppingCart}
-            href="/admin/dashboard/order"
+            href="/dashboard/order"
           />
           <SideBarLinks
             name="Products"
             Icon={Package}
-            href="/admin/dashboard/products"
+            href="/dashboard/products"
           />
           <SideBarLinks name="Customers" Icon={Users2} href="#" />
           <SideBarLinks name="Analytics" Icon={LineChart} href="#" />

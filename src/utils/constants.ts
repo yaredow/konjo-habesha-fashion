@@ -2,7 +2,7 @@ export const ITEMS_PERPAGE = 9;
 
 export const NAV_LINKS = [
   { path: "/", name: "Home" },
-  { path: "/admin/dashboard", name: "Dashboard" },
+  { path: "/dashboard", name: "Dashboard" },
   { path: "/shop", name: "Shop" },
   { path: "/contact", name: "Contact" },
 ] as const;
