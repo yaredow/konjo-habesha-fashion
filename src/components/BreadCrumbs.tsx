@@ -7,6 +7,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { usePathname } from "next/navigation";
 
@@ -14,7 +15,7 @@ export default function BreadCrumb() {
   const paths = usePathname();
   const pathNames = paths.split("/").filter((path) => path);
   return (
-    <Breadcrumb className=" my-2 md:mx-12">
+    <Breadcrumb className=" my-2 hidden md:mx-12 md:flex">
       <BreadcrumbList>
         <BreadcrumbItem>
           {pathNames.map((link, index) => {
@@ -24,6 +25,7 @@ export default function BreadCrumb() {
             const isLastPath = pathNames.length === index + 1;
             return (
               <div key={index}>
+                <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   {!isLastPath ? (
                     <BreadcrumbLink asChild>

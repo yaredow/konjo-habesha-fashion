@@ -67,7 +67,6 @@ export default function RootLayout({
                 <div className=" flex flex-col">
                   <NextTopLoader />
                   <Header />
-                  <BreadCrumb />
                   <div className="items-center justify-center">{children}</div>
                   <Footer />
                   <Toaster />
