@@ -9,13 +9,12 @@ import {
   BreadcrumbPage,
 } from "./ui/breadcrumb";
 import { usePathname } from "next/navigation";
-import { Fragment } from "react";
 
 export default function BreadCrumb() {
   const paths = usePathname();
   const pathNames = paths.split("/").filter((path) => path);
   return (
-    <Breadcrumb>
+    <Breadcrumb className=" my-2 md:mx-12">
       <BreadcrumbList>
         <BreadcrumbItem>
           {pathNames.map((link, index) => {
@@ -24,7 +23,7 @@ export default function BreadCrumb() {
               link[0].toUpperCase() + link.slice(1, link.length - 1);
             const isLastPath = pathNames.length === index + 1;
             return (
-              <Fragment key={index}>
+              <div key={index}>
                 <BreadcrumbItem>
                   {!isLastPath ? (
                     <BreadcrumbLink asChild>
@@ -34,7 +33,7 @@ export default function BreadCrumb() {
                     <BreadcrumbPage>{linkName}</BreadcrumbPage>
                   )}
                 </BreadcrumbItem>
-              </Fragment>
+              </div>
             );
           })}
         </BreadcrumbItem>
