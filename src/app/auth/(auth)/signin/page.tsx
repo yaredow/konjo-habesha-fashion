@@ -1,5 +1,7 @@
+import Spinner from "@/components/Spinner";
 import CardWrapper from "@/components/auth/CardWrapper";
 import LoginForm from "@/components/forms/LoginForm";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
@@ -12,7 +14,9 @@ export default function Page() {
         backButtonHref="/"
         backButtonLabel="Go back to home"
       >
-        <LoginForm />
+        <Suspense fallback={<Spinner />}>
+          <LoginForm />
+        </Suspense>
       </CardWrapper>
     </main>
   );
