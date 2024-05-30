@@ -66,7 +66,7 @@ export default function RootLayout({
                 <div className=" flex flex-col">
                   <NextTopLoader />
                   <Header />
-                  <div className="m-8 items-center justify-center">
+                  <div className="m mx-8 my-12 items-center justify-center">
                     {children}
                   </div>
                   <Footer />

@@ -11,6 +11,7 @@ import {
   getTotalCartQuantity,
 } from "@/store/slices/cartSlice";
 import { formatCurrency } from "@/utils/helpers";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -22,7 +23,7 @@ const Cart = () => {
 
   useEffect(() => {
     setTotalCartQuantity(reduxTotalCartQuantity);
-  }, []);
+  }, [reduxTotalCartQuantity]);
 
   if (totalCartQuantity === 0) return <EmptyCart />;
 
@@ -53,18 +54,18 @@ const Cart = () => {
               <p className="mb-1 text-lg font-bold ">
                 {formatCurrency(totalPrice + 4.99)}
               </p>
-              <p className="text-sm">includin g VAT</p>
+              <p className="text-sm">includin VAT</p>
             </div>
           </div>
           <CheckoutButton />
           <Button
             variant="link"
-            className="my-2 flex items-center gap-2 text-center  text-sm hover:underline"
+            className="mx-auto my-2 flex items-center justify-center text-center text-sm hover:underline"
           >
-            <span>
+            <Link href="/shop" className=" flex flex-row items-center gap-2">
               <FaArrowLeft />
-            </span>{" "}
-            Continue shopping
+              Continue shopping
+            </Link>
           </Button>
         </div>
       </div>
