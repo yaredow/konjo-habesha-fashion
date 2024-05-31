@@ -51,24 +51,26 @@ export default function ForgetPasswordForm() {
         className="flex w-full max-w-2xl gap-6 py-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} placeholder="Email" type="email" />
-                </FormControl>
-                <FormMessage className=" mx-2" />
-              </FormItem>
-            );
-          }}
-        />
+        <div className=" flex w-full flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <Input {...field} placeholder="Email" type="email" />
+                  </FormControl>
+                  <FormMessage className=" mx-2" />
+                </FormItem>
+              );
+            }}
+          />
 
-        <FormSuccess message={success} />
-        <FormError message={error} />
-        <SubmitButton isPending={isLoading} />
+          <FormSuccess message={success} />
+          <FormError message={error} />
+          <SubmitButton isPending={isLoading} />
+        </div>
       </form>
     </Form>
   );
