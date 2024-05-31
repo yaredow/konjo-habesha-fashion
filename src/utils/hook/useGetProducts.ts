@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 async function fetchProduct() {
-  const { data } = await axios.get("http://localhost:3000/api/product/all");
+  const { data } = await axios.get(
+    "https://konjo-habesha-fashion.vercel.app/api/product/all",
+  );
 
   return data;
 }
