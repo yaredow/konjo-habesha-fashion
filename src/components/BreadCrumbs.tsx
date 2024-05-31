@@ -19,7 +19,7 @@ export default function BreadCrumb() {
   if (paths === "/") return null;
 
   return (
-    <Breadcrumb className="my-2 hidden md:mx-12 md:flex">
+    <Breadcrumb className="my-[12px] hidden md:mx-12 md:flex">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
