@@ -112,7 +112,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   if (!isFetched) return <Spinner />;
 
   return (
-    <section className="md:mx-12">
+    <section className="min-h-screen md:mx-12">
       <div className=" mb-4">
         <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
           <div className="grid gap-3 md:grid-cols-5">
