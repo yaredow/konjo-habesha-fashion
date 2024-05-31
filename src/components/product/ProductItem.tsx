@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/utils/helpers";
 import { Product } from "@prisma/client";
+import Image from "next/image";
 
 type ProductType = {
   product: Product;
@@ -12,15 +13,16 @@ function ProductItem({ product }: ProductType) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.replace(`/product/${product.id}`);
+    router.replace(`/shop/${product.id}`);
   };
 
   return (
     <div onClick={handleClick} className="group relative hover:cursor-pointer">
-      <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  lg:h-80">
-        <img
+      <div className="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md lg:h-80">
+        <Image
           src={product.images[0].url}
           alt="product image"
+          fill
           className="h-full w-full object-cover object-center"
         />
       </div>

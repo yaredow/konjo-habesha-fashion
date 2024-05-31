@@ -44,7 +44,7 @@ export default function Search() {
   };
 
   const handleSearchItemSelect = (id: string) => {
-    router.push(`/product/${id}`);
+    router.push(`/shop/${id}`);
     setOpen(false);
   };
 
