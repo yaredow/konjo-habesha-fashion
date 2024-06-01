@@ -34,23 +34,26 @@ export default function Page() {
   useEffect(() => {
     onSubmit();
   }, [token, onSubmit]);
-  return (
-    <CardWrapper
-      title="Confirming your verification"
-      description="Please wait while we confirm your verification"
-      showSocial={false}
-      isLogin={false}
-      backButtonHref="/auth/signin"
-      backButtonLabel="Go back to sign in"
-    >
-      {!error && !success ? (
-        <div className=" flex w-full items-center justify-center">
-          <Spinner />
-        </div>
-      ) : null}
 
-      <FormSuccess message={success} />
-      <FormError message={error} />
-    </CardWrapper>
+  return (
+    <main className=" flex min-h-screen items-center justify-center">
+      <CardWrapper
+        title="Confirming your verification"
+        description="Please wait while we confirm your verification"
+        showSocial={false}
+        isLogin={false}
+        backButtonHref="/auth/signin"
+        backButtonLabel="Go back to sign in"
+      >
+        {!error && !success ? (
+          <div className=" flex w-full items-center justify-center">
+            <Spinner />
+          </div>
+        ) : null}
+
+        <FormSuccess message={success} />
+        <FormError message={error} />
+      </CardWrapper>
+    </main>
   );
 }

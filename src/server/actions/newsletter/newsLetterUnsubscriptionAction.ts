@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "../account/authenticate";
 import crypto from "crypto";
