@@ -17,6 +17,7 @@ export default function SearchComp() {
   const [query, setQuery] = useState<string>(initialQuery || "");
 
   const { search, isPending, results = [] } = useGetProductSearch(query);
+  console.log(results);
 
   const debouncedSearch = useCallback(
     debounce(() => search(), 400),

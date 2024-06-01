@@ -22,13 +22,7 @@ export default function Search() {
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
-  const {
-    search,
-    isPending,
-    results = [],
-  }: SearchType = useGetProductSearch(query);
-
-  console.log(results);
+  const { search, isPending, results }: SearchType = useGetProductSearch(query);
 
   const debouncedSearch = useCallback(
     debounce(() => search(), 400),
