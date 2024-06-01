@@ -131,7 +131,7 @@ export const sendNewsLetterSubscriptionConfirmationEmail = async (
   token: string,
 ) => {
   const firstName = name.split(" ")[0];
-  const unsubscribeUrl = `http://localhost:3000/newsletter/${token}`;
+  const unsubscribeUrl = `http://localhost:3000/newsletter?token=${token}`;
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,

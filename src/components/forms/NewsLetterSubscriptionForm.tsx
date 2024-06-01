@@ -6,14 +6,18 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { toast } from "../ui/use-toast";
 import { z } from "zod";
 import { newsLetterFormSchema } from "@/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { useState, useTransition } from "react";
+import { newsLetterSubscriptionAction } from "@/server/actions/newsletter/newsLetterSubscriptionAction";
+import { toast } from "../ui/use-toast";
+import SubmitButton from "../SubmitButton";
 
 export default function NewsLetterSubscriptionForm() {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof newsLetterFormSchema>>({
     resolver: zodResolver(newsLetterFormSchema),
     defaultValues: {
@@ -22,9 +26,21 @@ export default function NewsLetterSubscriptionForm() {
     },
   });
 
-  const onSubmit = async () => {
-    toast({
-      description: "You have successfully subscribed to our newsletter",
+  const onSubmit = async (values: z.infer<typeof newsLetterFormSchema>) => {
+    startTransition(() => {
+      newsLetterSubscriptionAction(values).then((data) => {
+        if (data.success) {
+          toast({
+            description: data.success,
+          });
+          form.reset();
+        } else {
+          toast({
+            variant: "destructive",
+            description: data.error,
+          });
+        }
+      });
     });
   };
 
@@ -61,9 +77,7 @@ export default function NewsLetterSubscriptionForm() {
           }}
         />
 
-        <Button className=" mt-4" type="submit">
-          Submit
-        </Button>
+        <SubmitButton isPending={isPending} />
       </form>
     </Form>
   );

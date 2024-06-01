@@ -5,12 +5,12 @@ export const publicRoutes = [
   "/shop*",
   "/search",
   "/auth/new-verification",
+  "/newsletter",
   "/dashboard",
   "/dashboard/product",
   "/dashboard/user",
   "/dashboard/order",
   "/api/stripe/webhook",
-  "/",
 ];
 
 export const authRoutes = [

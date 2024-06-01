@@ -1,14 +1,18 @@
+"use server";
+
 import { newsLetterFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "../account/authenticate";
 import prisma from "@/lib/prisma";
 import crypto from "crypto";
+import { sendNewsLetterSubscriptionConfirmationEmail } from "../email/EmailAction";
 
 export async function newsLetterSubscriptionAction(
   values: z.infer<typeof newsLetterFormSchema>,
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = newsLetterFormSchema.safeParse(values);
 
+  console.log(validatedFields.success);
   if (!validatedFields.success) {
     return { error: "Invalid data" };
   }
@@ -38,6 +42,8 @@ export async function newsLetterSubscriptionAction(
   if (!newSubsciption) {
     return { error: "Something went wrong. Try again!" };
   }
+
+  await sendNewsLetterSubscriptionConfirmationEmail(fullName, email, token);
 
   return { success: "You have successfully subscribed to our newsletter" };
 }
