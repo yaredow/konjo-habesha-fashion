@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const text = request.nextUrl.searchParams.get("text");
+  console.log(text);
 
   if (!text || text.trim() === "") {
     return NextResponse.json(
@@ -46,6 +47,8 @@ export async function GET(request: NextRequest) {
         _id: undefined,
       };
     });
+
+    console.log(results);
 
     return NextResponse.json({ results }, { status: 200 });
   } catch (err) {

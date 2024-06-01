@@ -44,12 +44,12 @@ enum UserRole {
 
 model newslettersubscriptions {
   id                      String   @id @default(auto()) @map("_id") @db.ObjectId
-  v                       Int      @map("__v")
+  v                       Int      @default(0) @map("__v")
   email                   String   @unique(map: "email_1")
   fullName                String
-  isSubscribed            Boolean
-  isVerified              Boolean
-  subscriptionDate        DateTime @db.Date
+  isSubscribed            Boolean  @default(true)
+  isVerified              Boolean  @default(false)
+  subscriptionDate        DateTime @default(now()) @db.Date
   subscriptionPreferences String[]
   unsubscribeToken        String   @unique(map: "unsubscribeToken_1")
   unsubscribeTokenExpires DateTime @db.Date

@@ -5,8 +5,10 @@ import { useState } from "react";
 
 async function fetchSearchProducts(query: string) {
   const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/search?text=${query}`,
+    `http://localhost:3000/api/product/search?text=${query}`,
   );
+
+  console.log(data);
 
   return data;
 }

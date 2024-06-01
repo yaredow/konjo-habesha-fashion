@@ -8,6 +8,7 @@ import PasswordResetEmail from "@/emails/PasswordResetEmail";
 import AdminNotificationEmail from "@/emails/AdminNotificationEmail";
 import OrderConfirmationEmail from "@/emails/OrderConfirmationEmail";
 import { OrderItemsType } from "../../../../types/order";
+import NewsletterEmail from "@/emails/NewsLetterSubscribingEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -120,6 +121,24 @@ export const sendOrderConfirmationEmail = async (
       orderDate,
       items,
       totalAmount,
+    }),
+  });
+};
+
+export const sendNewsLetterSubscriptionConfirmationEmail = async (
+  name: string,
+  email: string,
+  token: string,
+) => {
+  const firstName = name.split(" ")[0];
+  const unsubscribeUrl = `http://localhost:3000/newsletter/${token}`;
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "Newsletter Subscription confirmation",
+    react: NewsletterEmail({
+      firstName,
+      unsubscribeUrl,
     }),
   });
 };

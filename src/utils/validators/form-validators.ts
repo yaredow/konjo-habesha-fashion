@@ -167,3 +167,18 @@ export const contactFormSchema = z.object({
     message: "Message must not be longer than 1000 characters.",
   }),
 });
+
+export const newsLetterFormSchema = z.object({
+  fullName: z.string().refine(
+    (value) => {
+      if (value !== "") {
+        const names = value.trim().split(" ");
+        return names.length === 2 && names.every((name) => name.length > 0);
+      }
+    },
+    {
+      message: "Please enter your full name with both first and last names.",
+    },
+  ),
+  email: z.string().email(),
+});
