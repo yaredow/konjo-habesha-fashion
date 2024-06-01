@@ -114,7 +114,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   return (
     <section className="min-h-screen md:mx-12">
       <div className=" mb-4">
-        <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
+        <div className="mx-auto grid min-h-screen max-w-6xl  items-start gap-6 px-4 py-6 md:grid-cols-2 lg:gap-12">
           <div className="grid gap-3 md:grid-cols-5">
             <div className="order-last flex w-full gap-3 overflow-x-auto md:order-first md:col-span-1 md:flex-col">
               {product.images.slice(0, 4).map((image, index) => (
