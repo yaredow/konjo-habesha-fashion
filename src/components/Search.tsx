@@ -73,7 +73,7 @@ export default function Search() {
           {isPending && <Spinner />}
           {!isPending && results?.length === 0 && <div>No results found.</div>}
           {results?.length! > 0 && (
-            <div>
+            <div className="">
               {results?.slice(0, 6).map((result) => (
                 <div
                   key={result.id}
