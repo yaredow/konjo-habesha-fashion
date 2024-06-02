@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CartItem, Product } from "../../../../types/product";
+import { CartItem, Product } from "@/../types/product";
 import { cn } from "@/utils/cn";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addItem, getCart } from "@/store/slices/cartSlice";
@@ -30,7 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
 import RatingBreakdown from "@/components/product/review/RatingBreakdown";
-import { ProductReviewType } from "../../../../types/review";
+import { ProductReviewType } from "@/../types/review";
 import Image from "next/image";
 
 type UserReviewsType = {

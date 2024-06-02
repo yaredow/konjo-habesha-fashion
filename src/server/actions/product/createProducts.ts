@@ -6,6 +6,7 @@ import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import { uploadProductImagesAction } from "./uploadProductImages";
 import { ErrorAndSuccessType } from "../account/authenticate";
 import prisma from "@/lib/prisma";
+import slugify from "slugify";
 
 export async function createProductAction(
   formData: FormData,
@@ -33,11 +34,13 @@ export async function createProductAction(
 
   try {
     const { uploadedImages } = await uploadProductImagesAction(images);
+    const slug = slugify(validatedFields.data.name, { lower: true });
 
     const newProduct = await prisma.product.create({
       data: {
         ...validatedFields.data,
         images: uploadedImages,
+        slug,
       },
     });
 
