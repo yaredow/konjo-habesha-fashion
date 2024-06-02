@@ -49,17 +49,21 @@ type ProductType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
+export default function ProductDetail({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [cartFilter, setCartFilter] = React.useState<CartItem | null>(null);
-  const { id } = params;
+  const { slug } = params;
   const dispatch = useAppDispatch();
   const cart = useAppSelector(getCart);
   const {
     reviews = [],
     isFetched: isReviewsFetched,
     refetch: refetchReviews,
-  }: UserReviewsType = useGetReviews(id);
+  }: UserReviewsType = useGetReviews(slug);
 
   const avgRating = reviews.reduce(
     (acc, review) => (acc + review.rating) / reviews.length,
@@ -70,7 +74,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     product,
     isFetched,
     refetch: refetchProduct,
-  }: ProductType = useGetProduct(id);
+  }: ProductType = useGetProduct(slug);
 
   const handleAddToCart = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();

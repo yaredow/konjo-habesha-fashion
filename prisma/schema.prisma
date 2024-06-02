@@ -171,6 +171,7 @@ model Product {
   stockQuantity    Int
   unitsSold        Int              @default(0)
   Review           Review[]
+  slug             String           @unique
 
   @@map("products")
 }

@@ -72,7 +72,9 @@ export default function RootLayout({
                   <Suspense fallback={<Spinner />}>
                     <BreadCrumb />
                   </Suspense>
-                  <div className="items-center justify-center">{children}</div>
+                  <div className="min-h-screen items-center justify-center">
+                    {children}
+                  </div>
                   <Footer />
                   <Toaster />
                 </div>

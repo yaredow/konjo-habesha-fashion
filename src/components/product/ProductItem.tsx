@@ -12,7 +12,7 @@ function ProductItem({ product }: ProductType) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.replace(`/shop/${product.id}`);
+    router.replace(`/shop/${product.slug}`);
   };
 
   return (
