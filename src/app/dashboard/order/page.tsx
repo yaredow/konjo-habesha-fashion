@@ -281,11 +281,11 @@ export default function Page() {
                       <TableHead className="text-right">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <TableBody
-                    className={`flex ${!isFetched ? "h-64 items-center justify-center" : ""}`}
-                  >
+                  <TableBody>
                     {!isFetched ? (
-                      <Spinner />
+                      <div className=" flex h-56 items-center justify-center">
+                        <Spinner />
+                      </div>
                     ) : (
                       orders.map((order: Order) => (
                         <TableRow

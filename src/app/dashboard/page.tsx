@@ -150,11 +150,11 @@ export default function Dashboard() {
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody
-                  className={`flex ${!isOrdersFetched ? "h-64 items-center justify-center" : ""}`}
-                >
+                <TableBody>
                   {!isOrdersFetched ? (
-                    <Spinner />
+                    <div className=" flex h-56 w-full items-center justify-center">
+                      <Spinner />
+                    </div>
                   ) : (
                     orders.map((order) => (
                       <TableRow key={order.id}>

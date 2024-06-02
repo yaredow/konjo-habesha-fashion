@@ -161,7 +161,9 @@ export default function Page() {
                   </TableHeader>
                   <TableBody>
                     {!isFetched ? (
-                      <Spinner />
+                      <div className=" flex h-[50vh] w-[50vw] items-center justify-center">
+                        <Spinner />
+                      </div>
                     ) : (
                       products.map((product: Product) => (
                         <TableRow key={product.id}>
