@@ -1,5 +1,6 @@
 "use client";
 
+import PulsatingDots from "./PulsatingDots";
 import { Button } from "./ui/button";
 import SpinnerMini from "./ui/SpinnerMini";
 
@@ -14,7 +15,7 @@ export default function SubmitButton({
 }: SubmitButtonProps) {
   return (
     <Button disabled={isPending} type="submit">
-      {isPending ? <SpinnerMini /> : showTwoFactor ? "confirm" : "Submit"}
+      {isPending ? <PulsatingDots /> : showTwoFactor ? "confirm" : "Submit"}
     </Button>
   );
 }

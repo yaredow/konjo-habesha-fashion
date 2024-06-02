@@ -113,7 +113,12 @@ export default function ProductDetail({
     }
   }, [isFetched, product]);
 
-  if (!isFetched) return <Spinner />;
+  if (!isFetched)
+    return (
+      <div className=" grid items-center justify-center">
+        <Spinner size="large" />
+      </div>
+    );
 
   return (
     <section className="md:mx-12">
