@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "../../../public/images/logo/logo.png";
+import Logo from "../../../public/images/logo/logo2.png";
 import { ModeToggle } from "../DarkModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { HomeIcon, MenuIcon, Phone, ShoppingBag } from "lucide-react";
@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { AVAILABLE_CATEGORIRES } from "@/utils/constants";
 import { Suspense } from "react";
 import Spinner from "../Spinner";
+import { Separator } from "../ui/separator";
 
 export default async function Header() {
   return (
@@ -28,8 +29,8 @@ export default async function Header() {
           <Image
             src={Logo}
             alt="An animated habesha women wearing traditiona cloth"
-            width={80}
-            height={80}
+            width={50}
+            height={50}
             priority
           />
         </Link>
@@ -69,6 +70,7 @@ export default async function Header() {
 
             <ToggleCart />
 
+            <Separator orientation="vertical" />
             <div className=" flex flex-row items-center gap-2">
               <UserMenu />
             </div>
