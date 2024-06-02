@@ -66,7 +66,7 @@ export default function SearchComp() {
 
         {open && (
           <div className="flex w-full flex-col items-center">
-            {isPending && <Spinner className="my-4" />}
+            {isPending && <Spinner />}
             {!isPending && results?.length === 0 && (
               <div className="my-4">No results found.</div>
             )}
