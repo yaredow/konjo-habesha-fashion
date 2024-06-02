@@ -281,7 +281,9 @@ export default function Page() {
                       <TableHead className="text-right">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <TableBody>
+                  <TableBody
+                    className={`flex ${!isFetched ? "h-64 items-center justify-center" : ""}`}
+                  >
                     {!isFetched ? (
                       <Spinner />
                     ) : (

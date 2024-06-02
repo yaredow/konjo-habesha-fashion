@@ -4,7 +4,7 @@ import axios from "axios";
 
 async function fetchOrder(filter: FilterType) {
   const { data } = await axios.post(
-    "https://konjo-habesha-fashion.vercel.app/api/dashboard/order",
+    "http://localhost:3000/api/dashboard/order",
     {
       filter: {
         delivery_status: filter.delivery_status || null,

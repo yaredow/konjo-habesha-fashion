@@ -150,7 +150,9 @@ export default function Dashboard() {
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody
+                  className={`flex ${!isOrdersFetched ? "h-64 items-center justify-center" : ""}`}
+                >
                   {!isOrdersFetched ? (
                     <Spinner />
                   ) : (
@@ -189,7 +191,9 @@ export default function Dashboard() {
             <CardHeader>
               <CardTitle>Recent Sales</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-8">
+            <CardContent
+              className={`flex flex-col gap-8 ${!isOrdersFetched ? "h-64 items-center justify-center" : ""}`}
+            >
               {!isOrdersFetched ? (
                 <Spinner />
               ) : (
