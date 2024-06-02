@@ -32,6 +32,7 @@ import { formatCurrency } from "@/utils/helpers";
 import RatingBreakdown from "@/components/product/review/RatingBreakdown";
 import { ProductReviewType } from "@/../types/review";
 import Image from "next/image";
+import RippleLoader from "@/components/RippleLoader";
 
 type UserReviewsType = {
   reviews: ProductReviewType[];
@@ -113,7 +114,7 @@ export default function ProductDetail({
     }
   }, [isFetched, product]);
 
-  if (!isFetched) return <Spinner />;
+  if (!isFetched) return <RippleLoader />;
 
   return (
     <section className="md:mx-12">
