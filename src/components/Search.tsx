@@ -23,6 +23,7 @@ export default function Search() {
   const [open, setOpen] = useState<boolean>(false);
 
   const { search, isPending, results }: SearchType = useGetProductSearch(query);
+  console.log(results);
 
   const debouncedSearch = useCallback(
     debounce(() => search(), 400),
@@ -63,11 +64,11 @@ export default function Search() {
       </div>
 
       {open && (
-        <div className=" absolute left-0 right-0 mt-2 w-full rounded-lg border  bg-background p-4 shadow-md">
+        <div className="absolute left-0 right-0 mt-2 w-full rounded-lg border bg-background p-4 shadow-md">
           {isPending && <Spinner />}
           {!isPending && results?.length === 0 && <div>No results found.</div>}
           {results?.length! > 0 && (
-            <div className="">
+            <div className=" h-auto">
               {results?.slice(0, 6).map((result) => (
                 <div
                   key={result.id}
@@ -87,7 +88,7 @@ export default function Search() {
               {results?.length! > 6 && (
                 <div
                   onClick={handleViewAllResults}
-                  className="mt-4 flex cursor-pointer items-center justify-between p-2 text-sm hover:bg-gray-100 "
+                  className="mt-4 flex cursor-pointer items-center justify-between p-2 text-sm hover:bg-gray-100"
                 >
                   <p>
                     Search for <span className="italic">{query}</span>
