@@ -283,7 +283,7 @@ export default function Page() {
                   </TableHeader>
                   <TableBody>
                     {!isFetched ? (
-                      <Spinner className=" flex min-h-[50vh] items-center justify-center" />
+                      <Spinner />
                     ) : (
                       orders.map((order: Order) => (
                         <TableRow
