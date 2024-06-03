@@ -1,5 +1,5 @@
 import Spinner from "@/components/Spinner";
-import SearchComp from "@/components/search-comp";
+import SearchComp from "../../../search-comp";
 import { Suspense } from "react";
 
 export default function Page() {

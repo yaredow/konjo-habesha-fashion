@@ -10,12 +10,12 @@ async function fetchProductWithCategory(type: string) {
 }
 
 function useGetProductsWithCatagory(type: string) {
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["products", type],
     queryFn: () => fetchProductWithCategory(type),
   });
 
-  return { data };
+  return { data, isPending };
 }
 
 export default useGetProductsWithCatagory;

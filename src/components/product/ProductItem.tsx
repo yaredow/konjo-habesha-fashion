@@ -17,7 +17,7 @@ function ProductItem({ product }: ProductType) {
 
   return (
     <div onClick={handleClick} className="group relative hover:cursor-pointer">
-      <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  lg:h-80">
+      <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md lg:h-80">
         <img
           src={product.images[0].url}
           alt="product image"

@@ -2,8 +2,8 @@
 
 import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Spinner from "../Spinner";
-import ProductItem from "../product/ProductItem";
+import Spinner from "../src/components/Spinner";
+import ProductItem from "../src/components/product/ProductItem";
 import { useCallback, useEffect, useState } from "react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { debounce } from "lodash";
@@ -48,7 +48,7 @@ export default function SearchComp() {
   if (!isClient) return null;
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-4">
+    <div className="flex min-h-screen flex-col items-center p-4 md:mx-16">
       <div className="w-full">
         <div className="mb-8 flex flex-col items-center justify-center">
           <h1 className="mb-4 text-xl font-semibold">Search</h1>
