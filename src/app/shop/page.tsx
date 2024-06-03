@@ -52,7 +52,7 @@ export default function Page() {
   const _debouncedSubmit = useCallback(debouncedSubmit, [debouncedSubmit]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-7xl md:my-6">
+    <main className="mx-6 my-4 min-h-screen max-w-7xl md:mx-16 md:my-6">
       <div className="flex items-baseline justify-between border-b p-6">
         <h1 className="text-xl font-semibold tracking-normal md:text-2xl md:font-bold">
           {filter.category}
@@ -113,7 +113,7 @@ export default function Page() {
         </div>
       </div>
       <section className="flex flex-col items-center justify-center">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-4 lg:grid-cols-4">
           {/* Desktop Filter */}
           <div className="hidden md:block">
             <ProductFilter
