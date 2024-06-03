@@ -16,7 +16,7 @@ export default function TrendingProducts() {
   console.log(data);
 
   return (
-    <section className="mt-[5rem] md:mx-12">
+    <section className="mx-4 mt-[5rem] md:mx-12">
       <h1 className=" items-center text-2xl font-semibold md:items-start">
         Trending Products
       </h1>
