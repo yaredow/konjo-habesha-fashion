@@ -23,7 +23,7 @@ import { Separator } from "../ui/separator";
 import { auth } from "@/auth";
 
 export default async function Header() {
-  const session = auth();
+  const session = await auth();
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-sm md:px-12 ">
       <div className="flex flex-row items-center justify-between">
@@ -133,7 +133,7 @@ export default async function Header() {
                 </div>
 
                 <div className="flex flex-row justify-between">
-                  {!session ? (
+                  {session ? (
                     <UserMenu />
                   ) : (
                     <Link
