@@ -8,7 +8,7 @@ import TrendingProducts from "@/components/product/categories/TrendingProducts";
 
 export default function page() {
   return (
-    <div className=" flex flex-col md:gap-16">
+    <div className=" flex flex-col gap-6 md:gap-16">
       <>
         <Slider />
         <TrendingProducts />
