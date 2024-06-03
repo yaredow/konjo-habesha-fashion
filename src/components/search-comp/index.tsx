@@ -2,8 +2,8 @@
 
 import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Spinner from "../src/components/Spinner";
-import ProductItem from "../src/components/product/ProductItem";
+import Spinner from "../Spinner";
+import ProductItem from "../product/ProductItem";
 import { useCallback, useEffect, useState } from "react";
 import useGetProductSearch from "@/utils/hook/useGetSearchProducts";
 import { debounce } from "lodash";
