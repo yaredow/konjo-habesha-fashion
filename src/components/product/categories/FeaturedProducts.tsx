@@ -17,7 +17,7 @@ export default function FeaturedProducts() {
     useGetProductsWithCatagory("featured");
 
   return (
-    <section className="mx-12 mt-[5rem]">
+    <section className="mx-4 mt-[5rem] md:mx-12">
       <h1 className="items-center text-2xl font-semibold md:items-start">
         Featured Products
       </h1>
