@@ -20,8 +20,10 @@ import { AVAILABLE_CATEGORIRES } from "@/utils/constants";
 import { Suspense } from "react";
 import Spinner from "../Spinner";
 import { Separator } from "../ui/separator";
+import { auth } from "@/auth";
 
 export default async function Header() {
+  const session = auth();
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-sm md:px-12 ">
       <div className="flex flex-row items-center justify-between">
@@ -131,12 +133,19 @@ export default async function Header() {
                 </div>
 
                 <div className="flex flex-row justify-between">
-                  <Link href="/auth/signin" className="flex items-center gap-2">
-                    Log in{" "}
-                    <span>
-                      <FaArrowRightLong />
-                    </span>
-                  </Link>
+                  {!session ? (
+                    <UserMenu />
+                  ) : (
+                    <Link
+                      href="/auth/signin"
+                      className="flex items-center gap-2"
+                    >
+                      Log in{" "}
+                      <span>
+                        <FaArrowRightLong />
+                      </span>
+                    </Link>
+                  )}
                   <ModeToggle />
                 </div>
               </div>
