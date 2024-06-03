@@ -27,7 +27,7 @@ export const sendPasswordResetToken = async (
   name: string,
 ) => {
   const firstName = name.split(" ")[0];
-  const resetUrl = `http://localhost:3000/auth/reset-password?token=${token}`;
+  const resetUrl = `https://konjo-habesha-fashion.vercel.app/auth/reset-password?token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
@@ -42,7 +42,7 @@ export const sendVerificationEmail = async (
   token: string,
   name: string,
 ) => {
-  const verificationUrl = `http://localhost:3000/auth/new-verification?token=${token}`;
+  const verificationUrl = `https://konjo-habesha-fashion.vercel.app/auth/new-verification?token=${token}`;
   const firstName = name.split(" ")[0];
 
   await resend.emails.send({
@@ -131,7 +131,7 @@ export const sendNewsLetterSubscriptionConfirmationEmail = async (
   token: string,
 ) => {
   const firstName = name.split(" ")[0];
-  const unsubscribeUrl = `http://localhost:3000/newsletter?token=${token}`;
+  const unsubscribeUrl = `https://konjo-habesha-fashion.vercel.app/newsletter?token=${token}`;
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,

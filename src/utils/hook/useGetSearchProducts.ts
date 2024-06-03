@@ -8,9 +8,7 @@ async function fetchSearchProducts(query: string) {
     `https://konjo-habesha-fashion.vercel.app/api/product/search?text=${query}`,
   );
 
-  console.log(data);
-
-  return data;
+  return data.results;
 }
 
 export default function useGetProductSearch(query: string) {

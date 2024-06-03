@@ -7,7 +7,8 @@ export default function FacebookSigninButton() {
       action={async () => {
         "use server";
         await signIn("facebook", {
-          redirectTo: "http://localhost:300/account/profile",
+          redirectTo:
+            "https://konjo-habesha-fashion.vercel.app/account/profile",
         });
       }}
     >

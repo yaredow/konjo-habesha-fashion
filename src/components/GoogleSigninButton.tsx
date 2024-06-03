@@ -7,7 +7,8 @@ export default function GoogleButton() {
         "use server";
 
         await signIn("google", {
-          redirectTo: "http://localhost:3000/account/profile",
+          redirectTo:
+            "https://konjo-habesha-fashion.vercel.app/account/profile",
         });
       }}
     >

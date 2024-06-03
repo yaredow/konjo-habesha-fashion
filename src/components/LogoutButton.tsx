@@ -7,7 +7,9 @@ export default function LogoutButton() {
       action={async () => {
         "server side";
 
-        await signOut({ callbackUrl: "http://localhost:3000/account" });
+        await signOut({
+          callbackUrl: "https://konjo-habesha-fashion.vercel.app/auth",
+        });
       }}
     >
       <Button variant="link" type="submit">

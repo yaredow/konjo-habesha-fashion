@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 
 function Logout() {
   const handleLogout = () => {
-    signOut({ callbackUrl: "http://localhost:3000" });
+    signOut({ callbackUrl: "https://konjo-habesha-fashion.vercel.app" });
   };
 
   return (

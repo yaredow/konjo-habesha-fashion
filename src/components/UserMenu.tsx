@@ -19,7 +19,7 @@ export default function UserMenu() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const handleLogout = () => {
-    signOut({ callbackUrl: "http://localhost:3000" });
+    signOut({ callbackUrl: "https://konjo-habesha-fashion.vercel.app" });
   };
   return (
     <DropdownMenu>

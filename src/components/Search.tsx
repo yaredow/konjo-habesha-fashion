@@ -22,8 +22,11 @@ export default function Search() {
   const [query, setQuery] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
-  const { search, isPending, results }: SearchType = useGetProductSearch(query);
-  console.log(results);
+  const {
+    search,
+    isPending,
+    results = [],
+  }: SearchType = useGetProductSearch(query);
 
   const debouncedSearch = useCallback(
     debounce(() => search(), 400),
@@ -64,12 +67,16 @@ export default function Search() {
       </div>
 
       {open && (
-        <div className="absolute left-0 right-0 mt-2 w-full rounded-lg border bg-background p-4 shadow-md">
-          {isPending && <Spinner />}
+        <div className="absolute left-0 right-0 z-50 mt-2 w-full rounded-lg border bg-white p-4 shadow-md">
+          {isPending && (
+            <div className="grid items-center justify-center">
+              <Spinner />
+            </div>
+          )}
           {!isPending && results?.length === 0 && <div>No results found.</div>}
-          {results?.length! > 0 && (
-            <div className=" h-auto">
-              {results?.slice(0, 6).map((result) => (
+          {results && results.length > 0 && (
+            <div>
+              {results.slice(0, 6).map((result) => (
                 <div
                   key={result.id}
                   className="flex cursor-pointer items-center gap-4 p-2 hover:bg-gray-100"
@@ -85,7 +92,7 @@ export default function Search() {
                 </div>
               ))}
 
-              {results?.length! > 6 && (
+              {results.length > 6 && (
                 <div
                   onClick={handleViewAllResults}
                   className="mt-4 flex cursor-pointer items-center justify-between p-2 text-sm hover:bg-gray-100"
