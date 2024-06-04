@@ -67,7 +67,7 @@ export function SideBarLinks({ name, Icon, href }: SideBarLinksType) {
               { "border text-accent-foreground": pathName === href },
             )}
           >
-            <Icon className="h-5 w-5" />
+            <Icon className="h-4 w-4 md:h-5 md:w-5" />
             <span className="sr-only">{name}</span>
           </Link>
         </TooltipTrigger>

@@ -67,7 +67,10 @@ export default function UpdatePasswordForm() {
 
   return (
     <Form {...form}>
-      <form className=" grid gap-4 py-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className=" grid w-full gap-4 py-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="currentPassword"
