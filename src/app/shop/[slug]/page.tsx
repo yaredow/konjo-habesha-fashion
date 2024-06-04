@@ -330,7 +330,9 @@ export default function ProductDetail({
               </h1>
               <ul>
                 {!isReviewsFetched ? (
-                  <Spinner />
+                  <div className=" grid items-center justify-center">
+                    <Spinner />
+                  </div>
                 ) : (
                   reviews.map((review) => (
                     <li key={review.id}>
