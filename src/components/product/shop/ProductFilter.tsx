@@ -18,6 +18,7 @@ import {
   FilterOptions,
   ProductFilter as ProductFilterType,
 } from "@/utils/validators/product-validators";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ProductFilterProps {
   filter: ProductFilterType;
@@ -110,12 +111,9 @@ function ProductFilter({
                       });
                     }}
                     checked={filter.size.includes(option.value)}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:text-foreground"
                   />
-                  <label
-                    htmlFor={`size-${optionIdx}`}
-                    className="ml-3 text-sm text-gray-600"
-                  >
+                  <label htmlFor={`size-${optionIdx}`} className="ml-3 text-sm">
                     {option.label}
                   </label>
                 </li>
@@ -156,7 +154,7 @@ function ProductFilter({
                   />
                   <label
                     htmlFor={`price-${optionIdx}`}
-                    className="ml-3 text-sm text-gray-600"
+                    className="ml-3 text-sm "
                   >
                     {option.label}
                   </label>
@@ -182,7 +180,7 @@ function ProductFilter({
                   />
                   <label
                     htmlFor={`price-${PRICE_FILTERS.options.length}`}
-                    className="ml-3 text-sm text-gray-600"
+                    className="ml-3 text-sm"
                   >
                     Custom
                   </label>
