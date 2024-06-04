@@ -272,8 +272,8 @@ export default function ProductDetail({
           </TabsList>
         </div>
         <Separator className="mt-4" />
-        <TabsContent value="Description">
-          <div className=" mt-4 flex-wrap">{product.description}</div>
+        <TabsContent className=" m-4" value="Description">
+          <div className="mt-4 flex-wrap">{product.description}</div>
         </TabsContent>
         <TabsContent value="Reviews">
           <div className=" mx-auto mb-4 mt-12 flex justify-center">
