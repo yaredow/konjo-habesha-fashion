@@ -71,7 +71,7 @@ export default function SearchComp() {
               <div className="my-4">No results found.</div>
             )}
             {!isPending && results?.length! > 0 && (
-              <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {results?.map((result) => (
                   <ProductItem key={result.id} product={result} />
                 ))}
