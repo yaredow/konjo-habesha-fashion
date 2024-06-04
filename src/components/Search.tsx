@@ -62,7 +62,7 @@ export default function Search() {
           type="search"
           onChange={handleValueChange}
           placeholder="Search for products"
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[600px]"
+          className="w-full rounded-lg bg-background pl-8  md:w-[200px] lg:w-[600px]"
         />
       </div>
 

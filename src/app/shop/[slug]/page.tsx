@@ -163,11 +163,13 @@ export default function ProductDetail({
                   {product.name.toUpperCase()}
                 </h1>
                 <Separator className=" w-full" />
-                <p className=" text-lg font-normal">
-                  {formatCurrency(product.price)}
-                </p>
-                <div className="flex items-center gap-4">
-                  <CommentRatings fixed={true} rating={avgRating} />
+                <div className=" flex w-full flex-row items-center justify-between md:flex-col">
+                  <p className=" text-lg font-normal">
+                    {formatCurrency(product.price)}
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <CommentRatings fixed={true} rating={avgRating} />
+                  </div>
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center gap-2">
