@@ -123,7 +123,7 @@ export default function Page() {
             />
           </div>
           {/* Product grid */}
-          <ul className="grid grid-cols-2 gap-8 pt-6 md:grid-cols-3 lg:col-span-3 lg:grid-cols-3">
+          <ul className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-3 lg:col-span-3 lg:grid-cols-3">
             {products && products.length === 0 ? (
               <EmptyState />
             ) : products ? (
