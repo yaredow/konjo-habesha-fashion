@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 function PageNotFound() {
   const router = useRouter();
   return (
-    <section className="">
-      <div className="mx-auto min-h-screen px-6 lg:flex lg:items-center lg:gap-12">
-        <div className="wf-ull lg:w-1/2">
+    <section className=" mx-6 my-12 md:mx-12 ">
+      <div className="mx-auto flex min-h-screen flex-col px-6 md:min-h-[85vh] md:flex-row md:items-center md:justify-center ">
+        <div className="w-full lg:w-1/2">
           <p className="text-sm font-medium text-blue-500 dark:text-blue-400">
             404 error
           </p>
