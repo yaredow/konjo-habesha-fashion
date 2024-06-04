@@ -1,41 +1,54 @@
-import CardWrapper from "@/components/auth/CardWrapper";
 import UpdatePasswordForm from "@/components/forms/UpdatePasswordForm";
 import UpdateUserDataForm from "@/components/forms/UpdateUserDataForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default async function Page() {
+export const metadata = () => {
+  return {
+    title: "Update Profile",
+  };
+};
+
+export default function Page() {
   return (
-    <div className="mx-8 items-center justify-center md:mx-20 md:my-12">
-      <Tabs defaultValue="account" className=" my-4">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Account</TabsTrigger>
+    <div className="w-full max-w-md">
+      <Tabs defaultValue="profile">
+        <TabsList className="grid grid-cols-2 border-b border-gray-200 dark:border-gray-700">
+          <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="password">Password</TabsTrigger>
         </TabsList>
-
-        <TabsContent value="account">
-          <CardWrapper
-            title="Update your account"
-            description="Fill the data to update your account"
-            isLogin={false}
-            showSocial={false}
-            backButtonHref="/profile"
-            backButtonLabel="Back to profile"
-          >
-            <UpdateUserDataForm />
-          </CardWrapper>
+        <TabsContent className=" min-h-[350px]" value="profile">
+          <Card>
+            <CardHeader>
+              <CardTitle>Update Profile</CardTitle>
+              <CardDescription>
+                Make changes to your profile information.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <UpdateUserDataForm />
+            </CardContent>
+          </Card>
         </TabsContent>
-
-        <TabsContent value="password">
-          <CardWrapper
-            title="Update your Password"
-            description="You will be logged out once your password has been updated"
-            isLogin={false}
-            showSocial={false}
-            backButtonHref="/profile"
-            backButtonLabel="Back to profile"
-          >
-            <UpdatePasswordForm />
-          </CardWrapper>
+        <TabsContent className=" min-h-[350px]" value="password">
+          <Card>
+            <CardHeader>
+              <CardTitle>Update Password</CardTitle>
+              <CardDescription>
+                Change your password. After saving, you&apos;ll be logged out.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <UpdatePasswordForm />
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

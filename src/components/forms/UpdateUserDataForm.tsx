@@ -37,6 +37,11 @@ export default function UpdateUserDataForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof UpdateAccountFormSchema>) => {
+    if (values.name === user?.name) {
+      setError("Name is the same as before");
+      return;
+    }
+
     setError("");
     setSuccess("");
     startTransition(() => {
