@@ -13,7 +13,6 @@ import { Badge } from "../ui/badge";
 
 export default async function OrdersTable() {
   const orders = await getAllOrders();
-  console.log(orders);
 
   return (
     <Table className={`${orders?.length === 0 && "overflow-hidden"}`}>

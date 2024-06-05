@@ -13,7 +13,6 @@ type NewArrivalProductsType = {
 export default function TrendingProducts() {
   const { data, isPending }: NewArrivalProductsType =
     useGetProductsWithCatagory("trending");
-  console.log(data);
 
   return (
     <section className="mx-4 mt-[5rem] md:mx-12">

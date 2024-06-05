@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
     }
 
     const { size, sort, category, price } = validatedFields.data;
-    console.log(price);
     const { range: priceRange } = price;
     let orderBy: any = {};
 

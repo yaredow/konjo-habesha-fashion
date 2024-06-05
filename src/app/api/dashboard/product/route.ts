@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const { filter }: { filter: ProductFilterType } = await request.json();
-    console.log(filter);
 
     let products: Product[] = [];
 
@@ -17,7 +16,6 @@ export async function POST(request: Request) {
     } else {
       products = await prisma.product.findMany();
     }
-    console.log(products);
     return NextResponse.json({ products }, { status: 200 });
   } catch (err) {
     console.error(err);

@@ -12,7 +12,6 @@ export async function newsLetterSubscriptionAction(
 ): Promise<ErrorAndSuccessType> {
   const validatedFields = newsLetterFormSchema.safeParse(values);
 
-  console.log(validatedFields.success);
   if (!validatedFields.success) {
     return { error: "Invalid data" };
   }

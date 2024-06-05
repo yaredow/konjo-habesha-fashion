@@ -16,6 +16,7 @@ export default function page() {
       <Button
         variant="secondary"
         className="mx-auto my-6 inline-block items-center"
+        asChild
       >
         <Link href="/shop">Browse All</Link>
       </Button>

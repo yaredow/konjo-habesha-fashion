@@ -10,8 +10,6 @@ async function fetchProduct(filter: ProductFilterType) {
     },
   );
 
-  console.log(data);
-
   return data;
 }
 

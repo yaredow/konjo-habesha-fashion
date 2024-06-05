@@ -74,7 +74,6 @@ export default function Page() {
     refetch,
   } = useGetAdminFilteredProducts(filter);
   const router = useRouter();
-  console.log(filter);
 
   const onSubmit = () => refetch();
   const debouncedSubmit = debounce(onSubmit, 400);
