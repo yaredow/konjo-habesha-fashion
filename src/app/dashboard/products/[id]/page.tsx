@@ -72,15 +72,15 @@ type EditProductType = {
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { slug: string } }) {
   const [isLoading, startTransition] = useTransition();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [productDetails, setProductDetails] = React.useState<Product | null>(
     null,
   );
   const router = useRouter();
-  const { id } = params;
-  const { product, isFetched, refetch }: EditProductType = useGetProduct(id);
+  const { slug } = params;
+  const { product, isFetched, refetch }: EditProductType = useGetProduct(slug);
 
   const hasNoChanges = compareObject(productDetails as Product, product);
 

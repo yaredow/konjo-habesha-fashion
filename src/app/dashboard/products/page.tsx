@@ -207,7 +207,7 @@ export default function Page() {
                                 <DropdownMenuItem
                                   onClick={() =>
                                     router.replace(
-                                      `/dashboard/products/${product.id}`,
+                                      `/dashboard/products/${product.slug}`,
                                     )
                                   }
                                 >
