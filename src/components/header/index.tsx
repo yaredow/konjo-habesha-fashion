@@ -70,7 +70,7 @@ export default async function Header() {
               <ModeToggle />
             </div>
 
-            <ToggleCart />
+            <ToggleCart isMobile={false} />
 
             <Separator orientation="vertical" />
             <div className=" flex flex-row items-center gap-2">
@@ -85,7 +85,8 @@ export default async function Header() {
           <Image src={Logo} alt="Your Company" width={44} height={44} />
         </Link>
 
-        <div className="">
+        <div className=" flex flex-row items-center gap-[12px]">
+          <ToggleCart isMobile />
           <Sheet>
             <SheetTrigger asChild>
               <MenuIcon />

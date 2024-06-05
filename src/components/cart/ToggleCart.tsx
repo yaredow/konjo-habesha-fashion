@@ -7,7 +7,11 @@ import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function ToggleCart() {
+type ToggleCartProps = {
+  isMobile: boolean;
+};
+
+export default function ToggleCart({ isMobile }: ToggleCartProps) {
   const [cartQuantity, setCartQuantity] = useState<number>(0);
   const reduxCartQuantity = useAppSelector(getTotalCartQuantity);
 
@@ -19,7 +23,7 @@ export default function ToggleCart() {
     <div className="relative flex items-center">
       <Link href="/cart">
         <Button
-          variant="outline"
+          variant={isMobile ? "link" : "outline"}
           size="icon"
           className="overflow-hidden rounded-full"
         >
