@@ -1,13 +1,15 @@
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 function EmptyCart() {
   const router = useRouter();
   return (
-    <div className="flex h-full  flex-col items-center justify-center">
+    <div className="flex h-full min-h-[75vh] flex-col items-center justify-center">
       <div>
-        <img
-          className=" h-52 w-52"
+        <Image
+          height={200}
+          width={200}
           src="/images/cart/empty-cart.png"
           alt="an image of an empty cart"
         />
