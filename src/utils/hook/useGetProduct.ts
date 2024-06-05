@@ -9,14 +9,14 @@ async function fetchProduct(slug: string) {
   return data;
 }
 
-export default function useGetProduct(id: string) {
+export default function useGetProduct(slug: string) {
   const {
     data: responseData,
     isFetched,
     refetch,
   } = useQuery({
     queryKey: ["product"],
-    queryFn: () => fetchProduct(id),
+    queryFn: () => fetchProduct(slug),
   });
 
   const product = responseData?.product;

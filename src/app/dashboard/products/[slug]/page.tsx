@@ -73,6 +73,7 @@ type EditProductType = {
 };
 
 export default function Page({ params }: { params: { slug: string } }) {
+  console.log(params);
   const [isLoading, startTransition] = useTransition();
   const [files, setFiles] = React.useState<File[] | null>(null);
   const [productDetails, setProductDetails] = React.useState<Product | null>(

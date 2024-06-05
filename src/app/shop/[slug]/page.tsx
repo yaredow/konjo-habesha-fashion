@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import useGetProduct from "@/utils/hook/useGetProduct";
 import { Separator } from "@/components/ui/separator";
 import { BoxIcon, PackageIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
-
 import { Label } from "@/components/ui/label";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
