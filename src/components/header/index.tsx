@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/images/logo/logo2.png";
@@ -20,10 +22,10 @@ import { AVAILABLE_CATEGORIRES } from "@/utils/constants";
 import { Suspense } from "react";
 import Spinner from "../Spinner";
 import { Separator } from "../ui/separator";
-import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 
-export default async function Header() {
-  const session = await auth();
+export default function Header() {
+  const { data: session } = useSession();
   return (
     <nav className="sticky inset-0 inset-y-0 right-0 z-10 w-full border-b bg-background px-[10px] text-foreground shadow-sm md:px-12 ">
       <div className="flex flex-row items-center justify-between">
