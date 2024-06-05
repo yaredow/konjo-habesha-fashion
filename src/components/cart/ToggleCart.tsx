@@ -27,7 +27,7 @@ export default function ToggleCart({ isMobile }: ToggleCartProps) {
           size="icon"
           className="overflow-hidden rounded-full"
         >
-          <ShoppingCart strokeWidth={1.5} className="h-[20px] w-[20px]" />
+          <ShoppingCart strokeWidth={2} className="h-[20px] w-[20px]" />
         </Button>
       </Link>
       {cartQuantity > 0 && (
