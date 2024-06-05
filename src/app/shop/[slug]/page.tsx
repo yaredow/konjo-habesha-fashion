@@ -163,7 +163,7 @@ export default function ProductDetail({
                   {product.name.toUpperCase()}
                 </h1>
                 <Separator className=" w-full" />
-                <div className=" flex w-full flex-row items-center justify-between md:flex-col">
+                <div className=" flex w-full flex-row justify-between gap-2 md:flex-col md:justify-start">
                   <p className=" text-lg font-normal">
                     {formatCurrency(product.price)}
                   </p>
@@ -268,7 +268,9 @@ export default function ProductDetail({
         <div className="mx-auto flex justify-center">
           <TabsList>
             <TabsTrigger value="Description">Description</TabsTrigger>
-            <TabsTrigger value="Reviews">Reviews({reviews.length})</TabsTrigger>
+            <TabsTrigger value="Reviews">
+              Reviews ({reviews.length})
+            </TabsTrigger>
           </TabsList>
         </div>
         <Separator className="mt-4" />
