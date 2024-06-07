@@ -1,6 +1,5 @@
 import { getAllProducts } from "@/data/product";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 export default function useGetProducts() {
   const {
@@ -9,7 +8,7 @@ export default function useGetProducts() {
     refetch,
   } = useQuery({
     queryKey: ["products"],
-    queryFn: getAllProducts,
+    queryFn: async () => getAllProducts(),
   });
 
   return { products, isFetched, refetch };
