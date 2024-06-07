@@ -5,7 +5,7 @@ import { generatePasswordResetToken } from "@/lib/tokens";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "./authenticate";
-import { sendPasswordResetToken } from "../email/EmailAction";
+import { sendPasswordResetToken } from "../email/email";
 
 export async function forgotPasswordAction(
   values: z.infer<typeof forgotPasswordFormSchema>,

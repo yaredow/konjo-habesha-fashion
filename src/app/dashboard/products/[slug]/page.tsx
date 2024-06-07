@@ -54,9 +54,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteProductImageAction } from "@/server/actions/product/deleteProductImageAction";
+import { deleteProductImageAction } from "@/server/actions/product/delete-product-image";
 import { toast } from "@/components/ui/use-toast";
-import { editProductAction } from "@/server/actions/product/editProductAction";
+import { editProductAction } from "@/server/actions/product/edit-product";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
 import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";

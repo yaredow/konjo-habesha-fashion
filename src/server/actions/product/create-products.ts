@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
-import { uploadProductImagesAction } from "./uploadProductImages";
+import { uploadProductImagesAction } from "./upload-product-image";
 import { ErrorAndSuccessType } from "../account/authenticate";
 import prisma from "@/lib/prisma";
 import slugify from "slugify";

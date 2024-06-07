@@ -4,7 +4,7 @@ import { getUserByEmail } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verification_token";
 import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "./authenticate";
-import { sendWelcomeEmail } from "../email/EmailAction";
+import { sendWelcomeEmail } from "../email/email";
 
 export async function tokenVerificationAction(
   token: string,

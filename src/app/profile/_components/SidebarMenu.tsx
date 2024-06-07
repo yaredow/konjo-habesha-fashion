@@ -23,7 +23,7 @@ import { signOut, useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";
 import { useRef, useTransition } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { uploadUserProfileImage } from "@/server/actions/account/uploadUserProfileImage";
+import { uploadUserProfileImage } from "@/server/actions/account/upload-profile-image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 

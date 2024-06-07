@@ -5,7 +5,7 @@ import { z } from "zod";
 import { ErrorAndSuccessType } from "../account/authenticate";
 import prisma from "@/lib/prisma";
 import crypto from "crypto";
-import { sendNewsLetterSubscriptionConfirmationEmail } from "../email/EmailAction";
+import { sendNewsLetterSubscriptionConfirmationEmail } from "../email/email";
 
 export async function newsLetterSubscriptionAction(
   values: z.infer<typeof newsLetterFormSchema>,

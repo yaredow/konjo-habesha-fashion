@@ -1,10 +1,7 @@
 import { ContactUsFromSchema } from "@/utils/validators/form-validators";
 import { z } from "zod";
 import { ErrorAndSuccessType } from "../account/authenticate";
-import {
-  sendAdminNotificationEmail,
-  sendContactUsEmail,
-} from "../email/EmailAction";
+import { sendAdminNotificationEmail, sendContactUsEmail } from "../email/email";
 
 export async function contactUsAction(
   values: z.infer<typeof ContactUsFromSchema>,

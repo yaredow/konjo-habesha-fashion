@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "../ui/input";
-import { updatePasswordAction } from "@/server/actions/account/updatePassword";
+import { updatePasswordAction } from "@/server/actions/account/update-password";
 import { useState, useTransition } from "react";
 
 import {

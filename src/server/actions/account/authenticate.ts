@@ -13,10 +13,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { loginFormSchema } from "@/utils/validators/form-validators";
 import { AuthError } from "next-auth";
 import { z } from "zod";
-import {
-  sendTwoFactorTokenEmail,
-  sendVerificationEmail,
-} from "../email/EmailAction";
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "../email/email";
 
 export type ErrorAndSuccessType = {
   error?: string;

@@ -17,7 +17,7 @@ import {
   contactFormSchema,
 } from "@/utils/validators/form-validators";
 import { useState, useTransition } from "react";
-import { contactUsAction } from "@/server/actions/contact-us/contactUsAction";
+import { contactUsAction } from "@/server/actions/contact-us/contact-us";
 import { toast } from "../ui/use-toast";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";

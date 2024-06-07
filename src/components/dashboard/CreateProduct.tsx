@@ -36,9 +36,9 @@ import { PlusCircle } from "lucide-react";
 import ImageUploader from "../ImageUploader";
 import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
-import { createProductAction } from "@/server/actions/product/createProducts";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import SubmitButton from "../SubmitButton";
+import { createProductAction } from "@/server/actions/product/create-products";
 
 const options = [
   { value: "XS", label: "Extra Small" },

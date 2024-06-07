@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ErrorAndSuccessType } from "../account/authenticate";
-import { sendOrderConfirmationEmail } from "../email/EmailAction";
+import { sendOrderConfirmationEmail } from "../email/email";
 
 export async function createOrder(
   formData: FormData,

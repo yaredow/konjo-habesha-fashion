@@ -14,7 +14,7 @@ import SubmitButton from "../SubmitButton";
 import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
-import { forgotPasswordAction } from "@/server/actions/account/forgotPasswordAction";
+import { forgotPasswordAction } from "@/server/actions/account/forget-password";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
 

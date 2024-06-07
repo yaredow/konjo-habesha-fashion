@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
-import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/getCheckoutSessionUrlAction";
+import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/get-checkout-session";
 import { CartItem } from "../../../types/product";
 import React from "react";
 

@@ -32,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import CreateProduct from "@/components/dashboard/CreateProduct";
 import { formatCurrency, formatDate } from "@/utils/helpers";
-import { deleteProductAction } from "@/server/actions/product/deleteProductAction";
+import { deleteProductAction } from "@/server/actions/product/delete-product";
 import Spinner from "@/components/Spinner";
 import {
   AlertDialog,

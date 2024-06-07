@@ -7,7 +7,7 @@ import { ErrorAndSuccessType } from "./authenticate";
 import { z } from "zod";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "../email/EmailAction";
+import { sendVerificationEmail } from "../email/email";
 
 export async function registerAction(
   values: z.infer<typeof SignupFormSchema>,
