@@ -16,9 +16,9 @@ import SubmitButton from "../SubmitButton";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { ResetPasswordFormSchema } from "@/utils/validators/form-validators";
-import { resetPasswordAction } from "@/server/actions/account/resetPasswordAction";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
+import { resetPasswordAction } from "@/server/actions/account/reset-password";
 
 export default function PasswordResetForm() {
   const [error, setError] = useState<string | undefined>("");

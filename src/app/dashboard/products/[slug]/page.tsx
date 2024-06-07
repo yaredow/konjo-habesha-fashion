@@ -59,10 +59,10 @@ import { toast } from "@/components/ui/use-toast";
 import { editProductAction } from "@/server/actions/product/edit-product";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
-import { uploadProductImagesAction } from "@/server/actions/product/uploadProductImages";
 import compareObject from "@/utils/compareObjects";
 import { cn } from "@/utils/cn";
 import { Product } from "@prisma/client";
+import { uploadProductImagesAction } from "@/server/actions/product/upload-product-image";
 
 type EditProductType = {
   product: Product;
