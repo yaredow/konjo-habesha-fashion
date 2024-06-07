@@ -28,7 +28,6 @@ import { FetchOrderType } from "./order/page";
 import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
 import useGetProducts from "@/utils/hook/useGetProducts";
-import { Product } from "../../../types/product";
 import { formatName, getInitials } from "@/utils/formatName";
 
 export default function Dashboard() {
@@ -36,29 +35,24 @@ export default function Dashboard() {
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [activeProducts, setActiveProducts] = useState<number>(0);
   const [totalNumberOfSales, setTotalNumberOfSales] = useState<number>(0);
-  const {
-    orders = [],
-    isFetched: isOrdersFetched,
-    refetch,
-  }: FetchOrderType = useGetOrders({
-    delivery_status: "",
-    time_range: "",
-  });
-  const {
-    products = [],
-    isFetched: isProductsFetched,
-  }: { products: Product[]; isFetched: boolean } = useGetProducts();
+  const { orders = [], isFetched: isOrdersFetched }: FetchOrderType =
+    useGetOrders({
+      delivery_status: "",
+      time_range: "",
+    });
+
+  const { products, isFetched: isProductsFetched } = useGetProducts();
 
   useEffect(() => {
     setIsClient(true);
     if (isProductsFetched) {
-      const numberOfProducts = products.length;
-      setActiveProducts(numberOfProducts);
-      const totalSales = products.reduce(
+      const numberOfProducts = products?.length;
+      setActiveProducts(numberOfProducts as number);
+      const totalSales = products?.reduce(
         (total, product) => total + product.unitsSold,
         0,
       );
-      setTotalNumberOfSales(totalSales);
+      setTotalNumberOfSales(totalSales as number);
     }
 
     if (isOrdersFetched) {
