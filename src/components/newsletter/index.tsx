@@ -4,7 +4,7 @@ import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import Spinner from "@/components/Spinner";
 import CardWrapper from "@/components/auth/CardWrapper";
-import { newsLetterUnsubscriptionAction } from "@/server/actions/newsletter/newsLetterUnsubscriptionAction";
+import { newsLetterUnsubscriptionAction } from "@/server/actions/newsletter/newsletter-unsubscription";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 

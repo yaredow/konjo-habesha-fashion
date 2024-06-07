@@ -2,7 +2,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CommentRatings } from "@/components/ui/rating-stars";
 import { toast } from "@/components/ui/use-toast";
-import { likeOrDislikeAReviewAction } from "@/server/actions/product-review/likeOrDislikeAReviewAction";
+import { likeOrDislikeAReviewAction } from "@/server/actions/product-review/like-or-dislike-product-review";
 import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteReviewAction } from "@/server/actions/product-review/deleteReviewAction";
+import { deleteReviewAction } from "@/server/actions/product-review/delete-product-review";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { formatDate } from "@/utils/helpers";
 import {

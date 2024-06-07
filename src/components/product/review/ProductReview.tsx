@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import React, { useRef, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
-import { createProductReviewAction } from "@/server/actions/product-review/createProductReviewAction";
+import { createProductReviewAction } from "@/server/actions/product-review/create-product-review";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import SubmitButton from "@/components/SubmitButton";
