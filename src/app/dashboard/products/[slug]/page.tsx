@@ -1,10 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ChevronLeft, PlusCircle, Upload } from "lucide-react";
-
+import { ChevronLeft, PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,

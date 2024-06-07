@@ -1,5 +1,5 @@
 import { createOrder } from "@/server/actions/checkout/create-order";
-import { updateProductStats } from "@/server/actions/checkout/updateProductStatsAction";
+import { updateProductStats } from "@/server/actions/checkout/update-product-stats";
 import { stripe } from "@/utils/stripe";
 import { NextRequest, NextResponse } from "next/server";
 
