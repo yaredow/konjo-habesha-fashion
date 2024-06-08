@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { CartItem } from "../../../../types/product";
-import { stripe } from "@/utils/stripe";
+import { stripe } from "@/lib/stripe";
 import { User } from "@prisma/client";
 
 export async function getCheckoutSessionUrlAction(formData: FormData) {

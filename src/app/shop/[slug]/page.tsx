@@ -15,10 +15,11 @@ export async function generateMetadata({ params }: Props) {
   return { title: `${product?.name}` };
 }
 
-export default async function Page() {
+export default async function Page({ params }: Props) {
+  const { slug } = params;
   return (
     <Suspense fallback={<Spinner />}>
-      <ProductDetail />;
+      <ProductDetail slug={slug} />;
     </Suspense>
   );
 }

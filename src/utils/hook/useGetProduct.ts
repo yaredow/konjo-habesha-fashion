@@ -6,9 +6,9 @@ const fetchProduct = async (slug: string) => {
     `https://konjo-habesha-fashion.vercel.app/api/product/${slug}`,
   );
 
-  console.log(data);
+  console.log(data.product);
 
-  return data;
+  return data.product;
 };
 
 export default function useGetProduct(slug: string) {

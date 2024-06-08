@@ -21,7 +21,6 @@ type ReviewsProps = {
 type ReviewsTabProps = {
   id: string;
   product: Product;
-  avgRating: number;
   productRefetch: () => void;
 };
 
@@ -29,13 +28,17 @@ export default function ReviewsTab({
   id,
   productRefetch,
   product,
-  avgRating,
 }: ReviewsTabProps) {
   const {
     reviews,
     isFetched: isReviewsFetched,
     refetch: refetchReviews,
   }: ReviewsProps = useGetReviews(id);
+
+  const avgRating = reviews?.reduce(
+    (acc, review) => (acc + review.rating) / reviews.length,
+    0,
+  );
 
   return (
     <Tabs defaultValue="Description">

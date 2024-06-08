@@ -1,4 +1,3 @@
-import { getAllProducts } from "@/data/product";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
