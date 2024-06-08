@@ -23,10 +23,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function Page({ params }: Props) {
-  const { slug } = params;
-  const initialData = await getProduct(slug);
-
+export default async function Page() {
   return (
     <Suspense fallback={<Spinner />}>
       <ProductDetail />;

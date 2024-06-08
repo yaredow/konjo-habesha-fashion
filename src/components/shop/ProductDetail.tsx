@@ -80,7 +80,7 @@ export default function ProductDetail() {
     }
   }, [isFetched, product]);
 
-  if (!isFetched)
+  if (isFetched)
     return (
       <div className=" grid min-h-[75vh] items-center justify-center">
         <RippleLoader />;

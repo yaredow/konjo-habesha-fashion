@@ -24,10 +24,6 @@ export const getProduct = async (slug: string): Promise<Product | null> => {
       where: { slug },
     });
 
-    if (!product) {
-      return null;
-    }
-
     return product;
   } catch (error) {
     console.error(error);
