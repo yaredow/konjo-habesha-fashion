@@ -1,25 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-async function fetchProduct(slug: string) {
-  const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/${slug}`,
-  );
+const fetchProduct = async (slug: string) => {
+  const { data } = await axios.get(`http://localhost:3000/api/product/${slug}`);
+
+  console.log(data);
 
   return data;
-}
+};
 
 export default function useGetProduct(slug: string) {
   const {
-    data: responseData,
+    data: product,
     isFetched,
     refetch,
   } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["product", slug],
     queryFn: () => fetchProduct(slug),
   });
-
-  const product = responseData?.product;
 
   return { product, isFetched, refetch };
 }

@@ -7,7 +7,6 @@ import { formatName, getInitials } from "@/utils/formatName";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useCallback, useTransition } from "react";
 import { cn } from "@/utils/cn";
@@ -31,14 +30,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { ProductReviewType } from "../../../../types/review";
+import { ProductReviewType } from "@/../types/review";
 
 type ReviewProps = {
   review: ProductReviewType;
-  refetch: (
-    options?: RefetchOptions | undefined,
-  ) => Promise<QueryObserverResult<any, Error>>;
+  refetch: () => void;
 };
 
 export default function UserReview({ review, refetch }: ReviewProps) {

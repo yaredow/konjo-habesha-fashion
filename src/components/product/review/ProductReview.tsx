@@ -19,9 +19,7 @@ import SubmitButton from "@/components/SubmitButton";
 
 type ProductReviewType = {
   productId: string;
-  refetch: (
-    options?: RefetchOptions | undefined,
-  ) => Promise<QueryObserverResult<any, Error>>;
+  refetch: () => void;
 };
 
 export default function ProductReview({

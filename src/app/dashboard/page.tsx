@@ -28,6 +28,12 @@ import Spinner from "@/components/Spinner";
 import { formatCurrency } from "@/utils/helpers";
 import useGetProducts from "@/utils/hook/useGetProducts";
 import { formatName, getInitials } from "@/utils/formatName";
+import { Product } from "@prisma/client";
+
+type ProductsProps = {
+  products: Product[];
+  isFetched: boolean;
+};
 
 export default function Dashboard() {
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -40,14 +46,15 @@ export default function Dashboard() {
       time_range: "",
     });
 
-  const { products, isFetched: isProductsFetched } = useGetProducts();
+  const { products, isFetched: isProductsFetched }: ProductsProps =
+    useGetProducts();
 
   useEffect(() => {
     setIsClient(true);
     if (isProductsFetched) {
       const numberOfProducts = products?.length;
       setActiveProducts(numberOfProducts as number);
-      const totalSales = products?.reduce(
+      const totalSales = products.reduce(
         (total, product) => total + product.unitsSold,
         0,
       );

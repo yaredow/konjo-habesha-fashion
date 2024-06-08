@@ -79,7 +79,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   );
   const router = useRouter();
   const { slug } = params;
-  const { product, isFetched, refetch }: EditProductType = useGetProduct(slug);
+  const { product, isFetched, refetch } = useGetProduct(slug);
 
   const hasNoChanges = compareObject(productDetails as Product, product);
 
