@@ -3,7 +3,7 @@ import axios from "axios";
 
 const fetchReviews = async (productId: string) => {
   const { data } = await axios.get(
-    `http://localhost:3000/api/product/review/${productId}`,
+    `https://konjo-habesha-fashion.vercel.app/api/product/review/${productId}`,
   );
 
   return data;
