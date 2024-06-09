@@ -56,11 +56,13 @@ export default function ReviewsTab({
       </TabsContent>
       <TabsContent value="Reviews">
         <div className=" mx-auto mb-4 mt-12 flex justify-center">
-          <p className={reviews?.length > 0 ? "" : "hidden"}>
-            {reviews.length === 0
-              ? "Be the first to review this product"
-              : null}
-          </p>
+          <p
+            className={
+              reviews?.length! > 0
+                ? "hidden"
+                : "Be the first to rate this product"
+            }
+          ></p>
           <ProductReview productId={product.id} refetch={productRefetch} />
         </div>
 
