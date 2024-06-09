@@ -18,7 +18,7 @@ export default function ProductCommentRating({
     0,
   );
 
-  if (isFetched) return null;
+  if (!isFetched) return null;
 
   return (
     <div className="flex items-center gap-4">

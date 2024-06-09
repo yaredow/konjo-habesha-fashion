@@ -3,15 +3,13 @@
 import useGetProduct from "@/utils/hook/useGetProduct";
 import { Separator } from "@/components/ui/separator";
 import { BoxIcon, PackageIcon, UserIcon } from "lucide-react";
-import { CommentRatings } from "@/components/ui/rating-stars";
 import { formatCurrency } from "@/utils/helpers";
-import ProductDetailImages from "./ProductDetailImages";
-import ReviewsTab from "./ReviewsTab";
-import { useSearchParams } from "next/navigation";
+import ProductDetailImages from "@/components/shop/ProductDetailImages";
+import ReviewsTab from "@/components/shop/ReviewsTab";
 import { Product } from "@prisma/client";
 import ProductDetailForm from "./ProductDetailForm";
 import Spinner from "@/components/Spinner";
-import ProductCommentRating from "./ProductCommentRating";
+import ProductCommentRating from "@/components/shop/ProductCommentRating";
 
 type ProductProps = {
   product: Product;
@@ -75,7 +73,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
           </div>
         </div>
       </div>
-      <Separator className="mb-4" />;
+      <Separator className="mb-4" />
       <ReviewsTab id={product?.id} productRefetch={refetch} product={product} />
     </div>
   );

@@ -50,7 +50,9 @@ export default function ReviewsTab({
       </div>
       <Separator className="mt-4" />
       <TabsContent className=" m-4" value="Description">
-        <div className="mt-4 flex-wrap">{product?.description}</div>
+        <div className="mx-auto mt-4 flex justify-center text-center md:max-w-3xl">
+          {product?.description}
+        </div>
       </TabsContent>
       <TabsContent value="Reviews">
         <div className=" mx-auto mb-4 mt-12 flex justify-center">
