@@ -20,9 +20,7 @@ type ProductProps = {
 };
 
 export default function ProductDetail({ slug }: { slug: string }) {
-  console.log(slug);
   const { product, isFetched, refetch }: ProductProps = useGetProduct(slug);
-  console.log(product);
 
   if (!isFetched)
     return (

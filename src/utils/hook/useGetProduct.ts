@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchProduct = async (slug: string) => {
-  const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/${slug}`,
-  );
-
-  console.log(data.product);
+  const { data } = await axios.get(`http://localhost:3000/api/product/${slug}`);
 
   return data.product;
 };

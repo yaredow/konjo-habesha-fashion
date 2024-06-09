@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const id = request.url.slice(request.url.lastIndexOf("/") + 1);
+  console.log("product id: " + id);
 
   try {
     const reviews = await prisma.review.findMany({
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(reviews, { status: 200 });
+    return NextResponse.json({ reviews }, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

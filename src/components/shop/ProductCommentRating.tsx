@@ -9,11 +9,16 @@ export default function ProductCommentRating({
 }: {
   productId: string;
 }) {
-  const { reviews }: { reviews: Review[] } = useGetReviews(productId);
+  console.log("productId: ", productId);
+  const { reviews, isFetched }: { reviews: Review[]; isFetched: boolean } =
+    useGetReviews(productId);
+
   const avgRating = reviews?.reduce(
     (acc, review) => (acc + review.rating) / reviews.length,
     0,
   );
+
+  if (isFetched) return null;
 
   return (
     <div className="flex items-center gap-4">

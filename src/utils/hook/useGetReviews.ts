@@ -1,19 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const fetchReviews = async (productId: string) => {
+const fetchReviews = async (id: string) => {
+  console.log(id);
   const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/review/${productId}`,
+    `http://localhost:3000/api/product/review/${id}`,
   );
 
-  return data;
+  console.log(data);
+
+  return data.reviews;
 };
 
-export default function useGetReviews(productId: string) {
-  const { data, isFetched, refetch } = useQuery({
-    queryKey: ["reviews"],
-    queryFn: () => fetchReviews(productId),
+export default function useGetReviews(id: string) {
+  console.log(id);
+  const {
+    data: reviews,
+    isFetched,
+    refetch,
+  } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: () => fetchReviews(id),
   });
 
-  return { reviews: data, isFetched, refetch };
+  return { reviews, isFetched, refetch };
 }
