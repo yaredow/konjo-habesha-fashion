@@ -13,7 +13,6 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AvatarPlaceholder from "@/assets/User-Profile-PNG (1).png";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
@@ -35,7 +34,10 @@ export default function UserMenu() {
           className="overflow-hidden rounded-full"
         >
           <Image
-            src={session?.user.image || AvatarPlaceholder}
+            src={
+              session?.user.image ||
+              "https://pbs.twimg.com/profile_images/1754602039311478784/EmA-O4v4_400x400.jpg"
+            }
             alt="User profile picture"
             width={50}
             height={50}
