@@ -26,7 +26,6 @@ export default function ProductReview({
   refetch,
 }: ProductReviewType) {
   const { data: session, status } = useSession();
-  const isLoggedIn = !!session;
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -99,7 +98,7 @@ export default function ProductReview({
                 <div className="grid gap-2">
                   <Label htmlFor="rating">Rating</Label>
                   <CommentRatings
-                    aria-disabled={isLoggedIn}
+                    aria-
                     rating={rating}
                     variant="yellow"
                     onRatingChange={handleRatingChange}
@@ -111,7 +110,7 @@ export default function ProductReview({
               <div className=" flex flex-grow flex-col gap-2">
                 <Label htmlFor="fullName">Full Name</Label>
                 <Input
-                  disabled={status === "authenticated" || isLoggedIn}
+                  disabled={status === "authenticated"}
                   placeholder={
                     status === "authenticated"
                       ? session?.user?.name!
@@ -124,7 +123,7 @@ export default function ProductReview({
               <div className=" flex flex-grow flex-col gap-2">
                 <Label htmlFor="email">Email (Will not be published)</Label>
                 <Input
-                  disabled={status === "authenticated" || isLoggedIn}
+                  disabled={status === "authenticated"}
                   placeholder={
                     status === "authenticated" ? session?.user?.email! : "Email"
                   }
@@ -135,7 +134,6 @@ export default function ProductReview({
               <div className=" flex flex-grow flex-col gap-2">
                 <Label htmlFor="email">Title</Label>
                 <Input
-                  disabled={isLoggedIn}
                   name="title"
                   required
                   placeholder="Add a title to your review"
@@ -146,7 +144,6 @@ export default function ProductReview({
               <div className="grid gap-2">
                 <Label htmlFor="review">Review</Label>
                 <Textarea
-                  disabled={isLoggedIn}
                   name="review"
                   className="min-h-[120px]"
                   placeholder="Write your review here..."
@@ -160,7 +157,7 @@ export default function ProductReview({
 
               <FormError message={error} />
               <FormSuccess message={success} />
-              <SubmitButton isPending={isPending} isLoggedIn={isLoggedIn} />
+              <SubmitButton isPending={isPending} />
             </form>
           </div>
         </div>
