@@ -157,7 +157,7 @@ export default function ProductReview({
 
               <FormError message={error} />
               <FormSuccess message={success} />
-              <SubmitButton isPending={isPending} isLoggedIn />
+              <SubmitButton isPending={isPending} isLoggedIn={isLoggedIn} />
             </form>
           </div>
         </div>
