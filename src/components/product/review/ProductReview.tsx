@@ -26,6 +26,7 @@ export default function ProductReview({
   refetch,
 }: ProductReviewType) {
   const { data: session, status } = useSession();
+  const isLoggedIn = !!session;
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -156,7 +157,7 @@ export default function ProductReview({
 
               <FormError message={error} />
               <FormSuccess message={success} />
-              <SubmitButton isPending={isPending} />
+              <SubmitButton isPending={isPending} isLoggedIn />
             </form>
           </div>
         </div>

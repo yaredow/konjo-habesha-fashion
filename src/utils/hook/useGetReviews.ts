@@ -4,7 +4,7 @@ import axios from "axios";
 const fetchReviews = async (id: string) => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3000/api/product/review/${id}`,
+      `https://konjo-habesha-fashion.vercel.app/api/product/review/${id}`,
     );
 
     return data.reviews;

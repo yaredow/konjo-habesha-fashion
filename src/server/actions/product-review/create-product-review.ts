@@ -24,7 +24,12 @@ export async function createProductReviewAction(
     }
 
     const order = await prisma.order.findFirst({
-      where: { userId },
+      where: {
+        userId,
+        products: {
+          some: { productId },
+        },
+      },
     });
 
     if (!order) {
