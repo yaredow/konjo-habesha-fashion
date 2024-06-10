@@ -98,7 +98,6 @@ export default function ProductReview({
                 <div className="grid gap-2">
                   <Label htmlFor="rating">Rating</Label>
                   <CommentRatings
-                    aria-
                     rating={rating}
                     variant="yellow"
                     onRatingChange={handleRatingChange}

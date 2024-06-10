@@ -14,7 +14,7 @@ export default function SubmitButton({
 }: SubmitButtonProps) {
   return (
     <Button disabled={isPending} type="submit">
-      {isPending ? <PulsatingDots /> : showTwoFactor ? "confirm" : "Submit"}
+      {isPending ? <PulsatingDots /> : !showTwoFactor ? "Confirm" : "Submit"}
     </Button>
   );
 }
