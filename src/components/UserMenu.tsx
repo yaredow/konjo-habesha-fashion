@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { UserIcon } from "lucide-react";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
@@ -33,16 +34,20 @@ export default function UserMenu() {
           size="icon"
           className="overflow-hidden rounded-full"
         >
-          <Image
-            src={
-              session?.user.image ||
-              "https://pbs.twimg.com/profile_images/1754602039311478784/EmA-O4v4_400x400.jpg"
-            }
-            alt="User profile picture"
-            width={50}
-            height={50}
-            className="aspect-square rounded-full bg-background object-cover"
-          />
+          {session ? (
+            <Image
+              src={
+                session?.user.image ||
+                "https://pbs.twimg.com/profile_images/1754602039311478784/EmA-O4v4_400x400.jpg"
+              }
+              alt="User profile picture"
+              width={50}
+              height={50}
+              className="aspect-square rounded-full bg-background object-cover"
+            />
+          ) : (
+            <UserIcon strokeWidth={1.5} />
+          )}
         </Button>
       </DropdownMenuTrigger>
       {status === "authenticated" ? (
