@@ -11,7 +11,6 @@ import { toast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import React, { useRef, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { createProductReviewAction } from "@/server/actions/product-review/create-product-review";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
@@ -72,7 +71,7 @@ export default function ProductReview({
             });
           }
         })
-        .then((error) => {
+        .catch((error) => {
           console.error(error);
           setError("Something went wrong");
         });
