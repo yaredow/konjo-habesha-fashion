@@ -2,20 +2,20 @@ import CardWrapper from "@/components/auth/CardWrapper";
 import SignupForm from "@/components/forms/SignupForm";
 
 export const metadata = {
-  title: "Register - Your E-commerce Site",
+  title: "Register - Konjo Habesha Fashion",
   description:
-    "Create a new account on Your E-commerce Site to start shopping today.",
+    "Create a new account on Konjo Habesha Fashion to start shopping today.",
   keywords: ["e-commerce", "register", "sign up", "your site"],
   authors: [
     {
-      name: "Your E-commerce Site",
+      name: "Konjo Habesha Fashion",
       url: "https://www.your-ecommerce-site.com",
     },
   ],
   openGraph: {
-    title: "Register - Your E-commerce Site",
+    title: "Register - Konjo Habesha Fashion",
     description:
-      "Create a new account on Your E-commerce Site to start shopping today.",
+      "Create a new account on Konjo Habesha Fashion to start shopping today.",
     url: "https://www.your-ecommerce-site.com/register",
     type: "website",
   },
