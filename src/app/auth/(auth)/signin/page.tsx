@@ -4,9 +4,9 @@ import LoginForm from "@/components/forms/LoginForm";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: "Sign In - Your E-commerce Site",
+  title: "Sign In - Konjo Habesha Fashion",
   description:
-    "Sign in to your account on Your E-commerce Site to access your profile, orders, and more.",
+    "Sign in to your account on Konjo Habesha Fashion to access your profile, orders, and more.",
   keywords: ["e-commerce", "sign in", "login", "your site"],
   authors: [
     {
@@ -15,18 +15,18 @@ export const metadata = {
     },
   ],
   openGraph: {
-    title: "Sign In - Your E-commerce Site",
+    title: "Sign In - Konjo Habesha Fashion",
     description:
-      "Sign in to your account on Your E-commerce Site to access your profile, orders, and more.",
+      "Sign in to your account on Konjo Habesha Fashion to access your profile, orders, and more.",
     url: "https://www.your-ecommerce-site.com/signin",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     site: "@yoursite",
-    title: "Sign In - Your E-commerce Site",
+    title: "Sign In - Konjo Habesha Fashion",
     description:
-      "Sign in to your account on Your E-commerce Site to access your profile, orders, and more.",
+      "Sign in to your account on Konjo Habesha Fashion to access your profile, orders, and more.",
     image: "https://www.your-ecommerce-site.com/images/og-image.jpg",
   },
   icons: {
