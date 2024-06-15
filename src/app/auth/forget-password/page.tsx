@@ -8,7 +8,7 @@ export const metadata = {
   keywords: ["e-commerce", "forget password", "reset password", "your site"],
   authors: [
     {
-      name: "Your E-commerce Site",
+      name: "Konjo Habesha Fashion",
       url: "https://www.your-ecommerce-site.com",
     },
   ],
