@@ -2,9 +2,9 @@ import CardWrapper from "@/components/auth/CardWrapper";
 import ForgetPasswordForm from "@/components/forms/ForgetPasswordForm";
 
 export const metadata = {
-  title: "Forget Password - Your E-commerce Site",
+  title: "Forget Password - Konjo Habesha Fashion",
   description:
-    "Reset your password on Your E-commerce Site to regain access to your account.",
+    "Reset your password on Konjo Habesha Fashion to regain access to your account.",
   keywords: ["e-commerce", "forget password", "reset password", "your site"],
   authors: [
     {
@@ -13,9 +13,9 @@ export const metadata = {
     },
   ],
   openGraph: {
-    title: "Forget Password - Your E-commerce Site",
+    title: "Forget Password - Konjo Habesha Fashion",
     description:
-      "Reset your password on Your E-commerce Site to regain access to your account.",
+      "Reset your password on Konjo Habesha Fashion to regain access to your account.",
     url: "https://www.your-ecommerce-site.com/forget-password",
     type: "website",
   },
