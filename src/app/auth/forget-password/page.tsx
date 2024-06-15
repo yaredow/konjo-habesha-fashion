@@ -1,6 +1,29 @@
 import CardWrapper from "@/components/auth/CardWrapper";
 import ForgetPasswordForm from "@/components/forms/ForgetPasswordForm";
 
+export const metadata = {
+  title: "Forget Password - Your E-commerce Site",
+  description:
+    "Reset your password on Your E-commerce Site to regain access to your account.",
+  keywords: ["e-commerce", "forget password", "reset password", "your site"],
+  authors: [
+    {
+      name: "Your E-commerce Site",
+      url: "https://www.your-ecommerce-site.com",
+    },
+  ],
+  openGraph: {
+    title: "Forget Password - Your E-commerce Site",
+    description:
+      "Reset your password on Your E-commerce Site to regain access to your account.",
+    url: "https://www.your-ecommerce-site.com/forget-password",
+    type: "website",
+  },
+  icons: {
+    icon: "/icon.png",
+  },
+};
+
 export default function page() {
   return (
     <main className="my-auto flex items-center justify-center">
