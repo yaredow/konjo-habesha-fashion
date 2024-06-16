@@ -1,4 +1,4 @@
-import SidebarMenu from "./_components/SidebarMenu";
+import SideBarMenu from "./(profile)/_components/SidebarMenu";
 
 type ProfileLayoutProps = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type ProfileLayoutProps = {
 export default function ProfileLayout({ children }: ProfileLayoutProps) {
   return (
     <div className=" min-h-screen  w-full md:ml-8 ">
-      <SidebarMenu />
+      <SideBarMenu />
       <div className="flex items-center justify-center p-6">{children}</div>
     </div>
   );
