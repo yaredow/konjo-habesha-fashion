@@ -107,12 +107,6 @@ export default function SideBarMenu() {
             </div>
           </div>
 
-          <SideBarLinks
-            name="Dashboard"
-            Icon={LayoutDashboardIcon}
-            href="/profile/dashboard"
-          />
-
           <SideBarLinks name="Orders" Icon={InboxIcon} href="/profile/order" />
           <SideBarLinks
             name="Downloads"

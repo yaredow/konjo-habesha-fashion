@@ -57,10 +57,10 @@ export default function UserMenu() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link href="/profile/dashboard">Profile</Link>
+            <Link href="/account">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/profile/settings">Settings</Link>
+            <Link href="/account/settings">Settings</Link>
           </DropdownMenuItem>
           {session?.user?.role === "ADMIN" ? (
             <DropdownMenuItem>
