@@ -25,6 +25,7 @@ import { toast } from "@/components/ui/use-toast";
 import { uploadUserProfileImage } from "@/server/actions/account/upload-profile-image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
+import { handleLogout } from "@/lib/handleLogout";
 
 export default function SideBarMenu() {
   const [isLoading, startTransition] = useTransition();
@@ -33,10 +34,6 @@ export default function SideBarMenu() {
   const user = session?.user;
   const path = usePathname();
   const isSetting = path === "/account/settings" ? true : false;
-
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/auth/signin" });
-  };
 
   // Trigger file input click when button is clicked
   const handleButtonClick = () => {
@@ -122,6 +119,7 @@ export default function SideBarMenu() {
             Icon={SettingsIcon}
             href="/account/settings"
           />
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -129,7 +127,7 @@ export default function SideBarMenu() {
                   <LogOutIcon className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent onClick={handleSignOut} side="right">
+              <TooltipContent onClick={handleLogout} side="right">
                 sign out
               </TooltipContent>
             </Tooltip>
