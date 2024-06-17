@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  LayoutDashboardIcon,
   DownloadIcon,
   LocateIcon,
   InboxIcon,
@@ -33,7 +32,7 @@ export default function SideBarMenu() {
   const { data: session } = useSession();
   const user = session?.user;
   const path = usePathname();
-  const isSetting = path === "/profile/settings" ? true : false;
+  const isSetting = path === "/account/settings" ? true : false;
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/auth/signin" });
@@ -107,21 +106,21 @@ export default function SideBarMenu() {
             </div>
           </div>
 
-          <SideBarLinks name="Orders" Icon={InboxIcon} href="/profile/order" />
+          <SideBarLinks name="Orders" Icon={InboxIcon} href="/account/order" />
           <SideBarLinks
             name="Downloads"
             Icon={DownloadIcon}
-            href="/profile/download"
+            href="/account/download"
           />
           <SideBarLinks
             name="Addresses"
             Icon={LocateIcon}
-            href="/profile/address"
+            href="/account/address"
           />
           <SideBarLinks
             name="Settings"
             Icon={SettingsIcon}
-            href="/profile/settings"
+            href="/account/settings"
           />
           <TooltipProvider>
             <Tooltip>
