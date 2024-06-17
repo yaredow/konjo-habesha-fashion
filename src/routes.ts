@@ -23,4 +23,4 @@ export const authRoutes = [
 
 export const apiAuthPrefix = ["/api/auth", "/api/product"];
 
-export const DEFAULT_LOGIN_REDIRECT = "/profile/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/account";
