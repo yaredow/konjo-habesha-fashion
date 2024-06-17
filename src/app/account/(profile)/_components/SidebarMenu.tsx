@@ -25,7 +25,6 @@ import { toast } from "@/components/ui/use-toast";
 import { uploadUserProfileImage } from "@/server/actions/account/upload-profile-image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
-import { handleLogout } from "@/lib/handleLogout";
 
 export default function SideBarMenu() {
   const [isLoading, startTransition] = useTransition();
@@ -34,6 +33,10 @@ export default function SideBarMenu() {
   const user = session?.user;
   const path = usePathname();
   const isSetting = path === "/account/settings" ? true : false;
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "https://konjo-habesha-fashion.vercel.app/" });
+  };
 
   // Trigger file input click when button is clicked
   const handleButtonClick = () => {

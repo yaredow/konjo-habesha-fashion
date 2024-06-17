@@ -14,11 +14,14 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { UserIcon } from "lucide-react";
-import { handleLogout } from "@/lib/handleLogout";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "https://konjo-habesha-fashion.vercel.app/" });
+  };
 
   return (
     <DropdownMenu>
