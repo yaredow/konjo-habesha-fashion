@@ -1,10 +1,10 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { Button } from "../ui/button";
-import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/get-checkout-session";
-import { CartItem } from "../../../types/product";
 import React from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { CartItem } from "@/../../types/product";
+import { getCheckoutSessionUrlAction } from "@/server/actions/checkout/actions";
 
 const CheckoutButton = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);

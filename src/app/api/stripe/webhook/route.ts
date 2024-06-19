@@ -1,6 +1,8 @@
-import { createOrder } from "@/server/actions/checkout/create-order";
-import { updateProductStats } from "@/server/actions/checkout/update-product-stats";
 import { stripe } from "@/lib/stripe";
+import {
+  createOrder,
+  updateProductStats,
+} from "@/server/actions/checkout/actions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
