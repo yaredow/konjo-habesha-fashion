@@ -10,16 +10,13 @@ import {
   generateVerificationToken,
 } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { loginFormSchema } from "@/utils/validators/form-validators";
+import {
+  ErrorAndSuccessType,
+  loginFormSchema,
+} from "@/utils/validators/form-validators";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "../email/email";
-
-export type ErrorAndSuccessType = {
-  error?: string;
-  success?: string;
-  twoFactor?: boolean;
-};
 
 export async function authenticate(
   values: z.infer<typeof loginFormSchema>,

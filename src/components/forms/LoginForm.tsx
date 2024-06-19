@@ -12,12 +12,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import SubmitButton from "../SubmitButton";
-import { authenticate } from "@/server/actions/account/authenticate";
 import { loginFormSchema } from "@/utils/validators/form-validators";
 import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
+import { authenticate } from "@/server/actions/auth/actions";
 
 export default function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
