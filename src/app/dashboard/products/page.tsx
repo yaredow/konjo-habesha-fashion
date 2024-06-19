@@ -31,7 +31,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { formatCurrency, formatDate } from "@/utils/helpers";
-import { deleteProductAction } from "@/server/actions/product/delete-product";
+import { deleteProductAction } from "@/server/actions/product/actions";
 import Spinner from "@/components/Spinner";
 import {
   AlertDialog,
