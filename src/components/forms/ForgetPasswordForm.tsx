@@ -14,9 +14,9 @@ import SubmitButton from "../SubmitButton";
 import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { forgotPasswordFormSchema } from "@/utils/validators/form-validators";
-import { forgotPasswordAction } from "@/server/actions/account/forget-password";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
+import { forgotPasswordAction } from "@/server/actions/auth/actions";
 
 export default function ForgetPasswordForm() {
   const [error, setError] = useState<string | undefined>("");

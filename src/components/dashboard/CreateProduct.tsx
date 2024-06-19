@@ -38,7 +38,7 @@ import { MultiSelect } from "../ui/MultiSelect";
 import { Controller } from "react-hook-form";
 import { CreateProductFormSchema } from "@/utils/validators/form-validators";
 import SubmitButton from "../SubmitButton";
-import { createProductAction } from "@/server/actions/product/create-products";
+import { createProductAction } from "@/server/actions/product/actions";
 
 const options = [
   { value: "XS", label: "Extra Small" },

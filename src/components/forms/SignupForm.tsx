@@ -16,7 +16,7 @@ import SubmitButton from "../SubmitButton";
 import { SignupFormSchema } from "@/utils/validators/form-validators";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
-import { registerAction } from "@/server/actions/account/register";
+import { registerAction } from "@/server/actions/auth/actions";
 
 export default function SignupForm() {
   const [error, setError] = useState<string | undefined>("");

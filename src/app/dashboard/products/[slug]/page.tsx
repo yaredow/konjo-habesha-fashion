@@ -42,8 +42,8 @@ import {
   PRODUCT_STATUS_OPTIONS,
 } from "@/utils/constants";
 import { Switch } from "@/components/ui/switch";
-import { AlertDialog, AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import {
+  AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
@@ -51,16 +51,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteProductImageAction } from "@/server/actions/product/delete-product-image";
 import { toast } from "@/components/ui/use-toast";
-import { editProductAction } from "@/server/actions/product/edit-product";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import ImageUploader from "@/components/ImageUploader";
 import compareObject from "@/utils/compareObjects";
 import { cn } from "@/utils/cn";
 import { Product } from "@prisma/client";
-import { uploadProductImagesAction } from "@/server/actions/product/upload-product-image";
+import {
+  deleteProductImageAction,
+  uploadProductImagesAction,
+  editProductAction,
+} from "@/server/actions/product/actions";
 
 type EditProductType = {
   product: Product;

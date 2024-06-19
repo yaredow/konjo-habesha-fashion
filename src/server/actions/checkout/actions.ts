@@ -1,9 +1,62 @@
 "use server";
 
+import prisma from "@/lib/prisma";
+import { sendOrderConfirmationEmail } from "../email/email";
+import { ErrorAndSuccessType } from "@/utils/validators/form-validators";
 import { auth } from "@/auth";
-import { CartItem } from "../../../../types/product";
-import { stripe } from "@/lib/stripe";
 import { User } from "@prisma/client";
+import { CartItem } from "@/../../types/product";
+import { stripe } from "@/lib/stripe";
+
+export async function createOrder(
+  formData: FormData,
+): Promise<ErrorAndSuccessType> {
+  const customer = JSON.parse(formData.get("customer") as string);
+  const data = JSON.parse(formData.get("data") as string);
+
+  const items = JSON.parse(customer?.metadata.cart);
+
+  const products = items.map((item: any) => {
+    return {
+      productId: item.productId,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+    };
+  });
+
+  try {
+    const newOrder = await prisma.order.create({
+      data: {
+        userId: customer?.metadata.userId,
+        customerId: data?.customer,
+        paymentIntentId: data.payment_intent,
+        products,
+        subtotal: data?.amount_subtotal / 100,
+        shipping: data?.customer_details,
+        payment_status: data?.payment_status,
+      },
+    });
+
+    if (!newOrder) {
+      return { error: "Unable t crate an order" };
+    }
+
+    await sendOrderConfirmationEmail(
+      customer?.metadata.name,
+      newOrder?.id,
+      newOrder?.createdAt.toISOString(),
+      newOrder?.products,
+      newOrder?.subtotal,
+      customer?.metadata.email,
+    );
+
+    return { success: "Order created successfully" };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 export async function getCheckoutSessionUrlAction(formData: FormData) {
   const cartItems = JSON.parse(formData.get("cartItems") as string);
@@ -101,4 +154,42 @@ export async function getCheckoutSessionUrlAction(formData: FormData) {
   if (session) {
     return { success: true, url };
   }
+}
+
+export async function updateProductStats(formData: FormData) {
+  const customer = JSON.parse(formData.get("customer") as string);
+
+  const items = JSON.parse(customer.metadata.cart);
+
+  await Promise.all(
+    items.map(async (item: CartItem) => {
+      try {
+        const product = await prisma.product.findFirst({
+          where: { name: item.name },
+        });
+
+        if (!product) {
+          throw new Error("Product not found");
+        }
+
+        await prisma.product.update({
+          where: { id: product.id },
+          data: {
+            unitsSold: product.unitsSold + item.quantity,
+            stockQuantity: product.stockQuantity - item.quantity,
+          },
+        });
+
+        product.unitsSold += item.quantity;
+        product.stockQuantity -= item.quantity;
+
+        if (product.stockQuantity === 0) {
+          product.inStock = false;
+        }
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    }),
+  );
 }

@@ -1,8 +1,10 @@
 "use server";
 
-import { newsLetterFormSchema } from "@/utils/validators/form-validators";
+import {
+  ErrorAndSuccessType,
+  newsLetterFormSchema,
+} from "@/utils/validators/form-validators";
 import { z } from "zod";
-import { ErrorAndSuccessType } from "../account/authenticate";
 import prisma from "@/lib/prisma";
 import crypto from "crypto";
 import { sendNewsLetterSubscriptionConfirmationEmail } from "../email/email";
@@ -45,4 +47,32 @@ export async function newsLetterSubscriptionAction(
   await sendNewsLetterSubscriptionConfirmationEmail(fullName, email, token);
 
   return { success: "You have successfully subscribed to our newsletter" };
+}
+
+export async function newsLetterUnsubscriptionAction(
+  token: string,
+): Promise<ErrorAndSuccessType> {
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const subscription = await prisma.newslettersubscriptions.findUnique({
+    where: { unsubscribeToken: hashedToken },
+  });
+
+  if (!subscription) {
+    return { error: "Subscription not found" };
+  }
+
+  const isExpired = new Date(subscription.unsubscribeTokenExpires) < new Date();
+
+  if (!isExpired) {
+    return { error: "Token expired" };
+  }
+
+  await prisma.newslettersubscriptions.delete({
+    where: { unsubscribeToken: subscription.unsubscribeToken },
+  });
+
+  return {
+    success: "You have successfully unsubscribed from our subscription",
+  };
 }
