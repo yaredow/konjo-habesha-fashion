@@ -59,7 +59,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteOrderAction } from "@/server/actions/order/delete-order";
+import { deleteOrderAction } from "@/server/actions/order/actions";
 import { toast } from "@/components/ui/use-toast";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { AVAILABLE_DELIVARY_STATUS, ORDER_DURATION } from "@/utils/constants";
