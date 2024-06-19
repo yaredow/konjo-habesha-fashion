@@ -18,7 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { ResetPasswordFormSchema } from "@/utils/validators/form-validators";
 import { FormSuccess } from "../FormSuccess";
 import { FormError } from "../FormError";
-import { resetPasswordAction } from "@/server/actions/account/reset-password";
+import { resetPasswordAction } from "@/server/actions/auth/actions";
 
 export default function PasswordResetForm() {
   const [error, setError] = useState<string | undefined>("");

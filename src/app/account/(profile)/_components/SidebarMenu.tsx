@@ -22,9 +22,9 @@ import { signOut, useSession } from "next-auth/react";
 import { getInitials } from "@/utils/formatName";
 import { useRef, useTransition } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { uploadUserProfileImage } from "@/server/actions/account/upload-profile-image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
+import { uploadUserProfileImage } from "@/server/actions/auth/actions";
 
 export default function SideBarMenu() {
   const [isLoading, startTransition] = useTransition();

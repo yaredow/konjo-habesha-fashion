@@ -4,7 +4,7 @@ import CardWrapper from "@/components/auth/CardWrapper";
 import { FormError } from "@/components/FormError";
 import { FormSuccess } from "@/components/FormSuccess";
 import Spinner from "@/components/Spinner";
-import { tokenVerificationAction } from "@/server/actions/account/token-verification";
+import { tokenVerificationAction } from "@/server/actions/auth/actions";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
