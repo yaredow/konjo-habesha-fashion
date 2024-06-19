@@ -14,12 +14,12 @@ import React, { useState, useTransition } from "react";
 import { UpdateAccountFormSchema } from "@/utils/validators/form-validators";
 
 import { Input } from "../ui/input";
-import { updateUserData } from "@/server/actions/account/update-user-data";
 import SubmitButton from "../SubmitButton";
 import { useSession } from "next-auth/react";
 import { FormError } from "../FormError";
 import { FormSuccess } from "../FormSuccess";
 import { toast } from "@/components/ui/use-toast";
+import { updateUserData } from "@/server/actions/auth/actions";
 
 export default function UpdateUserDataForm() {
   const [isLoading, startTransition] = useTransition();
