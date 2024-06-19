@@ -11,9 +11,9 @@ import { newsLetterFormSchema } from "@/utils/validators/form-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
-import { newsLetterSubscriptionAction } from "@/server/actions/newsletter/newsletter-subscription";
 import { toast } from "../ui/use-toast";
 import SubmitButton from "../SubmitButton";
+import { newsLetterSubscriptionAction } from "@/server/actions/newsletter/actions";
 
 export default function NewsLetterSubscriptionForm() {
   const [isPending, startTransition] = useTransition();
