@@ -6,6 +6,8 @@ const fetchProducts = async () => {
     "https://konjo-habesha-fashion.vercel.app/api/product/all",
   );
 
+  console.log(data);
+
   return data.products;
 };
 

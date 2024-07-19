@@ -6,6 +6,8 @@ async function fetchProductWithCategory(type: string) {
     `https://konjo-habesha-fashion.vercel.app/api/product/categories/${type}`,
   );
 
+  console.log(data);
+
   return data;
 }
 
