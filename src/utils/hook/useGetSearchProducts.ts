@@ -2,11 +2,10 @@ import { Product } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
+import { URL } from "../constants";
 
 async function fetchSearchProducts(query: string) {
-  const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/search?text=${query}`,
-  );
+  const { data } = await axios.get(`${URL}/api/product/search?text=${query}`);
 
   return data.results;
 }

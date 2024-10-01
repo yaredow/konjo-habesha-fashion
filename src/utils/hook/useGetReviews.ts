@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { URL } from "../constants";
 
 const fetchReviews = async (id: string) => {
   try {
-    const { data } = await axios.get(
-      `https://konjo-habesha-fashion.vercel.app/api/product/review/${id}`,
-    );
+    const { data } = await axios.get(`${URL}/api/product/review/${id}`);
 
     return data.reviews;
   } catch (error) {

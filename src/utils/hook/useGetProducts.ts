@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { URL } from "../constants";
 
 const fetchProducts = async () => {
-  const { data } = await axios.get(
-    "https://konjo-habesha-fashion.vercel.app/api/product/all",
-  );
+  const { data } = await axios.get(`${URL}/api/product/all`);
 
   console.log(data);
 

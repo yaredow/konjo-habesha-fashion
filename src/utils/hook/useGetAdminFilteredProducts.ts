@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ProductFilterType } from "../validators/product-validators";
+import { URL } from "../constants";
 
 async function fetchProduct(filter: ProductFilterType) {
-  const { data } = await axios.post(
-    "https://konjo-habesha-fashion.vercel.app/dashboard/product",
-    {
-      filter,
-    },
-  );
+  const { data } = await axios.post(`${URL}/dashboard/product`, {
+    filter,
+  });
 
   console.log(data);
 

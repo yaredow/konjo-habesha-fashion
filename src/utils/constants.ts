@@ -132,3 +132,5 @@ export const AVAILABLE_ADMIN_PRODUCT_CATEGORIES = [
   { value: "draft", label: "Draft" },
   { value: "archived", label: "Archived" },
 ];
+
+export const URL = "https://konjo-habesha-fashion.vercel.app";

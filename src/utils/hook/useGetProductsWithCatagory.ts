@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { URL } from "../constants";
 
 async function fetchProductWithCategory(type: string) {
-  const { data } = await axios.get(
-    `https://konjo-habesha-fashion.vercel.app/api/product/categories/${type}`,
-  );
+  const { data } = await axios.get(`${URL}/api/product/categories/${type}`);
 
   console.log(data);
 
